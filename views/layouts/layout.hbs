@@ -27,8 +27,12 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous">
 
-
+  {{#if admin}}
+    <link rel="stylesheet" href="/stylesheets/style-2.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
+  {{else}}
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  {{/if}}
 
  <!-- Css Styles -->
     <link rel="stylesheet" href="stylesheets/elegant-icons.css" type="text/css">
@@ -41,12 +45,26 @@
 
   </head>
   <body>
+
+
       {{!-- linking user header partials --}}
-      {{> user-header}}
+      {{#if noSidebar}}
+
+      {{else}}
+      {{#if admin}}
+        {{>admin-header}}
+      {{else}}
+        {{> user-header}}
+      {{/if}}
+      {{/if}}
 
     {{{body}}}
 
-    {{> user-footer}}
+    {{#if admin}}
+
+    {{else}}
+      {{> user-footer}}
+    {{/if}}
 
 {{!-- bootstrap 5 --}}
     <script
@@ -76,7 +94,29 @@
     <script src="javascripts/mixitup.min.js"></script>
     <script src="javascripts/owl.carousel.min.js"></script>
 
+
+  {{#if admin}}
+    {{!-- Admin JS --}}
+    <script src="javascripts/scripts-2.js"></script>
+  {{else}}
     {{!-- main JS --}}
     <script src="javascripts/main.js"></script>
+  {{/if}}
+
+
+<script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    ></script>
+
+    <!-- JS Validator -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
+    ></script>
+
+    <!-- form submission file -->
+    <script src="/javascripts/validator.js">
+</script>
+
+
   </body>
 </html>

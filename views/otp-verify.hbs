@@ -40,45 +40,42 @@
 
 
 <script type="text/javascript">
-  function clickevent(e,pre,curr,next){
-    var length = document.getElementById(curr).value.length
-    var maxlength = document.getElementById(curr).getAttribute('maxlength')
-    if(maxlength==length){
-      if(next !== ""){
-        document.getElementById(next).focus()
-      }
-    }
-    if(e.key === "Backspace"){
-      if(pre !== ""){
-        document.getElementById(pre).focus()
-
-      }
+  function clickevent(e, pre, curr, next) {
+  var length = document.getElementById(curr).value.length;
+  var maxlength = document.getElementById(curr).getAttribute("maxlength");
+  if (maxlength == length) {
+    if (next !== "") {
+      document.getElementById(next).focus();
     }
   }
-
-
-  const startMin = 0.1;
-  let time = startMin*60
-
-  const countEl = document.getElementById('countdownOTP')
-  const resendOtp = document.getElementById('resendOtp')
-
-  let count = setInterval(updateCount,1000)
-  function updateCount(){
-    let min = Math.floor(time/60)
-    let sec = time % 60
-    
-    sec = sec < 10 ? '0'+sec : sec;
-
-    countEl.innerHTML = `${min} : ${sec}`
-
-    if(sec == 0 && min == 0){
-      clearInterval(count)
-      countEl.innerHTML = '00 : 00';
-      resendOtp.classList.remove('isDisabled')
+  if (e.key === "Backspace") {
+    if (pre !== "") {
+      document.getElementById(pre).focus();
     }
+  }
+}
 
-    time--
-  }  
+const startMin = 2;
+let time = startMin * 60;
 
+const countEl = document.getElementById("countdownOTP");
+const resendOtp = document.getElementById("resendOtp");
+
+let count = setInterval(updateCount, 1000);
+function updateCount() {
+  let min = Math.floor(time / 60);
+  let sec = time % 60;
+
+  sec = sec < 10 ? "0" + sec : sec;
+
+  countEl.innerHTML = `${min} : ${sec}`;
+
+  if (sec == 0 && min == 0) {
+    clearInterval(count);
+    countEl.innerHTML = "00 : 00";
+    resendOtp.classList.remove("isDisabled");
+  }
+
+  time--;
+}
 </script>

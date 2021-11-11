@@ -3,26 +3,29 @@
     <div class="row">
       <div class="col px-auto">
         <h6 class="coupon__code text-center fs-4">LOGIN</h6>
-        <form action="#">
+        <form action="/login" id="userLogin" method="post">
 
-          <div class="row px-lg-5">
+          <div class="row px-md-5">
             <div class="col text-center">
+              {{#if loginErr}}
+                {{loginErr}}
+              {{/if}}
+
               <div class="signup__input">
                 <p>E-Mail<span>*</span></p>
-                <input type="text" />
+                <input type="text" name="email" />
               </div>
             </div>
           </div>
-          <div class="px-lg-5 text-center">
+          <div class="px-md-5 text-center">
             <div class="signup__input">
               <p>Password<span>*</span></p>
-              <input type="password" />
+              <input type="password" id="email" name="password" />
             </div>
           </div>
-          <div class="px-lg-3">
+          <div class="px-md-3">
 
             <div class="text-center">
-              <p class="signup__links mb-0"><a href="">Forgot Password?</a></p>
               <button
                 type="submit"
                 class="btn btn-success create_account_btn mt-3"
@@ -31,12 +34,16 @@
             </div>
           </div>
         </form>
-        <form action="" class="mb-5">
+        <form action="/otp-verify" id="reqOtpForm" class="mb-5">
           <div class="row px-lg-5">
             <div class="col text-center">
               <div class="signup__input">
                 <p>Phone<span>*</span></p>
-                <input type="text" />
+                <input
+                  type="text"
+                  id="phoneNumber2"
+                  name="phone"
+                />
               </div>
             </div>
 
@@ -45,7 +52,8 @@
                 type="submit"
                 class="btn btn-secondary req_otp_btn"
               >Reguest OTP</button>
-              <p class="signup__links mb-0"><a href="">Don't Have an Account?</a></p>
+              <p class="signup__links mb-0"><a href="/signup">Don't Have an
+                  Account?</a></p>
             </div>
 
           </div>
@@ -54,3 +62,36 @@
     </div>
   </div>
 </div>
+
+<script>
+  //   FILTER INPUT FIELDS
+function setInputFilter(textbox, inputFilter) {
+  [
+    "input",
+    "keydown",
+    "keyup",
+    "mousedown",
+    "mouseup",
+    "select",
+    "contextmenu",
+    "drop",
+  ].forEach(function (event) {
+    textbox.addEventListener(event, function () {
+      if (inputFilter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
+      }
+    });
+  });
+}
+
+setInputFilter(document.getElementById("phoneNumber2"), function (value) {
+  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999999);
+});
+</script>

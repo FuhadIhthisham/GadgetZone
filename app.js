@@ -4,11 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// express session
+var session = require('express-session')
+
+// mongodb
+var db = require('./config/connection')
+
 // HBS handlebar
 var hbs = require('express-handlebars')
 
-var indexRouter = require('./routes/user');
-var usersRouter = require('./routes/admin');
+var indexRouter = require('./routes/index');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
@@ -23,9 +29,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// session middleware
+app.use(session({
+  secret: 'key',
+  cookie: {maxAge: 600000},
+  resave: false,
+  saveUninitialized: true
+})
+)
+
+// MongoDB connection checking
+db.connect((err) => {
+  if (err) console.log("Connection error " + err);
+  else console.log("Database Connected to port 27017");
+});
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

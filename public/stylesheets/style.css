@@ -1634,10 +1634,9 @@ ol {
   margin-bottom: 10px;
 }
 
-.product__details__text_2 h5{
-	font-size: 28px;
+.product__details__text_2 h5 {
+  font-size: 28px;
 }
-
 
 .product__details__text .rating {
   margin-bottom: 20px;
@@ -2366,11 +2365,9 @@ ol {
   margin-right: 30px;
 }
 
-
 .product__cart__item__pic {
   width: 90px;
   height: 90px;
-
 }
 
 .shopping__cart__table
@@ -2569,7 +2566,7 @@ ol {
   overflow: hidden;
 }
 
-.discount__price{
+.discount__price {
   color: rgb(15, 118, 15) !important;
 }
 
@@ -2608,11 +2605,9 @@ ol {
   color: #0d0d0d;
 }
 
-
 .address_items_dropdown {
   font-size: small;
 }
-
 
 .checkout__title {
   color: #111111;
@@ -2805,13 +2800,10 @@ ol {
     Signup
 -----------------------*/
 
-
-
 .signup__form {
   border-radius: 30px;
   background-color: rgba(167, 164, 164, 0.197);
 }
-
 
 .create_account_btn {
   border-radius: 40px;
@@ -2819,7 +2811,6 @@ ol {
   height: 40px;
   padding: 5px 30px;
 }
-
 
 .signup__links a {
   font-weight: 600;
@@ -2850,7 +2841,6 @@ ol {
   border-radius: 20px;
 }
 
-
 /* OTP */
 .otp__input input {
   height: 40px;
@@ -2870,7 +2860,6 @@ ol {
   text-decoration: none;
   pointer-events: none;
 }
-
 
 .req_otp_btn {
   border-radius: 40px;
@@ -2897,10 +2886,6 @@ ol {
 .signup__input input::placeholder {
   color: #b7b7b7;
 }
-
-
-
-
 
 /*---------------------
   Blog Sidebar
@@ -3950,4 +3935,50 @@ ol {
   .categories__text:before {
     height: 250px;
   }
+}
+
+/* 
+----------------------------
+Drop down menu profile
+---------------------------
+*/
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dropdown-content a {
+  color: black;
+  font-size: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+/* ERROR */
+
+.error {
+  margin-top: -10px ;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: red;
 }
