@@ -3830,3 +3830,5 @@ Prism.languages.sql = {
     } else
       console.warn("Copy to Clipboard plugin loaded before Toolbar plugin.");
 })();
+
+

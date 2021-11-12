@@ -1,0 +1,27 @@
+/* 
+IMAGE PREVIEW BRAND LOGO
+*/
+.image-preview {
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgb(209, 206, 206);
+  margin-top: 15px;
+
+  /* for default text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: rgb(139, 134, 134);
+}
+
+.image-preview-image {
+  display: none;
+  width: 100%;
+}
+
+/* 
+  ADD PRODUCT PAGE
+  */
+
+/* 

@@ -98,19 +98,19 @@ router.get("/reset-password", function (req, res, next) {
 });
 
 router.get("/product-details", function (req, res, next) {
-  res.render("product-details", { title: "GadgetZone" });
+  res.render("product-details", { title: "GadgetZone", user:req.session.user });
 });
 
 router.get("/product-list", function (req, res, next) {
-  res.render("product-list", { title: "GadgetZone" });
+  res.render("product-list", { title: "GadgetZone", user:req.session.user });
 });
 
 router.get("/shopping-cart", function (req, res, next) {
-  res.render("shopping-cart", { title: "GadgetZone" });
+  res.render("shopping-cart", { title: "GadgetZone", user:req.session.user });
 });
 
 router.get("/wishlist", function (req, res, next) {
-  res.render("wishlist", { title: "GadgetZone" });
+  res.render("wishlist", { title: "GadgetZone", user:req.session.user });
 });
 
 module.exports = router;

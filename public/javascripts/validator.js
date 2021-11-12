@@ -18,6 +18,25 @@ adminLogin.validate({
   },
 });
 
+
+// ADMIN ADD BRAND VALIDATION
+var addBrandForm = $("#addBrandForm");
+addBrandForm.validate({
+  rules: {
+    brandName: {
+      required: true,
+    },
+    brandLogo: {
+      required: true,
+    },
+  },
+  messages: {
+    brandLogo: {
+      required: "Brand logo image is required",
+    },
+  },
+});
+
 // USER LOGIN VALIDATION
 var userLogin = $("#userLogin");
 userLogin.validate({
@@ -34,6 +53,32 @@ userLogin.validate({
   messages: {
     email: {
       required: "This field is required",
+    },
+  },
+});
+
+// ADD CATEGORY VALIDATION
+var addCategoryForm = $("#addCategoryForm");
+addCategoryForm.validate({
+  rules: {
+    category: {
+      required: true,
+    },
+    subcategory: {
+      required: true,
+    },
+  },
+});
+
+// ADD SUBCATEGORY VALIDATION
+var addSubcategoryForm = $("#addSubcategoryForm");
+addSubcategoryForm.validate({
+  rules: {
+    category: {
+      required: true,
+    },
+    subcategory: {
+      required: true,
     },
   },
 });

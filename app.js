@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// File Upload
+var fileUpload = require('express-fileupload')
+
 // express session
 var session = require('express-session')
 
@@ -29,10 +32,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// File upload Middleware
+app.use(fileUpload())
+
 // session middleware
 app.use(session({
   secret: 'key',
-  cookie: {maxAge: 600000},
+  cookie: {maxAge: 6000000},
   resave: false,
   saveUninitialized: true
 })

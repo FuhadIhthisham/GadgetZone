@@ -1,0 +1,269 @@
+<div class="container col-7 mt-3 mb-5 justify-content-center">
+  <div class="signup__form row">
+    <form
+      action="/admin/addProduct"
+      class="col"
+      enctype="multipart/form-data"
+      id="addProductForm"
+      method="post"
+    >
+      <div class="row">
+        <div class="col">
+          <p
+            class="bg-gray-300 p-4 text-left font-weight-bold"
+            style="font-size: 20px;"
+          >Add New Product</p>
+          <div class="px-3 px-4">
+            <div class="row">
+                <div class="col">
+              <div class="signup__input">
+                <p>Product Name: </p>
+                <input type="text" name="productName" />
+              </div>
+            </div>
+            <div class="col">
+              <div class="signup__input">
+                <p>Product Description: </p>
+                <textarea
+                  name="productDescription"
+                  id="productDescription"
+                  cols="30"
+                  rows="5"
+                  style="resize: none; border-radius: 5px;"
+                ></textarea>
+              </div>
+            </div>
+            </div>
+           <div class="row">
+                <div class="col">
+              <div class="signup__input">
+                <p>Brand: </p>
+
+                <select
+                  class="form-select"
+                  style="border-radius: 30px;"
+                  name="brand"
+                  aria-label="Default select example"
+                >
+                  <option selected disabled>Brand</option>
+                  {{#each allCategory}}
+                    <option value="{{this.category}}">{{this.category}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="signup__input">
+                <p>Category: </p>
+
+                <select
+                  class="form-select"
+                  style="border-radius: 30px;"
+                  name="category"
+                  aria-label="Default select example"
+                >
+                  <option selected disabled>Category</option>
+                  {{#each allCategory}}
+                    <option value="{{this.category}}">{{this.category}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="signup__input">
+                <p>Subcategory: </p>
+
+                <select
+                  class="form-select"
+                  style="border-radius: 30px;"
+                  name="subcategory"
+                  aria-label="Default select example"
+                >
+                  <option selected disabled>Subcategory</option>
+                  {{#each allCategory}}
+                    <option value="{{this.category}}">{{this.category}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+           </div>
+            <div class="row">
+              <div class="col">
+                <div class="signup__input">
+                  <p>Landing Cost: </p>
+                  <input type="text" name="landingCost" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>MRP: </p>
+                  <input type="text" name="price" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="signup__input">
+                  <p>Colour 1: </p>
+                  <input type="text" name="colour1" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>Quantity 1: </p>
+                  <input type="text" name="quantity1" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="signup__input">
+                  <p>Colour 2: </p>
+                  <input type="text" name="colour2" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>Quantity 2: </p>
+                  <input type="text" name="quantity2" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="signup__input">
+                  <p>Colour 3: </p>
+                  <input type="text" name="colour3" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>Quantity 3: </p>
+                  <input type="text" name="quantity3" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="signup__input">
+                  <p>Product Image 1: </p>
+                  <input
+                    type="file"
+                    name="product_Image_1"
+                    accept="image/*"
+                    id="proImgInput"
+                  />
+                  <div class="image-preview" id="imagePreview">
+                    <img
+                      src=""
+                      alt="Image Preview"
+                      class="image-preview-image"
+                    />
+                    <span class="image-preview-text">Image Preview</span>
+                  </div>
+                </div>
+
+                {{#if brandMsg.status}}
+                  <p class="text-success"> {{brandMsg.msg}}</p>
+                {{else}}
+                  <p class="text-danger"> {{brandMsg.msg}}</p>
+                {{/if}}
+
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>Product Image 2: </p>
+                  <input
+                    type="file"
+                    name="product_Image_2"
+                    accept="image/*"
+                    id="proImgInput"
+                  />
+                  <div class="image-preview" id="imagePreview">
+                    <img
+                      src=""
+                      alt="Image Preview"
+                      class="image-preview-image"
+                    />
+                    <span class="image-preview-text">Image Preview</span>
+                  </div>
+                </div>
+
+                {{#if brandMsg.status}}
+                  <p class="text-success"> {{brandMsg.msg}}</p>
+                {{else}}
+                  <p class="text-danger"> {{brandMsg.msg}}</p>
+                {{/if}}
+
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>Product Image 3: </p>
+                  <input
+                    type="file"
+                    name="product_Image_3"
+                    accept="image/*"
+                    id="proImgInput"
+                  />
+                  <div class="image-preview" id="imagePreview">
+                    <img
+                      src=""
+                      alt="Image Preview"
+                      class="image-preview-image"
+                    />
+                    <span class="image-preview-text">Image Preview</span>
+                  </div>
+                </div>
+
+                {{#if brandMsg.status}}
+                  <p class="text-success"> {{brandMsg.msg}}</p>
+                {{else}}
+                  <p class="text-danger"> {{brandMsg.msg}}</p>
+                {{/if}}
+
+              </div>
+              <div class="col">
+                <div class="signup__input">
+                  <p>Product Image 4: </p>
+                  <input
+                    type="file"
+                    name="product_Image_4"
+                    accept="image/*"
+                    id="proImgInput"
+                  />
+                  <div class="image-preview" id="imagePreview">
+                    <img
+                      src=""
+                      alt="Image Preview"
+                      class="image-preview-image"
+                    />
+                    <span class="image-preview-text">Image Preview</span>
+                  </div>
+                </div>
+
+                {{#if brandMsg.status}}
+                  <p class="text-success"> {{brandMsg.msg}}</p>
+                {{else}}
+                  <p class="text-danger"> {{brandMsg.msg}}</p>
+                {{/if}}
+
+              </div>
+            </div>
+            <div class="col text-center border-top my-5">
+              <div class="signup__input">
+                <p> </p>
+                <button
+                  class="btn btn-success px-4 py-2"
+                  type="submit"
+                  style="border-radius: 30px;"
+                >
+                  ADD PRODUCT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
