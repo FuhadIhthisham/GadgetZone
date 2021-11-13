@@ -1,7 +1,7 @@
 <div class="container col-7 mt-3 mb-5 justify-content-center">
   <div class="signup__form row">
     <form
-      action="/admin/addProduct"
+      action="/admin/edit-product?id={{result._id}}"
       class="col"
       enctype="multipart/form-data"
       id="addProductForm"
@@ -16,13 +16,13 @@
           <div class="px-3 px-4">
             <div class="row">
               
-               {{#if productAddMsg.status}}
-                <p class="text-success text-center"> {{productAddMsg.msg}}</p>
+               {{#if productEditMsg.status}}
+                <p class="text-success text-center"> {{productEditMsg.msg}}</p>
               {{else}}
-                {{#if productAddMsg.imageErr}}
-                  <p class="text-danger text-center"> {{productAddMsg.imageErr}}</p>
+                {{#if productEditMsg.imageErr}}
+                  <p class="text-danger text-center"> {{productEditMsg.imageErr}}</p>
                 {{else}}
-                  <p class="text-danger text-center"> {{productAddMsg.msg}}</p>
+                  <p class="text-danger text-center"> {{productEditMsg.msg}}</p>
                 {{/if}}
               {{/if}}
 
@@ -30,7 +30,7 @@
               <div class="col">
                 <div class="signup__input">
                   <p>Product Name: </p>
-                  <input type="text" name="productName" />
+                  <input type="text" name="productName" value="{{result.productName}}" />
                 </div>
               </div>
               <div class="col">
@@ -42,7 +42,7 @@
                     cols="45"
                     rows="10"
                     style="resize: none; font-size: 13px;padding: 10px ; border-radius: 5px;"
-                  ></textarea>
+                  >{{result.productDescription}}</textarea>
                 </div>
               </div>
             </div>
@@ -57,7 +57,7 @@
                     aria-label="Default select example"
                     id="productBrand"
                   >
-                    <option selected disabled >Select</option>
+                    <option selected value="{{result.productBrand}}" disabled>{{result.productBrand}}</option>
                     {{#each allBrand}}
                       <option
                         value="{{this.brandName}}"
@@ -77,7 +77,7 @@
                     id="categoryChange"
                     onchange="catChange()"
                   >
-                    <option selected disabled >Select</option>
+                    <option selected disabled value="{{result.productCategory}}">{{result.productCategory}}</option>
                     {{#each allCategory}}
                       <option
                         value="{{this.category}}"
@@ -96,7 +96,7 @@
                     id="subCategory"
                     aria-label="Default select example"
                   >
-                    <option selected disabled>Select</option>
+                    <option selected disabled value="{{result.productSubcategory}}">{{result.productSubcategory}}</option>
                   </select>
                 </div>
               </div>
@@ -105,13 +105,13 @@
               <div class="col">
                 <div class="signup__input mt-3">
                   <p>Landing Cost: </p>
-                  <input type="number" name="landingCost" />
+                  <input type="number" name="landingCost" value="{{result.landingCost}}" />
                 </div>
               </div>
               <div class="col">
                 <div class="signup__input mt-3">
                   <p>MRP: </p>
-                  <input type="number" name="productPrice" />
+                  <input type="number" name="productPrice" value="{{result.productPrice}}" />
                 </div>
               </div>
             </div>
@@ -119,13 +119,13 @@
               <div class="col">
                 <div class="signup__input">
                   <p>Colour: </p>
-                  <input type="text" name="productColour" />
+                  <input type="text" name="productColour" value="{{result.productColour}}" />
                 </div>
               </div>
               <div class="col">
                 <div class="signup__input">
                   <p>Quantity: </p>
-                  <input type="number" name="productQuantity" />
+                  <input type="number" name="productQuantity" value="{{result.productQuantity}}" />
                 </div>
               </div>
             </div>
@@ -138,15 +138,15 @@
                     type="file"
                     name="product_Image_1"
                     accept="image/*"
-                    id="proImgInput1"
+                    id="proImgInput1_1"
                   />
                   <div class="image-preview" id="imagePreview1">
                     <img
-                      src=""
+                      src="/images/product-images/{{result._id}}_{{result.productColour}}_1.jpg"
                       alt="Image Preview"
-                      class="image-preview-image1"
+                      class="image-preview-image1_1"
                     />
-                    <span class="image-preview-text1">Image Preview</span>
+                    <span class="image-preview-text1_1"></span>
                   </div>
                 </div>
 
@@ -158,15 +158,15 @@
                     type="file"
                     name="product_Image_2"
                     accept="image/*"
-                    id="proImgInput2"
+                    id="proImgInput2_2"
                   />
                   <div class="image-preview" id="imagePreview2">
                     <img
-                      src=""
+                      src="/images/product-images/{{result._id}}_{{result.productColour}}_2.jpg"
                       alt="Image Preview"
-                      class="image-preview-image2"
+                      class="image-preview-image2_2"
                     />
-                    <span class="image-preview-text2">Image Preview</span>
+                    <span class="image-preview-text2"></span>
                   </div>
                 </div>
 
@@ -178,15 +178,15 @@
                     type="file"
                     name="product_Image_3"
                     accept="image/*"
-                    id="proImgInput3"
+                    id="proImgInput3_3"
                   />
                   <div class="image-preview" id="imagePreview3">
                     <img
-                      src=""
+                      src="/images/product-images/{{result._id}}_{{result.productColour}}_3.jpg"
                       alt="Image Preview"
-                      class="image-preview-image3"
+                      class="image-preview-image3_3"
                     />
-                    <span class="image-preview-text3">Image Preview</span>
+                    <span class="image-preview-text3"></span>
                   </div>
                 </div>
               </div>
@@ -197,15 +197,15 @@
                     type="file"
                     name="product_Image_4"
                     accept="image/*"
-                    id="proImgInput4"
+                    id="proImgInput4_4"
                   />
                   <div class="image-preview" id="imagePreview4">
                     <img
-                      src=""
+                      src="/images/product-images/{{result._id}}_{{result.productColour}}_4.jpg"
                       alt="Image Preview"
-                      class="image-preview-image4"
+                      class="image-preview-image4_4"
                     />
-                    <span class="image-preview-text4">Image Preview</span>
+                    <span class="image-preview-text4"></span>
                   </div>
                 </div>
               </div>
@@ -218,7 +218,7 @@
                   type="submit"
                   style="border-radius: 30px;"
                 >
-                  ADD PRODUCT
+                  EDIT PRODUCT
                 </button>
               </div>
             </div>
@@ -231,6 +231,7 @@
 
 
 <script type="text/javascript">
+// while Onchange select option category, it shows subcategories on other select option
   function catChange(){
   var currCategory = document.getElementById('categoryChange').value
   console.log(currCategory)
@@ -255,10 +256,10 @@
 <script type="text/javascript">
   // Image Preview1 For Add product
 
-  const proImgFile1 = document.getElementById('proImgInput1')
+  const proImgFile1 = document.getElementById('proImgInput1_1')
 const previewContainer1 = document.getElementById('imagePreview1')
-const previewImage1 = previewContainer1.querySelector('.image-preview-image1')
-const previewDefaultText1 = previewContainer1.querySelector('.image-preview-text1')
+const previewImage1 = previewContainer1.querySelector('.image-preview-image1_1')
+const previewDefaultText1 = previewContainer1.querySelector('.image-preview-text1_1')
 
 proImgFile1.addEventListener('change',()=>{
   const file = proImgFile1.files[0]
@@ -285,9 +286,9 @@ proImgFile1.addEventListener('change',()=>{
 })
   // Image Preview2 For Add product
 
-  const proImgFile2 = document.getElementById('proImgInput2')
+  const proImgFile2 = document.getElementById('proImgInput2_2')
 const previewContainer2 = document.getElementById('imagePreview2')
-const previewImage2 = previewContainer2.querySelector('.image-preview-image2')
+const previewImage2 = previewContainer2.querySelector('.image-preview-image2_2')
 const previewDefaultText2 = previewContainer2.querySelector('.image-preview-text2')
 
 proImgFile2.addEventListener('change',()=>{
@@ -315,9 +316,9 @@ proImgFile2.addEventListener('change',()=>{
 })
   // Image Preview3 For Add product
 
-  const proImgFile3 = document.getElementById('proImgInput3')
+  const proImgFile3 = document.getElementById('proImgInput3_3')
 const previewContainer3 = document.getElementById('imagePreview3')
-const previewImage3 = previewContainer3.querySelector('.image-preview-image3')
+const previewImage3 = previewContainer3.querySelector('.image-preview-image3_3')
 const previewDefaultText3 = previewContainer3.querySelector('.image-preview-text3')
 
 proImgFile3.addEventListener('change',()=>{
@@ -345,9 +346,9 @@ proImgFile3.addEventListener('change',()=>{
 })
   // Image Preview4 For Add product
 
-  const proImgFile4 = document.getElementById('proImgInput4')
+  const proImgFile4 = document.getElementById('proImgInput4_4')
 const previewContainer4 = document.getElementById('imagePreview4')
-const previewImage4 = previewContainer4.querySelector('.image-preview-image4')
+const previewImage4 = previewContainer4.querySelector('.image-preview-image4_4')
 const previewDefaultText4 = previewContainer4.querySelector('.image-preview-text4')
 
 proImgFile4.addEventListener('change',()=>{

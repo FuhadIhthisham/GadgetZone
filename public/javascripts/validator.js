@@ -37,6 +37,55 @@ addBrandForm.validate({
   },
 });
 
+// ADMIN ADD PRODUCT VALIDATION
+var addProductForm = $("#addProductForm");
+addProductForm.validate({
+  rules: {
+    productName: {
+      required: true,
+    },
+    productDescription: {
+      required: true,
+    },
+    productBrand: {
+      required: true,
+    },
+    productCategory: {
+      required: true,
+    },
+    productSubcategory: {
+      required: true,
+    },
+    landingCost: {
+      required: true,
+      number:true
+    },
+    productPrice: {
+      required: true,
+      number:true
+    },
+    productQuantity: {
+      required: true,
+      number:true
+    },
+    productColour: {
+      required: true,
+    },
+    product_Image_1: {
+      required: true,
+    },
+    product_Image_2: {
+      required: true,
+    },
+    product_Image_3: {
+      required: true,
+    },
+    product_Image_4: {
+      required: true,
+    },
+  },
+});
+
 // USER LOGIN VALIDATION
 var userLogin = $("#userLogin");
 userLogin.validate({

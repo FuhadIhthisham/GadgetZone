@@ -15,8 +15,22 @@ IMAGE PREVIEW BRAND LOGO
   color: rgb(139, 134, 134);
 }
 
-.image-preview-image {
+.image-preview-image,
+.image-preview-image1,
+.image-preview-image2,
+.image-preview-image3,
+.image-preview-image4
+{
   display: none;
+  width: 100%;
+}
+
+.image-preview-image1_1,
+.image-preview-image2_2,
+.image-preview-image3_3,
+.image-preview-image4_4
+{
+  display: block  ;
   width: 100%;
 }
 
