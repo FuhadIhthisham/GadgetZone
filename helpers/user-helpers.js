@@ -73,4 +73,22 @@ module.exports = {
       }
     });
   },
+  // checking OTP number details on database
+  phoneCheck: (userPhone) => {
+    return new Promise(async (resolve, reject) => {
+      let user = await db
+        .get()
+        .collection(collections.USER_COLLECTION)
+        .findOne({ phone: userPhone });
+      if (user) {
+            console.log("Phone found on db");
+            resolve({ userExist: true ,user});
+      } else {
+        console.log("Phone not found");
+        resolve({ userExist: false });
+      }
+    });
+  },
+
+
 };

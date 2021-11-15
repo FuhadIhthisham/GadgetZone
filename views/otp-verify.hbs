@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col px-auto">
         <h6 class="coupon__code text-center fs-4">Verify OTP</h6>
-        <form action="#">
-
+        {{!-- <form action="/otp-verify"> --}}
+          <h3 class="alert-danger text-center otperror" id="error">Invalid OTP</h3>
           <div class="row px-lg-5 px-sm-2">
             <div class="row text-center">
               <h6 class="mb-4">Enter the OTP send to your Phone</h6>
@@ -20,24 +20,55 @@
               <div class="otp__input col">
                 <input type="text" maxlength="1" id="num4" onkeyup="clickevent(event,'num3','num4','')"/>
               </div>
-
+               <input class="m-2 text-center form-control rounded" type="text" id="phonenumber" name="phonenumber" value="{{OtpPhone}}" hidden />
+                <h4>{{otpPhone}}</h4>
             </div>
           </div>
 
           <div class="text-center">
             <p class="signup__links mb-0" id="countdownOTP"><a href=""></a></p>
             <button
-              type="submit"
               class="btn btn-success create_account_btn mt-3"
+               onclick="otpform()"
             >Verify</button>
             <p class="signup__links my-4"><a href="" id="resendOtp" class="isDisabled">Resend OTP?</a></p>
           </div>
-        </form>
+        {{!-- </form> --}}
       </div>
     </div>
   </div>
 </div>
 
+<script type="text/javascript">
+  console.log("sjfdnbiusadhgfiuasgdf")
+  function otpform(){
+  console.log("121212")
+    
+    var first = document.getElementById("num1").value;
+    var second = document.getElementById("num2").value;
+    var third = document.getElementById("num3").value;
+    var fourth = document.getElementById("num4").value;
+
+    var otpnumber = first+second+third+fourth
+    var phoneNumber = document.getElementById("phonenumber").value;
+    console.log(phoneNumber)
+
+$.ajax({
+    url:'/otp-verify?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,
+    method:'get',
+    success:(response)=>{
+        if(response){
+            window.location.replace("/");
+        }else{
+            document.getElementById("error").classList.remove("otperror");
+        }
+    }
+})
+
+
+}
+
+</script>
 
 <script type="text/javascript">
   function clickevent(e, pre, curr, next) {
@@ -78,4 +109,6 @@ function updateCount() {
 
   time--;
 }
+
+
 </script>

@@ -3982,3 +3982,6 @@ Drop down menu profile
   font-size: 13px;
   color: red;
 }
+.otperror {
+  display: none;
+}

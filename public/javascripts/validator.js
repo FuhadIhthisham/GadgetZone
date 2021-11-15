@@ -85,6 +85,42 @@ addProductForm.validate({
     },
   },
 });
+// ADMIN EDIT PRODUCT VALIDATION
+var editProductForm = $("#editProductForm");
+editProductForm.validate({
+  rules: {
+    productName: {
+      required: true,
+    },
+    productDescription: {
+      required: true,
+    },
+    productBrand: {
+      required: true,
+    },
+    productCategory: {
+      required: true,
+    },
+    productSubcategory: {
+      required: true,
+    },
+    landingCost: {
+      required: true,
+      number:true
+    },
+    productPrice: {
+      required: true,
+      number:true
+    },
+    productQuantity: {
+      required: true,
+      number:true
+    },
+    productColour: {
+      required: true,
+    },
+  },
+});
 
 // USER LOGIN VALIDATION
 var userLogin = $("#userLogin");
@@ -142,7 +178,7 @@ userSignup.validate({
     },
     lastName: {
       required: true,
-      minlength: 5,
+      minlength: 1,
     },
     phone: {
       required: true,

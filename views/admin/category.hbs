@@ -86,9 +86,9 @@
               </div>
             </div>
             {{#if subCatMsg.status}}
-              <p class="text-success"> {{subCatMsg.msg}}</p>
+              <p class="alert-success"> {{subCatMsg.msg}}</p>
             {{else}}
-              <p class="text-secondary"> {{subCatMsg.msg}}</p>
+              <p class="alert-secondary"> {{subCatMsg.msg}}</p>
             {{/if}}
             <div class="col">
               <div class="signup__input">
@@ -137,13 +137,13 @@
                   <ul>
                     <li type="square">
                       {{this}}
-                      <a href="/admin/delete-subcategory?category={{../this.category}}&subcategory={{this}}" class="text-danger"><i class="fas fa-trash-alt"></i></a>
+                      <a onclick="deleteSub('{{../this.category}}','{{this}}')"  class="text-danger"><i class="fas fa-trash-alt"></i></a>
                     </li>
                   </ul>
                 {{/each}}
               </td>
               <td class="align-middle">
-                      <a href="/admin/delete-category?category={{this.category}}" class="text-danger"><i class="fas fa-trash-alt"></i></a>
+                      <a onclick="deleteCat('{{this.category}}')" class="text-danger"><i class="fas fa-trash-alt"></i></a>
               </td>
             </tr>
           {{/each}}
@@ -152,3 +152,68 @@
     </div>
   </div>
 </div>
+
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript">
+// sweet alert for delete subcategory button
+  function deleteSub(catId,subId){ 
+    swal({ 
+      title: "Are you sure?",
+      text:"Once deleted, you will not be able to recover this Product!",
+      icon:"warning",
+      buttons: true,
+      dangerMode: true,
+      })
+      .then((willDelete) => {
+        if(willDelete) { 
+          $.ajax({ 
+            url:"/admin/delete-subcategory",
+            method:"POST",
+            data:{category:catId,subcategory:subId},
+            success:(result)=>{ 
+              if(result.status){
+                swal("User deleted Successfully", {
+                  icon: "success", 
+                });
+              } 
+              location.href='/admin/category' 
+            }
+          });
+        }
+      })
+    }
+
+
+
+    //sweet alert for delete category button
+  function deleteCat(catId){ 
+    swal({ 
+      title: "Are you sure?",
+      text:"Once deleted, you will not be able to recover this Subcategory!",
+      icon:"warning",
+      buttons: true,
+      dangerMode: true,
+      })
+      .then((willDelete) => {
+        if(willDelete) { 
+          $.ajax({ 
+            url:"/admin/delete-category",
+            method:"POST",
+            data:{category:catId},
+            success:(result)=>{ 
+              if(result.status){
+                swal("User deleted Successfully", {
+                  icon: "success", 
+                });
+              } 
+              location.href='/admin/category' 
+            }
+          });
+        }
+      })
+    }
+
+</script>

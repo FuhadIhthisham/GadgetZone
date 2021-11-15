@@ -103,16 +103,17 @@ router.post("/addSubcategory",verifyLogin, function (req, res, next) {
 });
 
 // delete subcategory
-router.get("/delete-subcategory/",verifyLogin, function (req, res, next) {
-  adminHelper.deletesubCategory(req.query).then((response) => {
-    res.redirect("/admin/category");
+router.post("/delete-subcategory",verifyLogin, function (req, res, next) {
+  adminHelper.deletesubCategory(req.body).then((response) => {
+    console.log("subcategory deleted!!!!!");
+    res.json({status: true});
   });
 });
 
 // delete Category
-router.get("/delete-category/",verifyLogin, function (req, res, next) {
-  adminHelper.deleteCategory(req.query).then((response) => {
-    res.redirect("/admin/category");
+router.post("/delete-category/",verifyLogin, function (req, res, next) {
+  adminHelper.deleteCategory(req.body).then((response) => {
+    res.json({status: true});
   });
 });
 
@@ -154,12 +155,12 @@ router.post("/addBrand",verifyLogin, function (req, res, next) {
 });
 
 // delete brand
-router.get("/delete-brand/",verifyLogin, function (req, res, next) {
-  adminHelper.deleteBrand(req.query).then((response) => {
+router.post("/delete-brand/",verifyLogin, function (req, res, next) {
+  adminHelper.deleteBrand(req.body).then((response) => {
     if (response) {
       // To delete brand logo file
       fs.unlink(
-        "./public/images/brand-logo/" + req.query.id + ".png",
+        "./public/images/brand-logo/" + req.body.id + ".png",
         (err) => {
           if (err) {
             console.log(err);
@@ -168,7 +169,7 @@ router.get("/delete-brand/",verifyLogin, function (req, res, next) {
           }
         }
       );
-      res.redirect("/admin/brand");
+      res.json({status: true});
     }
   });
 });
@@ -211,22 +212,22 @@ router.post("/addProduct", verifyLogin, function (req, res, next) {
 
         // Moving Image 1
         prodImg1.mv(
-          `./public/images/product-images/${prodId}_${req.body.productColour}_1.jpg`,
+          `./public/images/product-images/${prodId}_1.jpg`,
           (err, done) => {
             if (!err) {
               // Moving Image 2
               prodImg2.mv(
-                `./public/images/product-images/${prodId}_${req.body.productColour}_2.jpg`,
+                `./public/images/product-images/${prodId}_2.jpg`,
                 (err, done) => {
                   if (!err) {
                     // Moving Image 3
                     prodImg3.mv(
-                      `./public/images/product-images/${prodId}_${req.body.productColour}_3.jpg`,
+                      `./public/images/product-images/${prodId}_3.jpg`,
                       (err, done) => {
                         if (!err) {
                           // Moving Image 4
                           prodImg4.mv(
-                            `./public/images/product-images/${prodId}_${req.body.productColour}_4.jpg`,
+                            `./public/images/product-images/${prodId}_4.jpg`,
                             (err, done) => {
                               if (!err) {
                                 console.log("Images Added Success.........");
@@ -286,23 +287,27 @@ router.get("/view-product", verifyLogin, function (req, res, next) {
         title: "View Product",
         admin: true,
         header: "PRODUCT MANAGEMENT",
+        productEditMsg,
         allProducts: response,
       });
     } else {
       console.log("view product response error!!!!");
     }
+    productEditMsg = null
   });
 });
 
 // delete product
-router.get("/delete-product/",verifyLogin, function (req, res, next) {
-  productHelper.getOneProduct(req.query).then((result) => {
-    productHelper.deleteProduct(req.query).then((response) => {
+router.post("/delete-product",verifyLogin, function (req, res, next) {
+  console.log(req.body);
+  console.log(req.body.id);
+  productHelper.getOneProduct(req.body.id).then((result) => {
+    productHelper.deleteProduct(req.body.id).then((response) => {
       if (response) {
         // To delete each product images
         for (i = 1; i <= 4; i++) {
           fs.unlink(
-            `./public/images/product-images/${req.query.id}_${result.productColour}_${i}.jpg`,
+            `./public/images/product-images/${req.body.id}_${i}.jpg`,
             (err) => {
               if (err) {
                 console.log(err);
@@ -350,9 +355,82 @@ router.get("/edit-product/",verifyLogin, function (req, res, next) {
 
 // post editted product
 router.post("/edit-product/",verifyLogin, function (req, res, next) {
-  productHelper.updateProduct(req.query).then((result) => {
-    
-  });
+  productHelper.getOneProduct(req.query).then((result) => {
+
+  
+  let prodImg1 = req.files?.product_Image_1;
+  let prodImg2 = req.files?.product_Image_2;
+  let prodImg3 = req.files?.product_Image_3;
+  let prodImg4 = req.files?.product_Image_4;
+  let prodId = result._id+'';
+
+  if(prodImg1){
+    fs.unlink(`./public/images/product-images/${prodId}_1.jpg`,(err,done)=>{
+      if(!err){
+        prodImg1.mv(
+          `./public/images/product-images/${prodId}_1.jpg`,
+          (err, done) => {
+            console.log("Image 1 updated.....");
+          })
+      }
+      else{
+        console.log("Image 1 didn't updated");
+      }   
+    })
+
+  }
+  if(prodImg2){
+    fs.unlink(`./public/images/product-images/${prodId}_2.jpg`,(err,done)=>{
+      if(!err){
+        prodImg2.mv(
+          `./public/images/product-images/${prodId}_2.jpg`,
+          (err, done) => {
+            console.log("Image 2 updated.....");
+          })
+      }
+      else{
+        console.log("Image 2 didn't updated");
+      }   
+    })    
+  }
+  if(prodImg3){
+    fs.unlink(`./public/images/product-images/${prodId}_3.jpg`,(err,done)=>{
+      if(!err){
+        prodImg3.mv(
+          `./public/images/product-images/${prodId}_3.jpg`,
+          (err, done) => {
+            console.log("Image 3 updated.....");
+          })
+      }
+      else{
+        console.log("Image 3 didn't updated");
+      }   
+    })    
+  }
+  if(prodImg4){
+    fs.unlink(`./public/images/product-images/${prodId}_4.jpg`,(err,done)=>{
+      if(!err){
+        prodImg4.mv(
+          `./public/images/product-images/${prodId}_4.jpg`,
+          (err, done) => {
+            console.log("Image 4 updated.....");
+          })
+      }
+      else{
+        console.log("Image 4 didn't updated");
+      }   
+    })    
+  }
+  
+})
+  
+  productHelper.updateProduct(req.query,req.body).then((result) => {
+    if(result){
+      productEditMsg = result
+      console.log("Updated product details");
+    }
+  })
+  res.redirect('/admin/view-product')
 });
 
 module.exports = router;

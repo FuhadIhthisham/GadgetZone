@@ -65,7 +65,7 @@ module.exports = {
         await db
         .get()
         .collection(collections.PRODUCT_COLLECTION)
-        .deleteOne({ _id: objectId(data.id) })
+        .deleteOne({ _id: objectId(data) })
         .then((response) => {
           console.log("response: "+response);
           resolve(response);
@@ -80,29 +80,46 @@ module.exports = {
     })
   },
     // Update products
-    updateProduct: (productData) => {
+    updateProduct: (productId,productData) => {
       return new Promise(async (resolve, reject) => {
         let isProduct = await db
           .get()
           .collection(collections.PRODUCT_COLLECTION)
-          .findOne({ productName: productData.productName }); //finds for a document in db of product name of req.body
+          .findOne({ _id: objectId(productId.id) }); //finds for a document in db by product id
         if (isProduct) {
-  
-            //if same subcategory is in subcategory array shows error
-            resolve({ status: false, msg: "This Product Already Exist" });
-        } else {
-          //if there is no document of product name, add product
           await db
             .get()
             .collection(collections.PRODUCT_COLLECTION)
-            .insertOne(productData).then((result)=>{
+            .updateOne({_id: objectId(productId.id)},{
+              $set:{
+                productName:productData.productName,
+                productDescription:productData.productDescription,
+                productBrand:productData.productBrand,
+                productCategory:productData.productCategory,
+                productSubcategory:productData.productSubcategory,
+                landingCost:productData.landingCost,
+                productPrice:productData.productPrice,
+                productColour:productData.productColour,
+                productQuantity:productData.productQuantity,
+              }}).then((result)=>{
               console.log(result);
               resolve({
-                result,
+                isProduct,
                 status: true,
-                msg: "Product Added Successfully",
+                msg: "Product Updated Successfully",
               });
             })
+          } 
+          else {
+            console.log(productId);
+            console.log(isProduct);
+            //if there is no document of product name
+            console.log("No product found...Failed update");
+            resolve({
+              status: false,
+              msg: "Product Update Failed",
+            });
+          
         }
       });
     },

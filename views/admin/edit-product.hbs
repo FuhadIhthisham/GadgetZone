@@ -3,8 +3,9 @@
     <form
       action="/admin/edit-product?id={{result._id}}"
       class="col"
+      onsubmit="return onsubmitForm(this)"
       enctype="multipart/form-data"
-      id="addProductForm"
+      id="editProductForm"
       method="post"
     >
       <div class="row">
@@ -15,18 +16,6 @@
           >Add New Product</p>
           <div class="px-3 px-4">
             <div class="row">
-              
-               {{#if productEditMsg.status}}
-                <p class="text-success text-center"> {{productEditMsg.msg}}</p>
-              {{else}}
-                {{#if productEditMsg.imageErr}}
-                  <p class="text-danger text-center"> {{productEditMsg.imageErr}}</p>
-                {{else}}
-                  <p class="text-danger text-center"> {{productEditMsg.msg}}</p>
-                {{/if}}
-              {{/if}}
-
-
               <div class="col">
                 <div class="signup__input">
                   <p>Product Name: </p>
@@ -57,7 +46,7 @@
                     aria-label="Default select example"
                     id="productBrand"
                   >
-                    <option selected value="{{result.productBrand}}" disabled>{{result.productBrand}}</option>
+                    <option selected value="{{result.productBrand}}" class="bg-gray-400">{{result.productBrand}}</option>
                     {{#each allBrand}}
                       <option
                         value="{{this.brandName}}"
@@ -77,7 +66,7 @@
                     id="categoryChange"
                     onchange="catChange()"
                   >
-                    <option selected disabled value="{{result.productCategory}}">{{result.productCategory}}</option>
+                    <option selected class="bg-gray-400" value="{{result.productCategory}}">{{result.productCategory}}</option>
                     {{#each allCategory}}
                       <option
                         value="{{this.category}}"
@@ -96,7 +85,7 @@
                     id="subCategory"
                     aria-label="Default select example"
                   >
-                    <option selected disabled value="{{result.productSubcategory}}">{{result.productSubcategory}}</option>
+                    <option selected class="bg-gray-400" value="{{result.productSubcategory}}">{{result.productSubcategory}}</option>
                   </select>
                 </div>
               </div>
@@ -142,7 +131,7 @@
                   />
                   <div class="image-preview" id="imagePreview1">
                     <img
-                      src="/images/product-images/{{result._id}}_{{result.productColour}}_1.jpg"
+                      src="/images/product-images/{{result._id}}_1.jpg"
                       alt="Image Preview"
                       class="image-preview-image1_1"
                     />
@@ -162,7 +151,7 @@
                   />
                   <div class="image-preview" id="imagePreview2">
                     <img
-                      src="/images/product-images/{{result._id}}_{{result.productColour}}_2.jpg"
+                      src="/images/product-images/{{result._id}}_2.jpg"
                       alt="Image Preview"
                       class="image-preview-image2_2"
                     />
@@ -182,7 +171,7 @@
                   />
                   <div class="image-preview" id="imagePreview3">
                     <img
-                      src="/images/product-images/{{result._id}}_{{result.productColour}}_3.jpg"
+                      src="/images/product-images/{{result._id}}_3.jpg"
                       alt="Image Preview"
                       class="image-preview-image3_3"
                     />
@@ -201,7 +190,7 @@
                   />
                   <div class="image-preview" id="imagePreview4">
                     <img
-                      src="/images/product-images/{{result._id}}_{{result.productColour}}_4.jpg"
+                      src="/images/product-images/{{result._id}}_4.jpg"
                       alt="Image Preview"
                       class="image-preview-image4_4"
                     />
@@ -215,7 +204,6 @@
                 <p> </p>
                 <button
                   class="btn btn-success px-4 py-2"
-                  type="submit"
                   style="border-radius: 30px;"
                 >
                   EDIT PRODUCT
@@ -230,7 +218,33 @@
 </div>
 
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script type="text/javascript">
+
+//ON SUBMIT FORM
+function onsubmitForm(form){
+  console.log(form)
+  swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this imaginary file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+}).then((isOkay)=>{
+  if(isOkay){
+    console.log("asif")
+    form.submit()
+  }
+})
+}
+
+
+
+
+
+
+
 // while Onchange select option category, it shows subcategories on other select option
   function catChange(){
   var currCategory = document.getElementById('categoryChange').value
