@@ -120,7 +120,29 @@ editProductForm.validate({
       required: true,
     },
   },
+
+  submitHandler:
+  //ON SUBMIT FORM
+      function onsubmitForm(form){
+        console.log(form)
+        swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this imaginary file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((isOkay)=>{
+        if(isOkay){
+          form.submit()
+        }
+      })
+      }
+
 });
+
+
+
+
 
 // USER LOGIN VALIDATION
 var userLogin = $("#userLogin");
@@ -275,15 +297,17 @@ setInputFilter(document.getElementById("phoneNumber"), function (value) {
   return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999999);
 });
 
+
+// Check whether password and retype password is equal in signup page
 $(document).ready(function () {
   $("#ConfirmPassword").on("keyup", function () {
     var password = $("#Password").val();
     var confirmPassword = $("#ConfirmPassword").val();
     if (password != confirmPassword)
-      $("#CheckPasswordMatch")
-        .html("Password does not match !")
-        .css("color", "red");
+    $("#CheckPasswordMatch")
+    .html("Password does not match !")
+    .css("color", "red");
     else
-      $("#CheckPasswordMatch").html("Password match !").css("color", "green");
+    $("#CheckPasswordMatch").html("Password match !").css("color", "green");
   });
 });

@@ -428,9 +428,9 @@ router.post("/edit-product/",verifyLogin, function (req, res, next) {
     if(result){
       productEditMsg = result
       console.log("Updated product details");
+      res.redirect('/admin/view-product')
     }
   })
-  res.redirect('/admin/view-product')
 });
 
 module.exports = router;

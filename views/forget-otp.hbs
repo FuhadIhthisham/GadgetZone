@@ -7,7 +7,7 @@
           <h3 class="alert-danger text-center otperror" id="error">Invalid OTP</h3>
           <div class="row px-lg-5 px-sm-2">
             <div class="row text-center">
-              <h6 class="mb-4">Enter the OTP send to your Phone {{otpPhone}}</h6>
+              <h6 class="mb-4">Enter the OTP send to your Phone {{OtpPhone}}</h6>
               <div class="otp__input col ms-3">
                 <input type="text" maxlength="1" id="num1" onkeyup="clickevent(event,'','num1','num2')" />
               </div>
@@ -20,7 +20,7 @@
               <div class="otp__input col">
                 <input type="text" maxlength="1" id="num4" onkeyup="clickevent(event,'num3','num4','')"/>
               </div>
-               <input class="m-2 text-center form-control rounded" type="text" id="phonenumber" name="phonenumber" value="{{OtpPhone}}" hidden />
+               <input class="m-2 text-center form-control rounded" type="text" id="phonenumber2" name="phonenumber" value="{{OtpPhone}}" hidden />
                 
             </div>
           </div>
@@ -40,32 +40,8 @@
 </div>
 
 <script type="text/javascript">
-  function otpform(){
-    
-    var first = document.getElementById("num1").value;
-    var second = document.getElementById("num2").value;
-    var third = document.getElementById("num3").value;
-    var fourth = document.getElementById("num4").value;
-
-    var otpnumber =`${first}${second}${third}${fourth}`
-    console.log(otpnumber)
-    var phoneNumber = document.getElementById("phonenumber").value;
-    console.log("Phone number:::: "+phoneNumber)
-
-$.ajax({
-    url:'/otp-verify?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,
-    method:'get',
-    success:(response)=>{
-        if(response){
-            window.location.replace("/");
-        }else{
-            document.getElementById("error").classList.remove("otperror");
-        }
-    }
-})
 
 
-}
 
 
 //   FILTER INPUT FIELDS
@@ -111,6 +87,43 @@ setInputFilter(document.getElementById("num3"), function (value) {
 setInputFilter(document.getElementById("num4"), function (value) {
   return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9);
 });
+
+
+
+
+
+
+
+
+
+
+
+  function otpform(){
+    
+    var first = document.getElementById("num1").value;
+    var second = document.getElementById("num2").value;
+    var third = document.getElementById("num3").value;
+    var fourth = document.getElementById("num4").value;
+
+    var otpnumber = `${first}${second}${third}${fourth}`
+    console.log(otpnumber)
+    var phoneNumber = document.getElementById("phonenumber2").value;
+    console.log("Phone number:::: "+phoneNumber)
+
+$.ajax({
+    url:'/forgot-otp?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,
+    method:'get',
+    success:(response)=>{
+        if(response){
+            window.location.replace("/reset-password");
+        }else{
+            document.getElementById("error").classList.remove("otperror");
+        }
+    }
+})
+
+
+}
 
 </script>
 

@@ -8,42 +8,14 @@ module.exports = {
   // Add user data to Database
   addUser: (userData) => {
     return new Promise(async (resolve, reject) => {
-      let userEmail = await db
-        .get()
-        .collection(collections.USER_COLLECTION)
-        .findOne({
-          $or:[
-            {
-              email: userData.email
-            },
-            {
-              phone: userData.phone
-            }
-          ]
-        });
-      if (
-        userData.phone === userEmail?.phone ||
-        userData.email === userEmail?.email
-      ) {
-        if (userData.phone === userEmail?.phone) {
-          resolve({
-            status: true,
-            msg: "User with this Phone number already exist",
-          });
-        }
-        else if (userData.email === userEmail?.email) {
-          resolve({ status: true, msg: "User with this Email already exist" });
-        }
-      } 
-      else {
+     
         userData.password = await bcrypt.hash(userData.password, 10);
         db.get()
           .collection(collections.USER_COLLECTION)
           .insertOne(userData)
           .then((data) => {
-            resolve({ status: false });
+            resolve({ status: true });
           });
-      }
     });
   },
 
@@ -90,5 +62,48 @@ module.exports = {
     });
   },
 
+  // checking duplication of User details on database
+  userCheck: (userData) => {
+    return new Promise(async (resolve, reject) => {
+      let user = await db
+        .get()
+        .collection(collections.USER_COLLECTION)
+        .findOne({ 
+          $or:
+          [
+            {email: userData.email},
+            {phone:userData.phone}
+          ] 
+        });
+      if (user) {
+            resolve({ userExist: true ,
+              msg: "User with this Phone number or email already exist"});
+      } else {
+        console.log("Phone not found");
+        resolve({ userExist: false});
+      }
+    });
+  },
 
+  // Reset password
+  resetPass: (resetData) => {
+    return new Promise(async (resolve, reject) => {
+     
+      resetData.newPass = await bcrypt.hash(resetData.newPass, 10);
+      console.log(resetData.newPass);
+      console.log(resetData.phonenumber);
+        db.get()
+          .collection(collections.USER_COLLECTION)
+          .updateOne({phone: resetData.phonenumber},
+            {
+              $set:{
+                password: resetData.newPass
+              }
+            })
+          .then((data) => {
+            resolve({ status: true });
+          });
+    });
+  },
+  
 };

@@ -94,13 +94,13 @@
               <div class="col">
                 <div class="signup__input mt-3">
                   <p>Landing Cost: </p>
-                  <input type="number" name="landingCost" value="{{result.landingCost}}" />
+                  <input type="text" id="landingCost" name="landingCost" value="{{result.landingCost}}" />
                 </div>
               </div>
               <div class="col">
                 <div class="signup__input mt-3">
                   <p>MRP: </p>
-                  <input type="number" name="productPrice" value="{{result.productPrice}}" />
+                  <input type="text" id="productPrice" name="productPrice" value="{{result.productPrice}}" />
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@
               <div class="col">
                 <div class="signup__input">
                   <p>Quantity: </p>
-                  <input type="number" name="productQuantity" value="{{result.productQuantity}}" />
+                  <input type="text" id="productQuantity" name="productQuantity" value="{{result.productQuantity}}" />
                 </div>
               </div>
             </div>
@@ -220,30 +220,7 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script type="text/javascript">
-
-//ON SUBMIT FORM
-function onsubmitForm(form){
-  console.log(form)
-  swal({
-  title: "Are you sure?",
-  text: "Once deleted, you will not be able to recover this imaginary file!",
-  icon: "warning",
-  buttons: true,
-  dangerMode: true,
-}).then((isOkay)=>{
-  if(isOkay){
-    console.log("asif")
-    form.submit()
-  }
-})
-}
-
-
-
-
-
-
+<script>
 
 // while Onchange select option category, it shows subcategories on other select option
   function catChange(){
@@ -268,6 +245,54 @@ function onsubmitForm(form){
 </script>
 
 <script type="text/javascript">
+
+
+//   FILTER INPUT FIELDS
+function setInputFilter(textbox, inputFilter) {
+  [
+    "input",
+    "keydown",
+    "keyup",
+    "mousedown",
+    "mouseup",
+    "select",
+    "contextmenu",
+    "drop",
+  ].forEach(function (event) {
+    textbox.addEventListener(event, function () {
+      if (inputFilter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
+      }
+    });
+  });
+}
+
+
+
+// ONLY NUMBERS IN price fields
+setInputFilter(document.getElementById("productPrice"), function (value) {
+  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999);
+});
+setInputFilter(document.getElementById("landingCost"), function (value) {
+  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999);
+});
+setInputFilter(document.getElementById("productQuantity"), function (value) {
+  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999);
+});
+
+
+
+
+
+
+
   // Image Preview1 For Add product
 
   const proImgFile1 = document.getElementById('proImgInput1_1')

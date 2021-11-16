@@ -7,7 +7,7 @@
           <h3 class="alert-danger text-center otperror" id="error">Invalid OTP</h3>
           <div class="row px-lg-5 px-sm-2">
             <div class="row text-center">
-              <h6 class="mb-4">Enter the OTP send to your Phone {{otpPhone}}</h6>
+              <h6 class="mb-4">Enter the OTP send to your Phone {{signupPhone}}</h6>
               <div class="otp__input col ms-3">
                 <input type="text" maxlength="1" id="num1" onkeyup="clickevent(event,'','num1','num2')" />
               </div>
@@ -20,7 +20,7 @@
               <div class="otp__input col">
                 <input type="text" maxlength="1" id="num4" onkeyup="clickevent(event,'num3','num4','')"/>
               </div>
-               <input class="m-2 text-center form-control rounded" type="text" id="phonenumber" name="phonenumber" value="{{OtpPhone}}" hidden />
+               <input class="m-2 text-center form-control rounded" type="text" id="phonenumber2" name="phonenumber" value="{{signupPhone}}" hidden />
                 
             </div>
           </div>
@@ -47,17 +47,17 @@
     var third = document.getElementById("num3").value;
     var fourth = document.getElementById("num4").value;
 
-    var otpnumber =`${first}${second}${third}${fourth}`
+    var otpnumber = `${first}${second}${third}${fourth}`
     console.log(otpnumber)
-    var phoneNumber = document.getElementById("phonenumber").value;
+    var phoneNumber = document.getElementById("phonenumber2").value;
     console.log("Phone number:::: "+phoneNumber)
 
 $.ajax({
-    url:'/otp-verify?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,
+    url:'/signupOtp?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,
     method:'get',
     success:(response)=>{
         if(response){
-            window.location.replace("/");
+            window.location.replace("/login");
         }else{
             document.getElementById("error").classList.remove("otperror");
         }
@@ -66,51 +66,6 @@ $.ajax({
 
 
 }
-
-
-//   FILTER INPUT FIELDS
-function setInputFilter(textbox, inputFilter) {
-  [
-    "input",
-    "keydown",
-    "keyup",
-    "mousedown",
-    "mouseup",
-    "select",
-    "contextmenu",
-    "drop",
-  ].forEach(function (event) {
-    textbox.addEventListener(event, function () {
-      if (inputFilter(this.value)) {
-        this.oldValue = this.value;
-        this.oldSelectionStart = this.selectionStart;
-        this.oldSelectionEnd = this.selectionEnd;
-      } else if (this.hasOwnProperty("oldValue")) {
-        this.value = this.oldValue;
-        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-      } else {
-        this.value = "";
-      }
-    });
-  });
-}
-
-
-
-
-// ONLY NUMBERS FOR OTP PAGE
-setInputFilter(document.getElementById("num1"), function (value) {
-  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9);
-});
-setInputFilter(document.getElementById("num2"), function (value) {
-  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9);
-});
-setInputFilter(document.getElementById("num3"), function (value) {
-  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9);
-});
-setInputFilter(document.getElementById("num4"), function (value) {
-  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9);
-});
 
 </script>
 
