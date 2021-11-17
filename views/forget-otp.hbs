@@ -31,13 +31,14 @@
               class="btn btn-success create_account_btn mt-3"
                onclick="otpform()"
             >Verify</button>
-            <p class="signup__links my-4"><a href="" id="resendOtp" class="isDisabled">Resend OTP?</a></p>
+            <p class="signup__links my-4"><a href="/resendotp" id="resendOtp" class="isDisabled">Resend OTP?</a></p>
           </div>
         {{!-- </form> --}}
       </div>
     </div>
   </div>
 </div>
+
 
 <script type="text/javascript">
 
@@ -87,15 +88,6 @@ setInputFilter(document.getElementById("num3"), function (value) {
 setInputFilter(document.getElementById("num4"), function (value) {
   return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9);
 });
-
-
-
-
-
-
-
-
-
 
 
   function otpform(){

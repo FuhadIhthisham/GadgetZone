@@ -124,10 +124,9 @@ editProductForm.validate({
   submitHandler:
   //ON SUBMIT FORM
       function onsubmitForm(form){
-        console.log(form)
         swal({
         title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this imaginary file!",
+        text: "Are you sure to update this product?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -311,3 +310,21 @@ $(document).ready(function () {
     $("#CheckPasswordMatch").html("Password match !").css("color", "green");
   });
 });
+
+
+
+function filevalidation(fileId){
+
+  var fileInput = document.getElementById(fileId);
+  var filePath = fileInput.value;
+  
+  // Allowing file type
+  var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+  if (!allowedExtensions.exec(filePath)) {
+  alert('Invalid file type\nOnly Image Files are Allowed');
+  fileInput.value = '';
+  return false;
+  }
+
+}

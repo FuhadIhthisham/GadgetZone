@@ -21,6 +21,7 @@ router.post("/phone-verify", function (req, res, next) {
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
   var phone = req.body.phone;
+  req.session.mob = phone       //mobile otp login number storing in session
   phone = phone.toString();
   userHelper.phoneCheck(phone).then((response) => {
     if (response.userExist) {
@@ -42,7 +43,9 @@ router.post("/phone-verify", function (req, res, next) {
     }
   });
   OtpPhone = null   //  changed to default value
+  
 });
+
 
 //post otp verify
 router.get("/otp-verify",(req,res)=>{
@@ -51,7 +54,7 @@ router.get("/otp-verify",(req,res)=>{
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
   let phoneNumber = req.query.phonenumber;
-  let otpNumber = Number(req.query.otpnumber);
+  let otpNumber = req.query.otpnumber;
   console.log("phone::::"+phoneNumber);
   console.log("otp::::"+otpNumber);
   client.verify
@@ -67,6 +70,7 @@ router.get("/otp-verify",(req,res)=>{
        console.log("session user in otp>>>>> "+req.session.user);
         req.session.user.loggedIn = true;
         let valid = true;
+        req.session.mob = null
        res.send(valid);
       })
     }else{
@@ -76,6 +80,31 @@ router.get("/otp-verify",(req,res)=>{
     }
   }));
 })
+
+
+
+// resend otp route 
+router.get('/resendOtp',(req,res)=>{
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+   client.verify
+   .services(serviceSid)
+   .verifications.create({
+     to: `+91${req.session.mob}`,
+     channel: "sms",
+   })
+   .then((ress) => {
+     console.log("phone check ress>>>>>>"+ress);
+     let OtpPhone = req.session.mob
+     console.log(OtpPhone);
+     res.render('otp-verify',{OtpPhone})
+   });
+})
+
+
+
 
 
 // login get
@@ -164,7 +193,8 @@ router.get("/forgot-otp",(req,res)=>{
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
   let phoneNumber = req.query.phonenumber;
-  let otpNumber = Number(req.query.otpnumber);
+  req.session.mob = phoneNumber
+  let otpNumber = req.query.otpnumber;
   console.log("phone::::"+phoneNumber);
   console.log("otp::::"+otpNumber);
   client.verify
@@ -188,6 +218,32 @@ router.get("/forgot-otp",(req,res)=>{
 })
 
 
+// resend otp route 
+router.get('/resendotp',(req,res)=>{
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+   client.verify
+   .services(serviceSid)
+   .verifications.create({
+     to: `+91${req.session.mob}`,
+     channel: "sms",
+   })
+   .then((ress) => {
+     console.log("phone check ress>>>>>>"+ress);
+     let OtpPhone = req.session.mob
+     console.log(OtpPhone);
+     res.render('otp-verify',{OtpPhone})
+   });
+})
+
+
+
+
+
+
+
 // GET RESET PASSWORD PAGE
   router.get("/reset-password", function (req, res, next) {
     res.header(
@@ -195,6 +251,7 @@ router.get("/forgot-otp",(req,res)=>{
       "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
     );
     console.log("reset otp>>>>>>>>>>>>>>"+OtpPhone);
+    req.session.mob = null
     res.render("reset-password", { title: "GadgetZone",OtpPhone });
   });
 
@@ -274,10 +331,6 @@ router.post("/signup",(req,res,next)=>{
   })
 })
 
-// resend otp route
-router.post('/resendOtp',(req,res)=>{
-  console.log(req.query);
-})
 
 // SignupOTP GET CHECK OTP and verify
 var signupSuccess
@@ -287,7 +340,7 @@ router.get("/signupOtp",(req,res)=>{
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
   let phoneNumber = req.query.phonenumber;
-  let otpNumber = Number(req.query.otpnumber);
+  let otpNumber = req.query.otpnumber;
   console.log("phone::::"+phoneNumber);
   console.log("otp::::"+otpNumber);
   client.verify

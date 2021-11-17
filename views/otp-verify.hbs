@@ -31,7 +31,7 @@
               class="btn btn-success create_account_btn mt-3"
                onclick="otpform()"
             >Verify</button>
-            <p class="signup__links my-4"><a href="" id="resendOtp" class="isDisabled">Resend OTP?</a></p>
+            <p class="signup__links my-4"><a href="/resendOtp" id="resendOtp" class="isDisabled">Resend OTP?</a></p>
           </div>
         {{!-- </form> --}}
       </div>
@@ -48,7 +48,6 @@
     var fourth = document.getElementById("num4").value;
 
     var otpnumber =`${first}${second}${third}${fourth}`
-    console.log(otpnumber)
     var phoneNumber = document.getElementById("phonenumber").value;
     console.log("Phone number:::: "+phoneNumber)
 
@@ -64,36 +63,9 @@ $.ajax({
     }
 })
 
-
 }
 
 
-//   FILTER INPUT FIELDS
-function setInputFilter(textbox, inputFilter) {
-  [
-    "input",
-    "keydown",
-    "keyup",
-    "mousedown",
-    "mouseup",
-    "select",
-    "contextmenu",
-    "drop",
-  ].forEach(function (event) {
-    textbox.addEventListener(event, function () {
-      if (inputFilter(this.value)) {
-        this.oldValue = this.value;
-        this.oldSelectionStart = this.selectionStart;
-        this.oldSelectionEnd = this.selectionEnd;
-      } else if (this.hasOwnProperty("oldValue")) {
-        this.value = this.oldValue;
-        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-      } else {
-        this.value = "";
-      }
-    });
-  });
-}
 
 
 
@@ -130,7 +102,7 @@ setInputFilter(document.getElementById("num4"), function (value) {
   }
 }
 
-const startMin = 2;
+const startMin = 0.2;
 let time = startMin * 60;
 
 const countEl = document.getElementById("countdownOTP");

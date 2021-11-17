@@ -64,33 +64,19 @@ module.exports = {
     });
   },
 
-  //   delete subcategory
-  deletesubCategory: (data) => {
-    return new Promise(async (resolve, reject) => {
-      let result = await db
-        .get()
-        .collection(collections.PRODUCT_CATEGORY)
-        .updateOne(
-          { category: data.category },
-          { $pull: { subcategory: data.subcategory } }
-        )
-        .then((response) => {
-          resolve(response);
-        });
-    });
-  },
+  
   //   delete Category
-  deleteCategory: (data) => {
-    return new Promise(async (resolve, reject) => {
-      let result = await db
-        .get()
-        .collection(collections.PRODUCT_CATEGORY)
-        .deleteOne({ category: data.category })
-        .then((response) => {
-          resolve(response);
-        });
-    });
-  },
+  // deleteCategory: (data) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     let result = await db
+  //       .get()
+  //       .collection(collections.PRODUCT_CATEGORY)
+  //       .deleteOne({ category: data.category })
+  //       .then((response) => {
+  //         resolve(response);
+  //       });
+  //   });
+  // },
 
   //   get brand datas
   getBrand: () => {

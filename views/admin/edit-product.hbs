@@ -13,7 +13,7 @@
           <p
             class="bg-gray-300 p-4 text-left font-weight-bold"
             style="font-size: 20px;"
-          >Add New Product</p>
+          >Edit Product</p>
           <div class="px-3 px-4">
             <div class="row">
               <div class="col">
@@ -127,6 +127,7 @@
                     type="file"
                     name="product_Image_1"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput1_1')"
                     id="proImgInput1_1"
                   />
                   <div class="image-preview" id="imagePreview1">
@@ -147,6 +148,7 @@
                     type="file"
                     name="product_Image_2"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput2_2')"
                     id="proImgInput2_2"
                   />
                   <div class="image-preview" id="imagePreview2">
@@ -167,6 +169,7 @@
                     type="file"
                     name="product_Image_3"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput3_3')"
                     id="proImgInput3_3"
                   />
                   <div class="image-preview" id="imagePreview3">
@@ -186,6 +189,7 @@
                     type="file"
                     name="product_Image_4"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput4_4')"
                     id="proImgInput4_4"
                   />
                   <div class="image-preview" id="imagePreview4">

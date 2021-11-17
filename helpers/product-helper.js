@@ -123,5 +123,68 @@ module.exports = {
         }
       });
     },
+    
+
+
+    //   delete product and subcategory
+    deleteProAndSubcat: (proData) => {
+    return new Promise(async (resolve, reject) => {
+
+      let allProducts = await db.get().collection(collections.PRODUCT_COLLECTION).find({productSubcategory: proData.subcategory}).toArray()
+      
+      if(proData.isPro==="yes"){
+         
+          let deletePro =  await db
+          .get()
+          .collection(collections.PRODUCT_COLLECTION)
+          .deleteMany({ productSubcategory: proData.subcategory })
+          .then((response) => {
+            console.log("Delete Product success::::::::: ")
+          });
+        }
+        if(proData.item==='sub'){
+          let deleteSub = await db
+          .get()
+          .collection(collections.PRODUCT_CATEGORY)
+          .updateOne(
+            { category: proData.category },
+            { $pull: { subcategory: proData.subcategory } }
+            ).then((res)=>{
+              console.log("Delete Subcategory success ");
+            })
+          }
+          resolve({allProducts})
+    });
+  },
+
+    //   delete product and category
+    deleteProAndCat: (proData) => {
+    return new Promise(async (resolve, reject) => {
+
+      let allProducts = await db.get().collection(collections.PRODUCT_COLLECTION).find({productCategory: proData.category}).toArray()
+
+      //  To delete with products
+      if(proData.isPro==="yes"){
+         
+          let deletePro =  await db
+          .get()
+          .collection(collections.PRODUCT_COLLECTION)
+          .deleteMany({productCategory: proData.category})
+          .then((response) => {
+            console.log("Delete Product Success::::::: ")
+          });
+        }
+        if(proData.item==='cat'){
+          let deleteCat = await db
+          .get()
+          .collection(collections.PRODUCT_CATEGORY)
+          .deleteOne({ category: proData.category })
+          .then((res)=>{
+              console.log("Delete Category Success: ");
+            })
+          }
+          resolve({allProducts})
+    });
+  },
 
 }

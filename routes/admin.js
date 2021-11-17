@@ -86,7 +86,7 @@ router.get("/category", verifyLogin, function (req, res, next) {
 });
 
 // add category
-router.post("/addCategory",verifyLogin, function (req, res, next) {
+router.post("/addCategory", verifyLogin, function (req, res, next) {
   adminHelper.addCategory(req.body).then((response) => {
     catMsg = response;
     res.redirect("/admin/category");
@@ -95,27 +95,88 @@ router.post("/addCategory",verifyLogin, function (req, res, next) {
 
 // add subcategory
 var subCatMsg;
-router.post("/addSubcategory",verifyLogin, function (req, res, next) {
+router.post("/addSubcategory", verifyLogin, function (req, res, next) {
   adminHelper.addCategory(req.body).then((response) => {
     subCatMsg = response;
     res.redirect("/admin/category");
   });
 });
 
-// delete subcategory
-router.post("/delete-subcategory",verifyLogin, function (req, res, next) {
-  adminHelper.deletesubCategory(req.body).then((response) => {
-    console.log("subcategory deleted!!!!!");
-    res.json({status: true});
-  });
+
+
+
+// delete subcategory with or without its products
+router.post("/delete-subcategory", verifyLogin, function (req, res, next) {
+  if (req.body.isPro === "yes" && req.body.item === "sub") {
+    productHelper.deleteProAndSubcat(req.body).then((response) => {
+      if (response) {
+        // To delete subcategory and each products
+        let prod = response.allProducts;
+        for (i = 0; i < prod.length; i++) {
+          for (let j = 1; j <= 4; j++) {
+            fs.unlink(
+              `./public/images/product-images/${prod[i]._id}_${j}.jpg`,
+              (err) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("product image is deleted.");
+                }
+              }
+            );
+          }
+        }
+      }
+    });
+  }
+  if (req.body.isPro === "no" && req.body.item === "sub") {
+    productHelper.deleteProAndSubcat(req.body).then((response) => {
+      console.log("subcat deleted");
+    });
+  }
+  res.json({ status: true });
 });
 
-// delete Category
-router.post("/delete-category/",verifyLogin, function (req, res, next) {
-  adminHelper.deleteCategory(req.body).then((response) => {
-    res.json({status: true});
-  });
+
+
+// delete category with or without its products
+router.post("/delete-category", verifyLogin, function (req, res, next) {
+  if (req.body.isPro === "yes" && req.body.item === "cat") {
+    productHelper.deleteProAndCat(req.body).then((response) => {
+      if (response) {
+        // To delete subcategory and each products
+        let prod = response.allProducts;
+        for (i = 0; i < prod.length; i++) {
+          for (let j = 1; j <= 4; j++) {
+            fs.unlink(
+              `./public/images/product-images/${prod[i]._id}_${j}.jpg`,
+              (err) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("product image is deleted.");
+                }
+              }
+            );
+          }
+        }
+      }
+    });
+    res.json({ status: true });
+  }
+  if (req.body.isPro === "no" && req.body.item === "cat") {
+    console.log(req.body);
+    productHelper.deleteProAndCat(req.body).then((response) => {
+      console.log("Category deleted");
+    });
+
+    res.json({ status: true });
+  }
 });
+
+
+
+
 
 // Brand management
 var brandMsg;
@@ -132,7 +193,7 @@ router.get("/brand", verifyLogin, function (req, res, next) {
 });
 
 // add Brand
-router.post("/addBrand",verifyLogin, function (req, res, next) {
+router.post("/addBrand", verifyLogin, function (req, res, next) {
   adminHelper.addBrand(req.body).then((response) => {
     brandMsg = response;
     if (brandMsg.status && brandMsg.result) {
@@ -155,21 +216,18 @@ router.post("/addBrand",verifyLogin, function (req, res, next) {
 });
 
 // delete brand
-router.post("/delete-brand/",verifyLogin, function (req, res, next) {
+router.post("/delete-brand/", verifyLogin, function (req, res, next) {
   adminHelper.deleteBrand(req.body).then((response) => {
     if (response) {
       // To delete brand logo file
-      fs.unlink(
-        "./public/images/brand-logo/" + req.body.id + ".png",
-        (err) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log("File is deleted.");
-          }
+      fs.unlink("./public/images/brand-logo/" + req.body.id + ".png", (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("File is deleted.");
         }
-      );
-      res.json({status: true});
+      });
+      res.json({ status: true });
     }
   });
 });
@@ -293,12 +351,12 @@ router.get("/view-product", verifyLogin, function (req, res, next) {
     } else {
       console.log("view product response error!!!!");
     }
-    productEditMsg = null
+    productEditMsg = null;
   });
 });
 
 // delete product
-router.post("/delete-product",verifyLogin, function (req, res, next) {
+router.post("/delete-product", verifyLogin, function (req, res, next) {
   console.log(req.body);
   console.log(req.body.id);
   productHelper.getOneProduct(req.body.id).then((result) => {
@@ -328,7 +386,7 @@ router.post("/delete-product",verifyLogin, function (req, res, next) {
 
 // get edit product page
 var productEditMsg;
-router.get("/edit-product/",verifyLogin, function (req, res, next) {
+router.get("/edit-product/", verifyLogin, function (req, res, next) {
   productHelper.getOneProduct(req.query).then((result) => {
     if (result) {
       adminHelper.getBrand().then((allBrand) => {
@@ -354,83 +412,91 @@ router.get("/edit-product/",verifyLogin, function (req, res, next) {
 });
 
 // post editted product
-router.post("/edit-product/",verifyLogin, function (req, res, next) {
+router.post("/edit-product/", verifyLogin, function (req, res, next) {
   productHelper.getOneProduct(req.query).then((result) => {
+    let prodImg1 = req.files?.product_Image_1;
+    let prodImg2 = req.files?.product_Image_2;
+    let prodImg3 = req.files?.product_Image_3;
+    let prodImg4 = req.files?.product_Image_4;
+    let prodId = result._id + "";
 
-  
-  let prodImg1 = req.files?.product_Image_1;
-  let prodImg2 = req.files?.product_Image_2;
-  let prodImg3 = req.files?.product_Image_3;
-  let prodImg4 = req.files?.product_Image_4;
-  let prodId = result._id+'';
-
-  if(prodImg1){
-    fs.unlink(`./public/images/product-images/${prodId}_1.jpg`,(err,done)=>{
-      if(!err){
-        prodImg1.mv(
-          `./public/images/product-images/${prodId}_1.jpg`,
-          (err, done) => {
-            console.log("Image 1 updated.....");
-          })
-      }
-      else{
-        console.log("Image 1 didn't updated");
-      }   
-    })
-
-  }
-  if(prodImg2){
-    fs.unlink(`./public/images/product-images/${prodId}_2.jpg`,(err,done)=>{
-      if(!err){
-        prodImg2.mv(
-          `./public/images/product-images/${prodId}_2.jpg`,
-          (err, done) => {
-            console.log("Image 2 updated.....");
-          })
-      }
-      else{
-        console.log("Image 2 didn't updated");
-      }   
-    })    
-  }
-  if(prodImg3){
-    fs.unlink(`./public/images/product-images/${prodId}_3.jpg`,(err,done)=>{
-      if(!err){
-        prodImg3.mv(
-          `./public/images/product-images/${prodId}_3.jpg`,
-          (err, done) => {
-            console.log("Image 3 updated.....");
-          })
-      }
-      else{
-        console.log("Image 3 didn't updated");
-      }   
-    })    
-  }
-  if(prodImg4){
-    fs.unlink(`./public/images/product-images/${prodId}_4.jpg`,(err,done)=>{
-      if(!err){
-        prodImg4.mv(
-          `./public/images/product-images/${prodId}_4.jpg`,
-          (err, done) => {
-            console.log("Image 4 updated.....");
-          })
-      }
-      else{
-        console.log("Image 4 didn't updated");
-      }   
-    })    
-  }
-  
-})
-  
-  productHelper.updateProduct(req.query,req.body).then((result) => {
-    if(result){
-      productEditMsg = result
-      console.log("Updated product details");
-      res.redirect('/admin/view-product')
+    if (prodImg1) {
+      fs.unlink(
+        `./public/images/product-images/${prodId}_1.jpg`,
+        (err, done) => {
+          if (!err) {
+            prodImg1.mv(
+              `./public/images/product-images/${prodId}_1.jpg`,
+              (err, done) => {
+                console.log("Image 1 updated.....");
+              }
+            );
+          } else {
+            console.log("Image 1 didn't updated");
+          }
+        }
+      );
     }
-  })
+    if (prodImg2) {
+      fs.unlink(
+        `./public/images/product-images/${prodId}_2.jpg`,
+        (err, done) => {
+          if (!err) {
+            prodImg2.mv(
+              `./public/images/product-images/${prodId}_2.jpg`,
+              (err, done) => {
+                console.log("Image 2 updated.....");
+              }
+            );
+          } else {
+            console.log("Image 2 didn't updated");
+          }
+        }
+      );
+    }
+    if (prodImg3) {
+      fs.unlink(
+        `./public/images/product-images/${prodId}_3.jpg`,
+        (err, done) => {
+          if (!err) {
+            prodImg3.mv(
+              `./public/images/product-images/${prodId}_3.jpg`,
+              (err, done) => {
+                console.log("Image 3 updated.....");
+              }
+            );
+          } else {
+            console.log("Image 3 didn't updated");
+          }
+        }
+      );
+    }
+    if (prodImg4) {
+      fs.unlink(
+        `./public/images/product-images/${prodId}_4.jpg`,
+        (err, done) => {
+          if (!err) {
+            prodImg4.mv(
+              `./public/images/product-images/${prodId}_4.jpg`,
+              (err, done) => {
+                console.log("Image 4 updated.....");
+              }
+            );
+          } else {
+            console.log("Image 4 didn't updated");
+          }
+        }
+      );
+    }
+  });
+
+  productHelper.updateProduct(req.query, req.body).then((result) => {
+    if (result) {
+      productEditMsg = result;
+      console.log("Updated product details");
+      res.redirect("/admin/view-product");
+    }
+  });
 });
 
 module.exports = router;

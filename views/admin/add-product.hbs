@@ -139,6 +139,7 @@
                     type="file"
                     name="product_Image_1"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput1')"
                     id="proImgInput1"
                   />
                   <div class="image-preview" id="imagePreview1">
@@ -159,6 +160,7 @@
                     type="file"
                     name="product_Image_2"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput2')"
                     id="proImgInput2"
                   />
                   <div class="image-preview" id="imagePreview2">
@@ -178,12 +180,14 @@
                   <input
                     type="file"
                     name="product_Image_3"
+                    onchange="return filevalidation('proImgInput3')"
                     accept="image/*"
                     id="proImgInput3"
                   />
                   <div class="image-preview" id="imagePreview3">
                     <img
                       src=""
+                      style="height: 150px !important; width: 150px;"
                       alt="Image Preview"
                       class="image-preview-image3"
                     />
@@ -198,6 +202,7 @@
                     type="file"
                     name="product_Image_4"
                     accept="image/*"
+                    onchange="return filevalidation('proImgInput4')"
                     id="proImgInput4"
                   />
                   <div class="image-preview" id="imagePreview4">
@@ -420,3 +425,4 @@ proImgFile4.addEventListener('change',()=>{
 })
 
 </script>
+

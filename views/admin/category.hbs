@@ -164,20 +164,45 @@
   function deleteSub(catId,subId){ 
     swal({ 
       title: "Are you sure?",
-      text:"Once deleted, you will not be able to recover this Product!",
+      text:"Do you want to delete all products under this category?",
       icon:"warning",
-      buttons: true,
+      buttons: {
+        cancel: "Cancel",
+        yes: {
+          text: "Yes",
+          value: true,
+        },
+        no: {
+          text: "No",
+          value: false
+          }
+      },
       dangerMode: true,
       })
       .then((willDelete) => {
-        if(willDelete) { 
+        if(willDelete===true) { 
           $.ajax({ 
             url:"/admin/delete-subcategory",
             method:"POST",
-            data:{category:catId,subcategory:subId},
+            data:{category:catId,subcategory:subId,isPro:"yes",item:'sub'},
             success:(result)=>{ 
               if(result.status){
-                swal("User deleted Successfully", {
+                swal("Subcategory and Products deleted Successfully", {
+                  icon: "success", 
+                });
+              } 
+              location.href='/admin/category' 
+            }
+          });
+        }
+        else if(willDelete===false){ 
+          $.ajax({ 
+            url:"/admin/delete-subcategory",
+            method:"POST",
+            data:{category:catId,subcategory:subId,isPro:"no",item:'sub'},
+            success:(result)=>{ 
+              if(result.status){
+                swal("Subcategory deleted Successfully", {
                   icon: "success", 
                 });
               } 
@@ -194,20 +219,45 @@
   function deleteCat(catId){ 
     swal({ 
       title: "Are you sure?",
-      text:"Once deleted, you will not be able to recover this Subcategory!",
+      text:"Do you want to delete all products under this category?",
       icon:"warning",
-      buttons: true,
+      buttons: {
+        cancel: "Cancel",
+        yes: {
+          text: "Yes",
+          value: true,
+        },
+        no: {
+          text: "No",
+          value: false
+          }
+      },
       dangerMode: true,
       })
       .then((willDelete) => {
-        if(willDelete) { 
+        if(willDelete===true) { 
           $.ajax({ 
             url:"/admin/delete-category",
             method:"POST",
-            data:{category:catId},
+            data:{category:catId,isPro:"yes",item:'cat'},
             success:(result)=>{ 
               if(result.status){
-                swal("User deleted Successfully", {
+                swal("category and Products deleted Successfully", {
+                  icon: "success", 
+                });
+              } 
+              location.href='/admin/category' 
+            }
+          });
+        }
+        else if(willDelete===false){ 
+          $.ajax({ 
+            url:"/admin/delete-category",
+            method:"POST",
+            data:{category:catId,isPro:"no",item:'cat'},
+            success:(result)=>{ 
+              if(result.status){
+                swal("Category deleted Successfully", {
                   icon: "success", 
                 });
               } 
