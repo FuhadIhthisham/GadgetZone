@@ -11,9 +11,9 @@ const allStates = require('../config/lists').allStates
 // twilio API
 
 
-const accountSid = "AC3ab377140a3e1f412bffe3886a8d895d"; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
-const authToken = "08448f74e537e416b6849ee113235f3b";
-const serviceSid = "VA948aed94f34ad8455cee59a01dd989a6";
+const accountSid = ""; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
+const authToken = "";
+const serviceSid = "";
 const client = require("twilio")(accountSid, authToken);
 
 
