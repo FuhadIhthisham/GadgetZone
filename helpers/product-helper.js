@@ -9,24 +9,40 @@ module.exports = {
      // Add product to Database
   addProduct: (productData) => {
     return new Promise(async (resolve, reject) => {
+      let variantid = new objectId()
       let isProduct = await db
         .get()
         .collection(collections.PRODUCT_COLLECTION)
         .findOne({ productName: productData.productName }); //finds for a document in db of product name of req.body
       if (isProduct) {
 
-          //if same subcategory is in subcategory array shows error
+          //if same product is in product array shows error
           resolve({ status: false, msg: "This Product Already Exist" });
       } else {
         //if there is no document of product name, add product
         await db
           .get()
           .collection(collections.PRODUCT_COLLECTION)
-          .insertOne(productData).then((result)=>{
+          .insertOne(
+            {
+              productName:productData.productName,
+              productDescription:productData.productDescription,
+              productBrand:productData.productBrand,
+              productCategory:productData.productCategory,
+              productSubcategory:productData.productSubcategory,
+              productVariants: [{
+                variantId: variantid,
+                productColour:productData.productColour,
+                productQuantity:productData.productQuantity,
+                landingCost:productData.landingCost,
+                productPrice:productData.productPrice,
+              }]
+            }).then((result)=>{
             console.log(result);
             resolve({
               result,
               status: true,
+              variantid,
               msg: "Product Added Successfully",
             });
           })
@@ -67,7 +83,7 @@ module.exports = {
         .collection(collections.PRODUCT_COLLECTION)
         .deleteOne({ _id: objectId(data) })
         .then((response) => {
-          console.log("response: "+response);
+          console.log(response);
           resolve(response);
         });
     });
@@ -75,10 +91,11 @@ module.exports = {
   // Get one product
     getOneProduct:(data)=>{
     return new Promise(async (resolve,reject)=>{
-      let oneProduct = await db.get().collection(collections.PRODUCT_COLLECTION).find({_id: objectId(data.id)}).toArray()
-      resolve(oneProduct[0])
+      let oneProduct = await db.get().collection(collections.PRODUCT_COLLECTION).find({_id: objectId(data)}).toArray()
+      resolve(oneProduct)
     })
   },
+
     // Update products
     updateProduct: (productId,productData) => {
       return new Promise(async (resolve, reject) => {
@@ -87,6 +104,7 @@ module.exports = {
           .collection(collections.PRODUCT_COLLECTION)
           .findOne({ _id: objectId(productId.id) }); //finds for a document in db by product id
         if (isProduct) {
+
           await db
             .get()
             .collection(collections.PRODUCT_COLLECTION)
@@ -97,11 +115,38 @@ module.exports = {
                 productBrand:productData.productBrand,
                 productCategory:productData.productCategory,
                 productSubcategory:productData.productSubcategory,
-                landingCost:productData.landingCost,
-                productPrice:productData.productPrice,
-                productColour:productData.productColour,
-                productQuantity:productData.productQuantity,
-              }}).then((result)=>{
+                
+              }}).then(async (result)=>{
+
+              
+                // await db
+                // .get()
+                // .collection(collections.PRODUCT_COLLECTION)
+                // .updateOne({_id: objectId(productId.id)},{
+                //   $push: { productVariants:
+                //     {
+                //       landingCost:productData.landingCost,
+                //       productPrice:productData.productPrice,
+                //       productColour:productData.productColour,
+                //       productQuantity:productData.productQuantity,
+                //     }
+                //   }
+                // })
+
+                await db
+                .get()
+                .collection(collections.PRODUCT_COLLECTION)
+                .updateOne({"productVariants.variantId": objectId(productId.varId)},{
+                  $set: 
+                    {
+                      "productVariants.$.landingCost": productData.landingCost,
+                      "productVariants.$.productPrice":productData.productPrice,
+                      "productVariants.$.productColour":productData.productColour,
+                      "productVariants.$.productQuantity":productData.productQuantity,
+                    }
+                })
+
+
               console.log(result);
               resolve({
                 isProduct,
@@ -186,5 +231,42 @@ module.exports = {
           resolve({allProducts})
     });
   },
+
+    //   delete product and brand 
+    deleteBrand: (proData) => {
+      return new Promise(async (resolve, reject) => {
+
+        let allProducts = await db.get().collection(collections.PRODUCT_COLLECTION).find({productBrand: proData.brandName}).toArray()
+        
+        let getBrandId =  await db
+          .get()
+          .collection(collections.BRAND_COLLECTION)
+          .findOne({brandName: proData.brandName})
+
+        //  To delete with products
+        if(proData.isPro){
+          
+            let deletePro =  await db
+            .get()
+            .collection(collections.PRODUCT_COLLECTION)
+            .deleteMany({productBrand: proData.brandName})
+            .then((response) => {
+              console.log("Delete Product Success::::::: ")
+            });
+
+          }
+          if(proData.isBrand){
+
+            let deleteBrand = await db
+              .get()
+              .collection(collections.BRAND_COLLECTION)
+              .deleteOne({ brandName: proData.brandName })
+              .then((response) => {
+                console.log("Delete Brand Success: ");
+              });
+            }
+            resolve({allProducts,getBrandId})
+      });
+    },
 
 }
