@@ -64,19 +64,6 @@ module.exports = {
     });
   },
 
-  
-  //   delete Category
-  // deleteCategory: (data) => {
-  //   return new Promise(async (resolve, reject) => {
-  //     let result = await db
-  //       .get()
-  //       .collection(collections.PRODUCT_CATEGORY)
-  //       .deleteOne({ category: data.category })
-  //       .then((response) => {
-  //         resolve(response);
-  //       });
-  //   });
-  // },
 
   //   get brand datas
   getBrand: () => {
@@ -116,18 +103,56 @@ module.exports = {
     });
   },
 
-  //   delete Brand
-  deleteBrand: (data) => {
-    return new Promise(async (resolve, reject) => {
-      console.log(data);
-      let result = await db
-        .get()
-        .collection(collections.BRAND_COLLECTION)
-        .deleteOne({ _id: objectId(data.id) })
-        .then((response) => {
-          console.log(response);
-          resolve(response);
-        });
-    });
+
+// Get all users details
+  getUsers:()=>{
+    return new Promise(async (resolve,reject)=>{
+      let allUsers = await db.get().collection(collections.USER_COLLECTION).find({}).toArray()
+      resolve(allUsers)
+    })
   },
+
+ // block user from admin page
+ blockUser: (userId) => {
+  return new Promise((resolve, reject) => {
+    db.get()
+      .collection(collections.USER_COLLECTION)
+      .updateOne({ _id: objectId(userId) }, { $set: { userBlocked: true } })
+      .then((data) => {
+        console.log(response);
+        resolve(data);
+      });
+  });
+},
+
+ // unblock user from admin page
+ unblockUser: (userId) => {
+  return new Promise((resolve, reject) => {
+    db.get()
+      .collection(collections.USER_COLLECTION)
+      .updateOne({ _id: objectId(userId) }, { $set: { userBlocked: false } })
+      .then((data) => {
+        console.log(response);
+        resolve(data);
+      });
+  });
+},
+
+checkBlock:(blockId)=>{
+  return new Promise(async (resolve, reject) => {
+   let res = await db.get()
+      .collection(collections.USER_COLLECTION)
+      .findOne({ _id: blockId})
+        resolve(res);
+  });
+},
+getBlockedUsers:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let blockedUsers = await db.get().collection(collections.USER_COLLECTION).find({userBlocked: true}).toArray()
+    resolve(blockedUsers)
+  })
+}
+
+
+
 };
