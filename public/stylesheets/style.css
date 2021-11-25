@@ -44,6 +44,7 @@ body {
   height: 100%;
   font-family: "Nunito Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
+  cursor: default;
 }
 
 h1,
@@ -104,6 +105,7 @@ textarea:focus {
 
 a {
   text-decoration: none;
+  cursor: pointer;
 }
 
 a:hover,
@@ -2408,11 +2410,11 @@ ol {
   width: 175px;
 }
 
-.shopping__cart__table table tbody tr td.quantity__item .quantity .pro-qty-2 {
+/* .shopping__cart__table table tbody tr td.quantity__item .quantity .pro-qty-2 {
   width: 80px;
-}
+} */
 
-.shopping__cart__table
+/* .shopping__cart__table
   table
   tbody
   tr
@@ -2425,9 +2427,9 @@ ol {
   text-align: center;
   color: #111111;
   font-size: 16px;
-}
+} */
 
-.shopping__cart__table
+/* .shopping__cart__table
   table
   tbody
   tr
@@ -2439,7 +2441,7 @@ ol {
   color: #888888;
   width: 10px;
   cursor: pointer;
-}
+} */
 
 .shopping__cart__table table tbody tr td.cart__price {
   color: #111111;
@@ -3984,4 +3986,16 @@ Drop down menu profile
 }
 .otperror {
   display: none;
+}
+
+
+.add-cart {
+  cursor: pointer;
+}
+
+
+.count-btn {
+  font-size: 18px;
+  padding: 3px 7px;
+  border: none;
 }

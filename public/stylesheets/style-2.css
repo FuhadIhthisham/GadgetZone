@@ -805,9 +805,6 @@ div.code-toolbar > .toolbar span:focus {
   text-decoration: none;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, a {
-  text-transform: capitalize
-}
 
 p {
   letter-spacing: 0.05em;
@@ -899,7 +896,6 @@ p {
 
 .btn {
   text-align: center;
-  text-transform: capitalize;
   --bg-opacity: 1;
   background-color: #b2f5ea;
   background-color: rgba(178, 245, 234, var(--bg-opacity));

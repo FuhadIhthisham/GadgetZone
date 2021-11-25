@@ -13,6 +13,9 @@
               {{#if signupSuccess}}
                  <h5 class="alert alert-success"> {{signupSuccess}} </h5>
               {{/if}}
+              {{#if blockMsg}}
+                 <h5 class="alert alert-danger"> {{blockMsg}} </h5>
+              {{/if}}
 
               <div class="signup__input">
                 <p>E-Mail<span>*</span></p>

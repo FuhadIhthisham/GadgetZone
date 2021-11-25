@@ -1,0 +1,167 @@
+<div class="container rounded bg-white mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-3 border-right">
+      <div
+        class="d-flex flex-column align-items-center text-center mt-2 p-3 py-5 profile-div"
+      >
+        <img
+          class="rounded-circle mt-5"
+          width="150px"
+          src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+        />
+        <span class="font-weight-bold">{{user.firstName}} {{user.lastName}}</span>
+        <span class="text-black-50">{{user.email}}</span>
+        <span>
+          <a href="" class="text-primary"><i
+              class="fas fa-user-edit mt-4"
+            ></i></a>
+        </span>
+      </div>
+    </div>
+    
+    <div class="col-md-9 border-right">
+      <div class="p-3 col-md-8 centered mb-5">
+        {{#if profileMsg}}
+          <div
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+          >
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <strong>{{profileMsg}}</strong>
+          </div>
+
+        {{/if}}
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h3 class="text-dark p-3 text-center font-weight-bold">Profile</h3>
+        </div>
+        <div class="row mt-2 profile-view">
+          <div class="col-md-6"><label class="labels">First Name</label><input
+              type="text"
+              class="form-control"
+              placeholder="first name"
+              value="{{user.firstName}}"
+              disabled
+            /></div>
+          <div class="col-md-6 mt-1"><label class="labels">Last Name</label><input
+              type="text"
+              class="form-control"
+              value="{{user.lastName}}"
+              placeholder=""
+              disabled
+            /></div>
+          <div class="col-md-12 mt-1"><label class="labels">Mobile Number</label><input
+              type="text"
+              class="form-control"
+              placeholder="enter phone number"
+              value="{{user.phone}}"
+              disabled
+            /></div>
+          <div class="col-md-12 mt-1"><label class="labels">Email ID</label><input
+              type="text"
+              class="form-control"
+              placeholder="ihthisham.v@gmail.com"
+              value="{{user.email}}"
+              disabled
+            /></div>
+        </div>
+      </div>
+      <div class="p-3 col-md-8 centered mb-5">
+        <div class="p-md-3">
+          <p
+            class="bg-gray-300 font-weight-bold mt-2"
+            style="font-size: 25px;"
+          >Saved Addresses
+            <a
+              class="btn btn-outline-primary btn-sm ms-3 px-1"
+              href="/add-address"
+              style="font-size: 13px;"
+            >Add New</a>
+          </p>
+          {{#each resp}}
+          <div class="card mt-4">
+            <p class="p-1">
+              <span
+                class="p-1"
+                style="background-color: rgba(56, 59, 59, 0.37); font-size: 13px;"
+              > {{this.address.addressType}} </span>
+            </p>
+            
+            <div class="card-body px-1 my-0 py-0">
+              <p class="fw-bold">{{this.address.name}} {{this.address.phone}}</p>
+              <p class="text-muted" style="font-size: 14px;">
+                {{this.address.houseNumber}} {{this.address.streetAddress}}
+                <br />
+                {{this.address.pincode}}
+              </p>
+              <div class="text-right text-secondary me-3 mt-0">
+                {{this.address.district}},&nbsp;{{this.address.state}}
+              </div>
+              <div class="text-center mt-0">
+                <a href="/edit-address?id={{this.address.addressId}}" class="">
+                  <i class="fas fa-edit text-primary"></i>
+                </a>
+                <a onclick="deleteAddress('{{this.address.addressId}}')">
+                  <i class="fas fa-trash text-danger ms-4"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* user profile */ body { background: rgba(46, 157, 172, 0.507) }
+  .form-control:focus { box-shadow: none; border-color: #BA68C8 }
+  .profile-button { background: rgb(99, 39, 120); box-shadow: none; border: none
+  } .profile-button:hover { background: #682773 } .profile-button:focus {
+  background: #682773; box-shadow: none } .profile-button:active { background:
+  #682773; box-shadow: none } .back:hover { color: #682773; cursor: pointer }
+  .labels { font-size: 16px } .add-experience:hover { background: #BA68C8;
+  color: #fff; cursor: pointer; border: solid 1px #BA68C8 } .profile-div{
+  background: rgba(46, 170, 160, 0.603); box-shadow: 2px 5px 10px;
+  border-radius: 30px; } .address-fields{ background-color: rgba(51, 139, 125,
+  0.589); padding: 40px 5px; box-shadow: 2px 5px 10px; } .profile-view {
+  background-color: rgba(51, 139, 125, 0.589); padding: 40px 5px; box-shadow:
+  2px 5px 10px; }
+</style>
+
+
+<script>
+  function deleteAddress(addressId){
+    swal({
+      title: "Are you sure To delete Address ?",
+      icon: 'warning',
+      buttons: true,
+      dangerMode:true,
+    }).then((willDelete)=>{
+      if(willDelete){
+        $.ajax({
+          url: '/delete-address',
+          method: 'post',
+          data: {id:addressId},
+          success: (result)=>{
+            if(result.status){
+              swal('Address Deleted Successfully',{
+                icon: "success",
+              })
+            }
+            location.href = '/user-profile'
+          }
+        })
+      }
+    })
+  }
+</script>

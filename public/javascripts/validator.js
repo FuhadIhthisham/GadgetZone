@@ -250,6 +250,44 @@ reqOtpForm.validate({
   },
 });
 
+
+
+// USER ADD ADDRESS VALIDATION
+var addAddressForm = $("#addAddressForm");
+addAddressForm.validate({
+  rules: {
+    name: {
+      required: true,
+      minlength:5
+    },
+    phone: {
+      required: true,
+      minlength:10
+    },
+    pincode: {
+      required: true,
+      number: true
+    },
+    locality: {
+      required: true,
+    },
+    houseNumber: {
+      required: true,
+    },
+    streetAddress: {
+      required: true,
+    },
+    district: {
+      required: true,
+    },
+    state: {
+      required: true,
+    },
+  },
+})
+
+
+
 //   FILTER INPUT FIELDS
 function setInputFilter(textbox, inputFilter) {
   [
@@ -294,6 +332,11 @@ setInputFilter(document.getElementById("signupName2"), function (value) {
 // ONLY 10 NUMBERS IN PHONE FIELD
 setInputFilter(document.getElementById("phoneNumber"), function (value) {
   return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999999);
+});
+
+// ONLY INTEGER NUMBERS
+setInputFilter(document.getElementById("number1"), function(value) {
+  return /^\d*$/.test(value); 
 });
 
 

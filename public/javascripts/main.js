@@ -171,7 +171,7 @@
   proQty.on("click", ".qtybtn", function () {
     var $button = $(this);
     var oldValue = $button.parent().find("input").val();
-    if ($button.hasClass("inc")) {
+    if ($button.hasClass("dec")) {
       var newVal = parseFloat(oldValue) + 1;
     } else {
       // Don't allow decrementing below zero
@@ -224,7 +224,75 @@
   });
 })(jQuery);
 
-/*------------------
-        OTP
-    --------------------*/
 
+
+// 
+// ADD TO CART
+// 
+
+function addToCart(proId,subTotal){
+  $.ajax({
+    url: '/add-to-cart/'+proId,
+    data:{
+      productTotal:subTotal
+    },
+    method: 'post',
+    success:(response)=>{
+      if(response.status){
+        let count = $('.cart-count').html()
+        count = parseInt(count) + 1
+        $('.cart-count').html(count)
+      }
+      else{
+        location.replace('/login')
+      }
+    }
+  })
+}
+
+
+// function changeQuantity(cartId,proId,variantId,stock,price,count){
+//   stock = parseInt(stock)
+//   price = parseInt(price)
+//   let grandTotal = document.getElementById('grandTotal')
+//   document.getElementById(variantId).innerHTML = price
+//   let quantity = parseInt(document.getElementById(proId+variantId).innerHTML)
+//   count = parseInt(count)
+//   $.ajax({
+//     url: '/change-quantity',
+//     data: {
+//       cartId:cartId,
+//       product: proId,
+//       count:count,
+//       quantity: quantity
+//     },
+//     method: 'post',
+//     success:(response)=>{
+//       if(response.removeProduct){
+//         location.reload()
+//         alert("Product removed form cart")
+//       }
+//       else {
+//         document.getElementById(proId+variantId).innerHTML = quantity+count
+//       }
+//     }
+//   })
+// }
+
+function deleteCartProduct(cartId,proId,variantId){
+  $.ajax({
+    url: '/delete-cart-product',
+    data:{
+      cartId:cartId,
+      proId:proId,
+      varId:variantId
+    },
+    method: 'post',
+    success:(response)=>{
+      if(response){
+        location.reload()
+        alert("Product Deleted successfully")
+      }
+    }
+  })
+}
