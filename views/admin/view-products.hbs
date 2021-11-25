@@ -22,9 +22,7 @@
             <th scope="col">CATEGORY</th>
             <th scope="col">SUBCATEGORY</th>
             <th scope="col">BRAND</th>
-            <th scope="col">LANDING COST</th>
-            <th scope="col">MRP</th>
-            <th scope="col">STOCK</th>
+            <th scope="col">VARIANT</th>
             <th scope="col">ACTION</th>
           </tr>
         </thead>
@@ -33,16 +31,22 @@
           {{#each allProducts}}
             <tr>
               <td class="align-middle">{{@index}}</td>
-              <td class="align-middle"> <img src="/images/product-images/{{this._id}}_1.jpg" width="50px" height="50px">{{this.productName}} </td>
+              <td class="align-middle"> <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg" width="50px" height="50px">{{this.productName}} </td>
               <td class="align-middle"> {{this.productCategory}} </td>
               <td class="align-middle"> {{this.productSubcategory}} </td>
               <td class="align-middle"> {{this.productBrand}} </td>
-              <td class="align-middle"> {{this.landingCost}} </td>
-              <td class="align-middle"> {{this.productPrice}} </td>
-              <td class="align-middle"> {{this.productQuantity}} </td>
               <td class="align-middle">
-                      <a onclick="deleteProduct('{{this._id}}')" class="text-danger"><i class="fas fa-trash-alt"></i></a>
-                      <a href="/admin/edit-product?id={{this._id}}" class="text-primary ms-4"><i class="far fa-edit"></i></i></a>
+                {{#each productVariants}}
+                  <span class="font-bold">Colour: </span>  {{this.productColour}} <i class="fas fa-circle" style="color: {{this.productColour}};"></i> <br>
+                  <span class="font-bold">L.Cost: </span> <span> {{this.landingCost}} </span> <br>
+                  <span class="font-bold">Price: </span> <span> {{this.productPrice}} </span> <br>
+                  <span class="font-bold">Quantity: </span>  <span>{{this.productQuantity}}  </span> <br>
+              {{/each}}
+                  </td>
+              <td class="align-middle">
+                      <a onclick="deleteProduct('{{this._id}}','{{this.productVariants.0.variantId}}')" class="text-danger"><i class="fas fa-trash-alt"></i></a>
+                      <a href="/admin/edit-product?id={{this._id}}&variantId={{this.productVariants.0.variantId}}" class="text-primary ms-2"><i class="far fa-edit"></i></a>
+                      <a href="/admin/add-variant?id={{this._id}}" class="text-primary ms-2"><i class="far fa-plus-square"></i></a>
               </td>
             </tr>
           {{/each}}
@@ -56,7 +60,7 @@
 
 <script type="text/javascript">
 // sweet alert for delete product button
-  function deleteProduct(id){ 
+  function deleteProduct(id,varId){ 
     swal({ 
       title: "Are you sure?",
       text:"Once deleted, you will not be able to recover this Product!",
@@ -69,7 +73,7 @@
           $.ajax({ 
             url:"/admin/delete-product",
             method:"POST",
-            data:{id:id},
+            data:{id:id,varId:varId},
             success:(result)=>{ 
               if(result.status){
                 swal("User deleted Successfully", {

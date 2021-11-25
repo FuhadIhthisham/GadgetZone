@@ -20,7 +20,7 @@
               />
             <div class="dropdown-content">
               {{#if user}}
-                <button class="btn" disabled>{{user.email}}</button>
+                <button class="" disabled>{{user.email}}</button>
                 <a href="/user-profile"class='btn'>Profile</a>
                 <a href="/my-orders"class='btn'>My Orderes</a>
                 <a href="/"class='btn'>Logout</a>
@@ -30,10 +30,9 @@
               {{/if}}
             </div>
           </div>
-    <a href="#"><img src="img/icon/cart.png" alt="" /><span
-        class="badge rounded-pill bg-warning text-dark"
-      >2</span></a>
-    <div class="price">₹9999</div>
+    <a href="/cart"><img src="img/icon/cart.png" alt="" /><span
+        class="badge rounded-pill bg-warning text-dark cart-count"
+      > {{cartCount}} </span></a>
   </div>
   <div id="mobile-menu-wrap"></div>
   <div class="offcanvas__text">
@@ -49,22 +48,22 @@
     <div class="row">
       <div class="col-lg-3 col-md-3">
         <div class="header__logo">
-          <a href="./index.html"><img src="img/logo.png" alt="" /></a>
+          <a href="/"><img src="img/logo.png" alt="" /></a>
         </div>
       </div>
       <div class="col-lg-6 col-md-6">
         <nav class="header__menu mobile-menu">
           <ul>
-            <li class="active"><a href="/index">Home</a></li>
-            <li><a href="/product-details">Shop</a></li>
-            <li><a href="#">Pages</a>
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="#">Audio</a>
               <ul class="dropdown">
-                <li><a href="./about.html">About Us</a></li>
-                <li><a href="./shop-details.html">Shop Details</a></li>
-                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                <li><a href="./checkout.html">Check Out</a></li>
-                <li><a href="./blog-details.html">Blog Details</a></li>
+                <li><a href="/product-list">Speaker</a></li>
+                <li><a href="/product-list">Headphones</a></li>
+                <li><a href="/product-list">Earphones</a></li>
+                <li><a href="/">TWS</a></li>
               </ul>
+            <li><a href="/">Cameras</a></li>
+            <li><a href="/">Power Banks</a></li>
             </li>
           </ul>
         </nav>
@@ -82,10 +81,10 @@
               />
             <div class="dropdown-content">
               {{#if user}}
-              <button class="btn" disabled>{{user.email}}</button>
-                <a href="/user-profile"class='btn'>Profile</a>
-                <a href="/my-orders"class='btn'>My Orderes</a>
-                <a href="/logout"class='btn'>Logout</a>
+              <button class="btn  mr-0" disabled>{{user.email}}</button>
+                <a href="/user-profile"class='btn  mr-0'>Profile</a>
+                <a href="/my-orders"class='btn  mr-0'>My Orderes</a>
+                <a href="/logout"class='btn  mr-0'>Logout</a>
               {{else}}
                 <a href="/signup"class='btn mr-0'>Signup</a>
                 <a href="/login"class='btn'>Login</a>
@@ -93,9 +92,9 @@
             </div>
           </div>
 
-          <a href="#"><img src="img/icon/cart.png" alt="" /><span
-              class="badge rounded-pill bg-warning text-dark"
-            >2</span></a>
+          <a href="/cart"><img src="img/icon/cart.png" alt="" /><span
+              class="badge rounded-pill bg-warning text-dark cart-count"
+            >{{cartCount}}</span></a>
         </div>
       </div>
     </div>

@@ -84,8 +84,8 @@
               <td class="align-middle"> <img src="/images/brand-logo/{{this._id}}.png" width="50px" height="50px"> </td>
               <td class="align-middle"> {{this.brandName}} </td>
               <td class="align-middle">
-                      <a onclick="deleteBrand('{{this._id}}')"  class="text-danger"><i class="fas fa-trash-alt"></i></a>
-                      <a href="/admin/edit-brand?id={{this._id}}" class="text-primary ms-5"><i class="far fa-edit"></i></i></a>
+                      <a onclick="deleteBrand('{{this.brandName}}')"  class="text-danger"><i class="fas fa-trash-alt"></i></a>
+                      
               </td>
             </tr>
           {{/each}}
@@ -102,23 +102,48 @@
 <script type="text/javascript">
 
     //sweet alert for delete category button
-  function deleteBrand(id){ 
+  function deleteBrand(brand){ 
     swal({ 
-      title: "Are you sure?",
-      text:"Once deleted, you will not be able to recover this Brand!",
+     title: "Are you sure?",
+      text:"Do you want to delete all products of this Brand?",
       icon:"warning",
-      buttons: true,
+      buttons: {
+        cancel: "Cancel",
+        yes: {
+          text: "Yes",
+          value: true,
+        },
+        no: {
+          text: "No",
+          value: false
+          }
+      },
       dangerMode: true,
       })
       .then((willDelete) => {
-        if(willDelete) { 
+        if(willDelete===true) { 
           $.ajax({ 
             url:"/admin/delete-brand",
             method:"POST",
-            data:{id:id},
+            data:{brandName:brand,isPro:"yes",isBrand:"yes"},
             success:(result)=>{ 
               if(result.status){
-                swal("User deleted Successfully", {
+                swal("Brand and its products deleted Successfully", {
+                  icon: "success", 
+                });
+              } 
+              location.href='/admin/brand' 
+            }
+          });
+        }
+        if(willDelete===false) { 
+          $.ajax({ 
+            url:"/admin/delete-brand",
+            method:"POST",
+            data:{brandName:brand,isPro:"no",isBrand:"yes"},
+            success:(result)=>{ 
+              if(result.status){
+                swal("Brand deleted Successfully", {
                   icon: "success", 
                 });
               } 
@@ -128,10 +153,6 @@
         }
       })
     }
-
-
-
-
 
 
 
