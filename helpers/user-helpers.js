@@ -112,7 +112,8 @@ module.exports = {
     let prodObj = {
       item: objectId(proId),
       quantity: 1,
-      subTotal:total
+      subTotal:total,
+      status: "Pending"
     };
     return new Promise(async (resolve, reject) => {
       let userCart = await db
@@ -322,10 +323,11 @@ module.exports = {
             state: address.state,
         },
         userId: objectId(userId),
+        dateISO: new Date().toISOString().slice(0,10),
+        date: new Date(),
         paymentMethod: order,
         totalAmount:total,
         products:products,
-        status:status
       }
 
       db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
@@ -508,7 +510,6 @@ module.exports = {
             "address.$.streetAddress": data.streetAddress,
             "address.$.district": data.district,
             "address.$.state": data.state,
-            "address.$.date": new Date(),
           }
         }
         ).then((resp)=>{

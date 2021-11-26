@@ -615,7 +615,7 @@ router.get("/add-variant/", verifyLogin, function (req, res, next) {
 
 
 // Get view user page
-router.get('/view-users',(req,res,next)=>{
+router.get('/view-users',verifyLogin,(req,res,next)=>{
 
   adminHelper.getUsers().then((response)=>{
     if(response){
@@ -632,7 +632,7 @@ router.get('/view-users',(req,res,next)=>{
 })
 
 // block user
-router.post('/block-user',(req,res)=>{
+router.post('/block-user',verifyLogin,(req,res)=>{
   adminHelper.blockUser(req.body.id).then((resp=>{
     if(response){
       console.log("user blocked........");
@@ -647,7 +647,7 @@ router.post('/block-user',(req,res)=>{
 })
 
 // unblock user
-router.post('/unblock-user',(req,res)=>{
+router.post('/unblock-user',verifyLogin,(req,res)=>{
   adminHelper.unblockUser(req.body.id).then((resp=>{
     if(response){
       console.log("user unblocked........");
@@ -662,7 +662,7 @@ router.post('/unblock-user',(req,res)=>{
 })
 
 // Get blocked users list page
-router.get('/blocked-users',(req,res,next)=>{
+router.get('/blocked-users',verifyLogin,(req,res,next)=>{
 
   adminHelper.getBlockedUsers().then((response)=>{
     console.log(response);
@@ -678,6 +678,75 @@ router.get('/blocked-users',(req,res,next)=>{
   })
 
 })
+
+
+// Get order management page
+router.get('/manage-orders',verifyLogin,(req,res,next)=>{
+
+  adminHelper.viewOrders().then((response)=>{
+    if(response){
+      console.log(response);
+      res.render('admin/order-management',
+      { 
+        title: "Order Management",
+        admin: true,
+        header: "ORDER MANAGEMENT",
+        allOrders: response,
+      })
+    }
+  })
+
+})
+
+
+router.post('/status-update',verifyLogin,(req,res)=>{
+  let status = req.body.status
+  let orderId = req.body.orderId
+  let proId = req.body.proId
+  adminHelper.deliveryStatusUpdate(status,orderId,proId).then((resp=>{
+    if(response){
+      console.log("Status Updated");
+      res.json({status:true})
+    }
+    else {
+      console.log("status not updated");
+      res.json({status:false})
+    }
+  }))
+})
+
+
+router.get('/ordered-products',verifyLogin,(req,res,next)=>{
+  
+  let orderId = req.query.orderId
+  let userId = req.query.userId
+  let proId = req.query.proId
+  productHelper.getOrderProducts(orderId,userId,proId).then((products)=>{
+    console.log(products);
+    res.render('admin/ordered-products',{
+      products,
+      title: "Ordered Products",
+      admin: true,
+      header: "ORDER MANAGEMENT",
+    })
+  })
+})
+
+router.post('/cancel-product',verifyLogin,(req,res)=>{
+  let orderId = req.body.orderId
+  let proId = req.body.proId
+  adminHelper.cancelProduct(orderId,proId).then((resp=>{
+    if(response){
+      console.log("product cancelled");
+      res.json({status:true})
+    }
+    else {
+      console.log("product not cancelled");
+      res.json({status:false})
+    }
+  }))
+})
+
 
 
 module.exports = router;

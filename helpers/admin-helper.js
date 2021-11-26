@@ -151,8 +151,27 @@ getBlockedUsers:()=>{
     let blockedUsers = await db.get().collection(collections.USER_COLLECTION).find({userBlocked: true}).toArray()
     resolve(blockedUsers)
   })
-}
+},
 
 
+viewOrders:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let orders = await db.get().collection(collections.ORDER_COLLECTION).find({}).toArray()
+    resolve(orders)
+  })
+},
+
+
+deliveryStatusUpdate:(status,orderId,proId)=>{
+  return new Promise(async (resolve,reject)=>{
+    db.get().collection(collections.ORDER_COLLECTION).updateOne({_id: objectId(orderId),"products.item": objectId(proId)},
+    {
+      $set:{ "products.$.status": status }
+    }).then((response)=>{
+        console.log(response);
+        resolve(true)
+    })
+  })
+},
 
 };

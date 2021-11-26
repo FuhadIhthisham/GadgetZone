@@ -269,4 +269,50 @@ module.exports = {
       });
     },
 
+    getOrderProducts:(orderId,userId)=>{
+      return new Promise(async (resolve,reject)=>{
+       let prod = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+          {
+            $match:{_id: objectId(orderId)}
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              item: "$products.item",
+              quantity: "$products.quantity",
+              subTotal: "$products.subTotal",
+              status: "$products.status"
+            }
+          },
+          {
+            $lookup:{
+              from: collections.PRODUCT_COLLECTION,
+              localField: "item",
+              foreignField: "_id",
+              as: "product"
+            }
+          },
+          {
+            $project:{
+              item:1,
+              quantity:1,
+              subTotal:1,
+              status:1,
+              product: {
+                $arrayElemAt: ["$product",0]
+              }
+            }
+          },
+          {
+            $unwind: "$product.productVariants"
+          },
+        ]).toArray()
+        resolve(prod)
+      })
+
+
+    }
+
 }
