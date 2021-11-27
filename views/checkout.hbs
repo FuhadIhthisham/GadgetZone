@@ -269,6 +269,9 @@
               </div>
 
               <button type="button" onclick="placeOrder()" class="site-btn mt-4">PLACE ORDER</button>
+              <input type="text" id="userName" value="{{user.firstName}}" disabled hidden>
+              <input type="text" id="userPhone" value="{{user.phone}}" disabled hidden>
+              <input type="text" id="userEmail" value="{{user.email}}" disabled hidden>
             </div>
           </div>
         </div>
@@ -285,6 +288,7 @@
       src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
     ></script>
 
+
 <script>
 
  var checkoutAddressId
@@ -293,6 +297,10 @@
 function selectAddress(id){
   checkoutAddressId = id
 }
+
+var userName = document.getElementById('userName').value
+var userPhone = document.getElementById('userPhone').value
+var userEmail = document.getElementById('userEmail').value
 
 function selectPayment(payment){
   paymentMethod = payment
@@ -326,13 +334,79 @@ function placeOrder(){
       url: `/place-order?payment=${paymentMethod}&addressId=${checkoutAddressId}`,
       method: 'get',
       success:(res)=>{
-        if(res){
+        if(res.codSuccess){
           location.replace('/order-placed')
+        }
+        else{
+          razorpayPayment(res)
         }
       }
     })
   }
 }
+
+
+
+
+function razorpayPayment(order){
+var options = {
+    "key": "rzp_test_GT3btMNJZ1MvHn", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "GadgetZone",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+     
+
+        verifyPayment(response,order)
+
+    },
+    "prefill": {
+        "name": userName,
+        "email": userEmail,
+        "contact": userPhone
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+
+var rzp1 = new Razorpay(options);
+rzp1.open();
+
+}
+
+function verifyPayment(payment,order){
+  $.ajax({
+    url: '/verify-payment',
+    data:{
+      payment,
+      order
+    },
+    method: 'post',
+
+    success:(res)=>{
+      if(res.status){ 
+        location.replace('/order-placed')
+      }
+      else{
+      swal({
+        title: "Sorry, Payment Failed",
+        icon: 'warning',
+        dangerMode:true,
+        })
+      }
+    }
+  })
+}
+
+
+
 
 
 // USER ADD ADDRESS VALIDATION

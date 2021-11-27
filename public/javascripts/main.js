@@ -280,19 +280,37 @@ function addToCart(proId,subTotal){
 // }
 
 function deleteCartProduct(cartId,proId,variantId){
-  $.ajax({
-    url: '/delete-cart-product',
-    data:{
-      cartId:cartId,
-      proId:proId,
-      varId:variantId
-    },
-    method: 'post',
-    success:(response)=>{
-      if(response){
-        location.reload()
-        alert("Product Deleted successfully")
-      }
-    }
+
+  swal({
+    title: "Are you sure?",
+    text: "Would you like to remove this product from cart ?",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
   })
+  .then((willDelete) => {
+    if (willDelete) {
+
+      $.ajax({
+        url: '/delete-cart-product',
+        data:{
+          cartId:cartId,
+          proId:proId,
+          varId:variantId
+        },
+        method: 'post',
+        success:(response)=>{
+          if(response){
+            swal("Product deleted from cart", {
+              icon: "success",
+            });
+          }
+          location.reload()
+        }
+      })
+    } 
+  });
+ 
+
+  
 }

@@ -6,13 +6,15 @@ const productHelper = require("../helpers/product-helper");
 var router = express.Router();
 var userHelper = require("../helpers/user-helpers");
 
+var objectId = require("mongodb").ObjectId;
+
 const allStates = require('../config/lists').allStates
 
 // twilio API
 
 
 const accountSid = "AC3ab377140a3e1f412bffe3886a8d895d"; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
-const authToken = "86a52b176f150a8bba9b7d37b833ed5d";
+const authToken = "735fbeed36169cb620fbbda4acdaa920";
 const serviceSid = "VA948aed94f34ad8455cee59a01dd989a6";
 const client = require("twilio")(accountSid, authToken);
 
@@ -410,40 +412,6 @@ router.get("/signupOtp",(req,res)=>{
   }));
 })
 
-
-router.get("/checkout",verifyBlock,async function (req, res, next) {
-  let products = await userHelper.getCartProducts(req.session.user._id)
-  if(products.length != 0){
-    let addresses = await userHelper.getAddress(req.session.user._id)
-    console.log(products);
-    let grandTotal = await userHelper.getGrandTotal(req.session.user._id)
-    grandTotal = grandTotal[0]?.grandTotal
-      res.render("checkout", { title: "GadgetZone", user: req.session.user, addresses, products, grandTotal, checkoutAddressMsg});
-      checkoutAddressMsg = null
-  }
-  else{
-    res.redirect('/')
-  }
-  });
-
-
-router.get("/place-order",verifyBlock,async function (req, res, next) {
-  let products = await userHelper.getCartProductsList(req.session.user._id)
-  let grandTotal = await userHelper.getGrandTotal(req.session.user._id)
-  let address = await userHelper.getOneAddress(req.query.addressId,req.session.user._id)
-  address = address[0].address
-  grandTotal = grandTotal[0].grandTotal
-  userHelper.placeOrder(req.query.payment,req.session.user._id,address,products,grandTotal).then((resp)=>{
-    res.json({status:true})
-  })
-  // console.log(req.query);
-  });
-
-router.get("/order-placed",verifyBlock,async function (req, res, next) {
-  res.render('order-placed',{ title: "GadgetZone", user: req.session.user})
-  });
-
-
 router.get("/logout", function (req, res, next) {
   req.session.user.loggedIn = false;
   req.session.user = null;
@@ -466,8 +434,15 @@ router.get("/product-details", async (req, res, next)=> {
   })
 });
 
-router.get("/product-list", function (req, res, next) {
-  res.render("product-list", { title: "GadgetZone", user: req.session.user });
+router.get("/product-list",async function (req, res, next) {
+  let cartCount = null
+  if(req.session.user){
+    cartCount = await userHelper.getCartCount(req.session.user._id)
+  }
+  productHelper.getAllProducts().then(async(allProducts) => {
+    let user = req.session.user;
+    res.render("product-list", { title: "GadgetZone", user,allProducts, cartCount });
+  });
 });
 
 // cart view page
@@ -518,6 +493,82 @@ router.post('/delete-cart-product',verifyBlock,(req,res)=>{
     res.json(response)
   })
 })
+
+
+
+router.get("/checkout",verifyBlock,async function (req, res, next) {
+  let products = await userHelper.getCartProducts(req.session.user._id)
+  if(products.length != 0){
+    let addresses = await userHelper.getAddress(req.session.user._id)
+    console.log(products);
+    let grandTotal = await userHelper.getGrandTotal(req.session.user._id)
+    grandTotal = grandTotal[0]?.grandTotal
+      res.render("checkout", { title: "GadgetZone", user: req.session.user, addresses, products, grandTotal, checkoutAddressMsg});
+      checkoutAddressMsg = null
+  }
+  else{
+    res.redirect('/')
+  }
+  });
+
+
+router.get("/place-order",verifyBlock,async function (req, res, next) {
+  let products = await userHelper.getCartProductsList(req.session.user._id)
+  let grandTotal = await userHelper.getGrandTotal(req.session.user._id)
+  let address = await userHelper.getOneAddress(req.query.addressId,req.session.user._id)
+  let rzpId = new objectId()
+  address = address[0].address
+  grandTotal = grandTotal[0].grandTotal
+  userHelper.placeOrder(req.query.payment,req.session.user._id,address,products,grandTotal).then((resp)=>{
+    if(req.query.payment == 'COD'){
+      res.json({codSuccess:true})
+    }
+    else{
+      req.session.orderDetails = resp
+      grandTotal = parseInt(grandTotal)
+      userHelper.generateRazorpay(rzpId,grandTotal).then((resp)=>{
+        res.json(resp)
+      })
+    }
+  })
+  // console.log(req.query);
+  });
+
+router.post("/verify-payment",verifyBlock,function (req, res, next) {
+    console.log(req.body);
+    let orderDetails = req.session.orderDetails
+    console.log(orderDetails);
+    userHelper.verifyPayment(req.body).then(()=>{
+      userHelper.changePaymentStatus(orderDetails).then(()=>{
+        console.log("Payment Success");
+        res.json({status:true})
+      })
+    }).catch((err)=>{
+      console.log(err);
+      res.json({status:false})
+    })
+  });
+
+
+router.get("/order-placed",verifyBlock,async function (req, res, next) {
+  res.render('order-placed',{ title: "GadgetZone", user: req.session.user})
+  });
+
+
+
+
+router.get("/my-orders",verifyBlock, function (req, res, next) {
+  userHelper.getAllOrders(req.session.user._id).then((allOrders)=>{
+    res.render("my-orders", { title: "GadgetZone", user: req.session.user, allOrders });
+  })
+});
+
+router.post("/cancel-product",verifyBlock, function (req, res, next) {
+  userHelper.cancelProduct(req.body.orderId,req.body.proId).then((allOrders)=>{
+    res.json({status:true})
+  })
+});
+
 
 router.get("/wishlist",verifyBlock, function (req, res, next) {
   res.render("wishlist", { title: "GadgetZone", user: req.session.user });

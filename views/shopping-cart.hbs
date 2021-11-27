@@ -35,39 +35,6 @@
         {{else}}
       
       <div class="col-lg-8">
-        {{!-- <div class="shopping__cart__table"> --}}
-          {{! <table>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="product__cart__item">
-                  <div class="product__cart__item__pic">
-                    <img src="img/shopping-cart/iwatch-1.jpg" alt="" />
-                  </div>
-                  <div class="product__cart__item__text">
-                    <h6>Apple Watch SE</h6>
-                    <h5>₹27999</h5>
-                  </div>
-                </td>
-                <td class="quantity__item">
-                  <div class="quantity">
-                    <div class="pro-qty-2">
-                      <input type="text" value="1" />
-                    </div>
-                  </div>
-                </td>
-                <td class="cart__price">₹27999</td>
-                <td class="cart__close"><i class="fa fa-close"></i></td>
-              </tr>
-            </tbody>
-          </table> }}
           {{#each products}}
           <div class="card mb-3" style="max-width: 750px;">
             <div class="row g-0">
@@ -83,22 +50,17 @@
                 <div class="card-body">
                   <h5 class="card-title">{{../this.product.productName}}</h5>
                   <p class="card-text fs-6"> ₹ <span id="{{../this.product._id}}MRP">{{this.productPrice}}</span></p>
-                  {{!-- <p class="card-text"><small class="text-muted"></small></p> --}}
+                  
                 </div>
               </div>
               {{/each}}
               <div class="product__cart__item text-center mt-md-5 col-md-2">
-                {{!-- <div class="card-body mt-md-4"> --}}
-                  {{! <div class="quantity">
-                    <div class="pro-qty-2"> }}
                   {{#each product.productVariants}}
                   <button class="count-btn me-2" id="dec-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.productPrice}}',-1)">-</button>
                     <span id="{{../this.product._id}}{{this.variantId}}">{{../this.quantity}}</span>
                   <button class="count-btn ms-2" id="inc-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.productPrice}}',1)">+</button>
                   <p class="card-text mt-3 mb-4 font-weight-bold">₹ <span id="{{this.variantId}}">{{../this.subTotal}}</span></p>
-                  {{! </div>
-                  </div> }}
-                {{!-- </div> --}}
+                  
               </div>
               <div class="col-md-2">
                 <div class="card-body mt-md-4 text-center align-middle">
@@ -109,7 +71,6 @@
             </div>
           </div>
         {{/each}}
-        {{!-- </div> --}}
         <div class="row">
           <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="continue__btn">
@@ -118,7 +79,6 @@
           </div>
           <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="continue__btn update__btn">
-              {{! <a href="#"><i class="fa fa-spinner"></i> Update cart</a> }}
             </div>
           </div>
         </div>
@@ -161,11 +121,15 @@ function changeQuantity(cartId,proId,variantId,stock,price,count){
   let mrp = document.getElementById(proId+'MRP').innerHTML
   let currSub = (quantity+count)*price
   console.log(currSub)
+  
+  if(quantity==1 && count==-1){
+    document.getElementById('dec-btn').setAttribute('disabled')
+  }
+
   if(quantity>=stock && count==1){
     Swal.fire('Sorry,Out of Stock!!')
   }
   else{
-
   $.ajax({
     url: '/change-quantity',
     data: {
@@ -180,7 +144,6 @@ function changeQuantity(cartId,proId,variantId,stock,price,count){
     success:(response)=>{
       if(response.removeProduct){
         location.reload()
-        alert("Product removed form cart")
       }
       else {
         document.getElementById(proId+variantId).innerHTML = quantity+count
