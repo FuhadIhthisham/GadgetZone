@@ -286,6 +286,53 @@ addAddressForm.validate({
   },
 })
 
+// EDIT PROFILE VALIDATION
+var editProfileForm = $("#editProfileForm");
+editProfileForm.validate({
+  rules: {
+    firstName: {
+      required: true,
+      minlength:5
+    },
+    lastName: {
+      required: true,
+      minlength: 5
+    },
+    phone: {
+      required: true,
+      number: true,
+      minlength:10
+    },
+    email: {
+      required: true,
+      email:true
+    },
+  },
+})
+
+
+// ADD OFFER VALIDATION
+var addOfferForm = $("#addOfferForm");
+addOfferForm.validate({
+  rules: {
+    offerProduct: {
+      required: true,
+    },
+    discount: {
+      required: true,
+      minlength: 5,
+      number: true
+    },
+    startDate: {
+      required: true,
+      minlength:10
+    },
+    expiryDate: {
+      required: true,
+    },
+  },
+})
+
 
 
 //   FILTER INPUT FIELDS

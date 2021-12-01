@@ -313,6 +313,66 @@ module.exports = {
       })
 
 
+    },
+
+
+    addProductOffer:(data)=>{
+      return new Promise(async (resolve,reject)=>{
+        data.discount = parseInt(data.discount)
+        discount = parseInt(data.discount)
+        db.get().collection(collections.PRODUCT_OFFER).insertOne({data}).then(async(res)=>{
+          
+          let products = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
+            {
+              $match:{productName: data.offerProduct}
+            },
+            {
+              $unwind: "$productVariants"
+            }
+          ]).toArray()
+
+          await products.map(async(product)=>{
+            let productPrice = product.productVariants.productPrice
+            productPrice = parseInt(productPrice)
+            let discountPrice = productPrice-((productPrice*discount)/100)
+            discountPrice = parseInt(discountPrice.toFixed(2))
+            let variantId = product.productVariants.variantId + ""
+            
+            await db.get().collection(collections.PRODUCT_COLLECTION).updateOne(
+              {
+                _id:product._id,
+                "productVariants.variantId": objectId(variantId)
+              },
+              {
+                $set:{
+                  "productVariants.$.offerPrice": discountPrice
+                }
+              })
+          })
+          resolve({status:true})
+          
+        })
+      })
+    },
+
+    getProductOffer:()=>{
+      return new Promise(async(resolve,reject)=>{
+        let offerList = await db.get().collection(collections.PRODUCT_OFFER).find({}).toArray()
+        console.log(offerList);
+
+        await offerList.map((product)=>{
+          console.log(product);
+        })
+
+        // let offerProducts = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
+        //   {
+        //     $match:{productName}
+        //   }
+        // ])
+        resolve(true)
+      })
     }
+    
+
 
 }

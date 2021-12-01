@@ -174,4 +174,193 @@ deliveryStatusUpdate:(status,orderId,proId)=>{
   })
 },
 
+addBanner:(body)=>{
+  return new Promise((resolve,reject)=>{
+    db.get().collection(collections.BANNER_COLLECTION).update({},{
+     $set:{
+      topHead1: body.topHead1,
+      topText1: body.topText1,
+      topHead2: body.topHead2,
+      topText2: body.topText2,
+      topHead3: body.topHead3,
+      topText3: body.topText3,
+      offerHead: body.offerHead,
+      offerText: body.offerText,
+     } 
+    })
+    resolve(true)
+  })
+},
+
+getBanner:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let allBanner = await db.get().collection(collections.BANNER_COLLECTION).findOne({})
+    resolve(allBanner)
+  })
+},
+
+
+getRevenue:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let revenue = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+      {
+        $unwind: "$products"
+      },
+      {
+        $match:{"products.status": "Delivered"}
+      },
+      {
+        $project:{
+          subTotal: "$products.subTotal"
+        }
+      },
+      {
+        $project:{
+          subTotal: 1,
+          _id:0
+        }
+      },
+      {
+        $group:{
+          _id:null,
+          totalRevenue:{$sum:"$subTotal"}
+        }
+      }
+    ]).toArray()
+
+    console.log("Total Revenue: "+revenue[0].totalRevenue);
+
+    resolve(revenue[0].totalRevenue)
+  })
+},
+
+
+getTotalProducts:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let totalProducts = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
+      {
+        $unwind: "$productVariants"
+      },
+      {
+        $count: "prdouctsCount"
+      }
+    ]).toArray()
+
+    console.log("Total Products:>>>>>>>>>"+totalProducts[0].prdouctsCount);
+    resolve(totalProducts[0].prdouctsCount)
+  })
+},
+
+
+getDeliveredOrders:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let deliveredOrders = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+      {
+        $unwind: "$products"
+      },
+      {
+        $match:{"products.status": "Delivered"}
+      },
+      {
+        $count: "deliveredCount"
+      }
+    ]).toArray()
+
+    console.log('Delivered Count: '+deliveredOrders[0].deliveredCount);
+    resolve(deliveredOrders[0].deliveredCount)
+  })
+},
+
+
+getTotalUsers:()=>{
+  return new Promise(async (resolve,reject)=>{
+    let totalUsers = await db.get().collection(collections.USER_COLLECTION).find({}).count()
+
+    console.log('Total users Count: '+totalUsers);
+    resolve(totalUsers)
+  })
+},
+
+
+getdailySales:()=>{
+  return new Promise(async(resolve,reject)=>{
+    let dailySale = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+      {
+        $unwind: "$products"
+      },
+      {
+        $match:{
+          "products.status": "Delivered"
+        }
+      },
+      {
+        $group:{
+          _id: {$dateToString: {format: "%Y-%m-%d",date:"$date"}},
+          totalAmount: {$sum:"$products.subTotal"},
+          count:{$sum:1}
+        }
+      },
+      {
+        $sort: {_id:-1}
+      },
+      {
+        $limit: 7
+      }
+    ]).toArray()
+    // console.log(dailySale);
+    resolve(dailySale)
+  })
+},
+
+getCatSales:()=>{
+  return new Promise(async(resolve,reject)=>{
+    let catSales = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+      {
+        $unwind: "$products"
+      },
+      {
+        $match:{
+          "products.status": "Delivered"
+        }
+      },
+      {
+        $project:{
+          item: "$products.item",
+          quantity: "$products.quantity",
+          subTotal: "$products.subTotal"
+        }
+      },
+      {
+        $lookup:{
+          from: collections.PRODUCT_COLLECTION,
+          localField: "item",
+          foreignField: "_id",
+          as: "orderedProducts"
+        }
+      },
+      {
+        $unwind: "$orderedProducts"
+      },
+      {
+        $project:{
+          quantity:1,
+          subTotal:1,
+          category: "$orderedProducts.productSubcategory"
+        }
+      },
+      {
+        $group:{
+          _id: "$category",
+          totalAmount: {$sum:"$subTotal"},
+          count:{$sum:1}
+        }
+      }
+    ]).toArray()
+    console.log(catSales);
+    resolve(catSales)
+  })
+}
+
+
+
 };

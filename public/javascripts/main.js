@@ -239,9 +239,19 @@ function addToCart(proId,subTotal){
     method: 'post',
     success:(response)=>{
       if(response.status){
+        swal({
+          title: "Product Added To Cart",
+          icon: "success",
+        })
         let count = $('.cart-count').html()
         count = parseInt(count) + 1
         $('.cart-count').html(count)
+      }
+      else if(response.productExist){
+        swal({
+          title: "Product Already Exists On Cart",
+          icon: "warning",
+        })
       }
       else{
         location.replace('/login')
@@ -310,7 +320,29 @@ function deleteCartProduct(cartId,proId,variantId){
       })
     } 
   });
- 
 
-  
+}
+
+
+function deleteAddress(addressId){
+  swal({
+    title: "Are you sure?",
+    text: "Would you like to remove this address ?",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  }).then((willDelete)=>{
+    if(willDelete){
+      $.ajax({
+        url: '/delete-address',
+        method: 'post',
+        data:{addressId},
+        success:(resp)=>{
+          if(resp.status){
+            location.replace('/user-profile')
+          }
+        }
+      })
+    }
+  })
 }
