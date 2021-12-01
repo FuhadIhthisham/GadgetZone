@@ -88,10 +88,15 @@
               <div class="product__details__text">
 
                 <h4 class="mt-sm-3 mb-3">{{this.productName}}</h4>
-
-                <h3>₹{{this.productVariants.0.productPrice}} 
-                  <span>2990.00</span>     {{!-- if offer price  --}}
-                </h3>
+                {{#if this.productVariants.0.offerPrice}}
+                  <h3>₹{{this.productVariants.0.offerPrice}} 
+                    <span>{{this.productVariants.0.productPrice}}</span>     {{!-- if offer price  --}}
+                  </h3>
+                {{else}}
+                  <h3>₹{{this.productVariants.0.productPrice}} 
+                    {{!-- <span>{{this.productVariants.0.offerPrice}}</span>      --}}
+                  </h3>
+                {{/if}}
 
 
                 {{!-- <div class="product__details__option__size"> --}}
@@ -115,10 +120,17 @@
                 <div class="product__details__cart__option mt-4">
 
                 <div class="product__details__cart__option">
-                  <button onclick="addToCart('{{this._id}}',{{this.productVariants.0.productPrice}})" class="primary-btn add-cart">
-                    ADD TO
-                    <i class="fas fa-cart-plus"></i>
-                  </button>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <button onclick="addToCart('{{this._id}}',{{this.productVariants.0.offerPrice}})" class="primary-btn add-cart">
+                      ADD TO
+                      <i class="fas fa-cart-plus"></i>
+                    </button>
+                  {{else}}
+                    <button onclick="addToCart('{{this._id}}',{{this.productVariants.0.productPrice}})" class="primary-btn add-cart">
+                      ADD TO
+                      <i class="fas fa-cart-plus"></i>
+                    </button>
+                  {{/if}}
                   <a
                     href="#"
                     class="primary-btn"

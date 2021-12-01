@@ -129,10 +129,17 @@
                 </div>
                 <div class="product__item__text">
                   <h6 class="text-secondary mb-2">{{this.productBrand}}</h6>
-                  <a
-                    onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
-                    class="add-cart text-danger"
-                  >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <a
+                      onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
+                      class="add-cart text-danger"
+                    >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{else}}
+                    <a
+                      onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
+                      class="add-cart text-danger"
+                    >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{/if}}
                    <h6>{{this.productName}}</h6>
               <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
                   <div class="rating">
@@ -142,7 +149,13 @@
                     <i class="fa text-warning fa-star"></i>
                     <i class="fa text-warning fa-star-o"></i>
                   </div>
-                  <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
+                    <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.productVariants.0.productPrice}}</span>
+                {{else}}
+                    <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+                    {{!-- <span class="text-decoration-line-through"> ₹{{this.productVariants.0.productPrice}}</span> --}}
+                {{/if}}
                 </div>
               </div>
             </div>

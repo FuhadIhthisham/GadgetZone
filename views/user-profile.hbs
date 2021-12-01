@@ -12,7 +12,7 @@
         <span class="font-weight-bold">{{user.firstName}} {{user.lastName}}</span>
         <span class="text-black-50">{{user.email}}</span>
         <span>
-          <a href="" class="text-primary"><i
+          <a href="/edit-profile" class="text-primary" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
               class="fas fa-user-edit mt-4"
             ></i></a>
         </span>
@@ -22,7 +22,7 @@
           </a>
         </span>
         <span class="my-2">
-          <a href="" class="text-dark text-decoration-none">
+          <a href="" class="text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@mdo">
             Change Password <i class="fa fa-user-circle" aria-hidden="true"></i>
           </a>
         </span>
@@ -46,6 +46,25 @@
               <span class="sr-only">Close</span>
             </button>
             <strong>{{profileMsg}}</strong>
+          </div>
+
+        {{/if}}
+
+        {{#if changePassMsg}}
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <strong>{{changePassMsg}}</strong>
           </div>
 
         {{/if}}
@@ -132,6 +151,168 @@
   </div>
 </div>
 
+
+
+{{!--EDIT PROFILE MODAL --}}
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <form action="/edit-profile" method="post" id="editProfileForm" enctype="multipart/form-data">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-secondary">
+                      <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+
+                      <label class="labels">Profile Pic <br> </label>
+                      <input type="file" name="profilePic" id="">
+
+
+
+                        <div class="">
+                          <label class="labels">First Name</label><input
+                            type="text"
+                            name="firstName"
+                            class="form-control"
+                            value="{{user.firstName}}"
+                            placeholder="Last Name"
+                          />
+                        </div>
+                        <div class="">
+                          <label class="labels">Last Name</label><input
+                            type="text"
+                            name="lastName"
+                            value="{{user.lastName}}"
+                            class="form-control"
+                            placeholder="Last Name"
+                          />
+                        </div>
+                        <div class="">
+                          <label class="labels">Mobile Number</label><input
+                            type="text"
+                            name="phone"
+                            value="{{user.phone}}"
+                            class="form-control"
+                            placeholder="Phone"
+                            id="phonenumber"
+                          />
+                        </div>
+
+                        <div class="">
+                          <label class="labels">Email</label><input
+                            type="text"
+                            name="email"
+                            value="{{user.email}}"
+                            id="email"
+                            class="form-control"
+                            placeholder="Phone"
+                          />
+                        </div>
+                      
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >Cancel</button>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
+            </div>
+
+
+
+{{!-- CHANGE PASSWORD MODAL --}}
+              <div
+                class="modal fade"
+                id="exampleModal2"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <form action="/change-password" method="post" id="changePassForm">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-secondary">
+                      <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="">
+                          <label class="labels">Current Password</label><input
+                            type="password"
+                            name="currPass"
+                            class="form-control"
+                          />
+                        </div>
+                        <div class="">
+                          <label class="labels">New Password</label><input
+                            type="password"
+                            name="newPass"
+                            class="form-control"
+                            id="newPassword"
+                          />
+                        </div>
+                        <div class="">
+                          <label class="labels">Type New Password Again</label><input
+                            type="password"
+                            name="retryNewPass"
+                            class="form-control"
+                            id="retryNewPass"
+                          />
+                        </div>
+                      
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >Cancel</button>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
+            </div>
+
+
+<script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    ></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- JS Validator -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
+    ></script>
+
+    <!-- form submission file -->
+    <script src="/javascripts/validator.js"> </script>
+
+
 <style>
   /* user profile */ body { background: rgba(46, 157, 172, 0.507) }
   .form-control:focus { box-shadow: none; border-color: #BA68C8 }
@@ -150,28 +331,77 @@
 
 
 <script>
-  function deleteAddress(addressId){
-    swal({
-      title: "Are you sure To delete Address ?",
-      icon: 'warning',
-      buttons: true,
-      dangerMode:true,
-    }).then((willDelete)=>{
-      if(willDelete){
-        $.ajax({
-          url: '/delete-address',
-          method: 'post',
-          data: {id:addressId},
-          success: (result)=>{
-            if(result.status){
-              swal('Address Deleted Successfully',{
-                icon: "success",
-              })
-            }
-            location.href = '/user-profile'
-          }
-        })
+  //   FILTER INPUT FIELDS
+function setInputFilter(textbox, inputFilter) {
+  [
+    "input",
+    "keydown",
+    "keyup",
+    "mousedown",
+    "mouseup",
+    "select",
+    "contextmenu",
+    "drop",
+  ].forEach(function (event) {
+    textbox.addEventListener(event, function () {
+      if (inputFilter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
       }
-    })
-  }
+    });
+  });
+}
+  // ONLY 10 NUMBERS IN PHONE FIELD
+setInputFilter(document.getElementById("phonenumber"), function (value) {
+  return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 9999999999);
+});
+</script>
+
+
+
+<script>
+
+  // Check whether password and retype password is equal in reset password page
+
+var changePassForm = $("#changePassForm");
+changePassForm.validate({
+  rules: {
+    currPass: {
+      required: true,
+      minlength: 5,
+    },
+    newPass: {
+      required: true,
+      minlength: 5,
+    },
+    retryNewPass: {
+      minlength: 5,
+      equalTo: "#newPassword",
+    },
+  },
+});
+
+
+
+$(document).ready(function () {
+  $("#retryNewPass").on("keyup", function () {
+    var password = $("#newPass").val();
+    var confirmPassword = $("#retryNewPass").val();
+    if (password != confirmPassword)
+      $("#CheckPasswordMatch")
+        .html("Password does not match !")
+        .css("color", "red");
+    else
+      $("#CheckPasswordMatch").html("Password match !").css("color", "green");
+  });
+});
+
+
+
 </script>

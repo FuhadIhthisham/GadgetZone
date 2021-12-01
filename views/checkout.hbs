@@ -337,6 +337,9 @@ function placeOrder(){
         if(res.codSuccess){
           location.replace('/order-placed')
         }
+        else if(res.data){
+          location.href = res.url
+        }
         else{
           razorpayPayment(res)
         }
@@ -400,6 +403,7 @@ function verifyPayment(payment,order){
         icon: 'warning',
         dangerMode:true,
         })
+        location.replace('/payment-cancel')
       }
     }
   })

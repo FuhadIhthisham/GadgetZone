@@ -49,18 +49,29 @@
               <div class="col-md-6">
                 <div class="card-body">
                   <h5 class="card-title">{{../this.product.productName}}</h5>
-                  <p class="card-text fs-6"> ₹ <span id="{{../this.product._id}}MRP">{{this.productPrice}}</span></p>
+                  {{#if this.offerPrice}}
+                    <p class="card-text fs-6"> ₹ <span id="{{../this.product._id}}MRP">{{this.offerPrice}}</span></p>
+                  {{else}}
+                    <p class="card-text fs-6"> ₹ <span id="{{../this.product._id}}MRP">{{this.productPrice}}</span></p>
+                  {{/if}}
                   
                 </div>
               </div>
               {{/each}}
               <div class="product__cart__item text-center mt-md-5 col-md-2">
                   {{#each product.productVariants}}
-                  <button class="count-btn me-2" id="dec-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.productPrice}}',-1)">-</button>
-                    <span id="{{../this.product._id}}{{this.variantId}}">{{../this.quantity}}</span>
-                  <button class="count-btn ms-2" id="inc-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.productPrice}}',1)">+</button>
-                  <p class="card-text mt-3 mb-4 font-weight-bold">₹ <span id="{{this.variantId}}">{{../this.subTotal}}</span></p>
-                  
+                    {{#if this.offerPrice}}
+                      <button class="count-btn me-2" id="dec-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.offerPrice}}',-1)">-</button>
+                        <span id="{{../this.product._id}}{{this.variantId}}">{{../this.quantity}}</span>
+                      <button class="count-btn ms-2" id="inc-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.offerPrice}}',1)">+</button>
+                      <p class="card-text mt-3 mb-4 font-weight-bold">₹ <span id="{{this.variantId}}">{{../this.subTotal}}</span></p>
+                    {{else}}
+                      <button class="count-btn me-2" id="dec-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.productPrice}}',-1)">-</button>
+                        <span id="{{../this.product._id}}{{this.variantId}}">{{../this.quantity}}</span>
+                      <button class="count-btn ms-2" id="inc-btn" onclick="changeQuantity('{{../this._id}}','{{../this.product._id}}','{{this.variantId}}','{{this.productQuantity}}','{{this.productPrice}}',1)">+</button>
+                      <p class="card-text mt-3 mb-4 font-weight-bold">₹ <span id="{{this.variantId}}">{{../this.subTotal}}</span></p>
+                    {{/if}}
+             
               </div>
               <div class="col-md-2">
                 <div class="card-body mt-md-4 text-center align-middle">
@@ -94,10 +105,10 @@
         <div class="cart__total">
           <h6>Cart total</h6>
           <ul>
-            <li>Items Price <span id="grandTotal"> {{grandTotal}} </span><span> ₹ </span></li>
+            <li>Items Price <span id="itemTotal"> {{grandTotal}} </span><span> ₹ </span></li>
             <li>Coupon Discount
-              <span class="discount__price">₹ 0</span></li>
-            <li class="fs-4">Total <span>₹ {{grandTotal}}</span></li>
+              <span class="discount__price" id="discountPrice">0</span> <span class="discount__price">₹</span> </li>
+            <li class="fs-4">Total <span id="grandTotal"> {{grandTotal}}</span> <span>₹</span> </li>
           </ul>
           <a href="/checkout" class="primary-btn">Proceed to checkout</a>
         </div>
@@ -115,12 +126,13 @@ function changeQuantity(cartId,proId,variantId,stock,price,count){
   stock = parseInt(stock)
   price = parseInt(price)
   count = parseInt(count)
-  let currGrandTotal = parseInt(document.getElementById('grandTotal').innerHTML)
+  let itemTotal = parseInt(document.getElementById('itemTotal').innerHTML)
+  let grandTotal = parseInt(document.getElementById('grandTotal').innerHTML)
+  let discountPrice = parseInt(document.getElementById('discountPrice').innerHTML)
   let subTotal = parseInt(document.getElementById(variantId).innerHTML)
   let quantity = parseInt(document.getElementById(proId+variantId).innerHTML)
   let mrp = document.getElementById(proId+'MRP').innerHTML
   let currSub = (quantity+count)*price
-  console.log(currSub)
   
   if(quantity==1 && count==-1){
     document.getElementById('dec-btn').setAttribute('disabled')
@@ -148,7 +160,8 @@ function changeQuantity(cartId,proId,variantId,stock,price,count){
       else {
         document.getElementById(proId+variantId).innerHTML = quantity+count
         document.getElementById(variantId).innerHTML = (quantity+count)*price
-        document.getElementById("grandTotal").innerHTML = currGrandTotal + subTotal
+        document.getElementById("itemTotal").innerHTML = itemTotal + (price*count)
+        document.getElementById("grandTotal").innerHTML = (itemTotal + (price*count)) - discountPrice
       }
     }
   })

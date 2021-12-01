@@ -1,13 +1,13 @@
 <!-- Hero Section Begin -->
 <section class="hero">
   <div class="hero__slider owl-carousel">
-    <div class="hero__items set-bg mx-md-3" data-setbg="img/hero/hero-123.jpg">
+    <div class="hero__items set-bg mx-md-3" data-setbg="/images/banner-images/topBanner1.jpg">
       <div class="container">
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
             <div class="hero__text">
-              <h6>POWER THE WORLD SALE</h6>
-              <h2 class="text-lig text-light">MI POWER BANK 10000mAh</h2>
+              <h5 class="text-dark">{{banners.topHead1}}</h5>
+              <h2 class="text-lig text-dark">{{banners.topText1}}</h2>
               <a href="/product-list" class="primary-btn">Shop now
                 <span class="arrow_right"></span></a>
             </div>
@@ -16,13 +16,28 @@
       </div>
     </div>
 
-    <div class="hero__items set-bg" data-setbg="img/hero/hero-1.jpg">
+    <div class="hero__items set-bg" data-setbg="/images/banner-images/topBanner2.jpg">
       <div class="container">
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
             <div class="hero__text">
-              <h4 class="text-light">ROARING SOUND</h4>
-              <h2> Beats Solo3 Wireless</h2>
+              <h4 class="text-light">{{banners.topHead2}}</h4>
+              <h2 class="text-light"> {{banners.topText2}}</h2>
+              <a href="/product-list" class="primary-btn">Shop now
+                <span class="arrow_right"></span></a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__items set-bg" data-setbg="/images/banner-images/topBanner3.jpg">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-5 col-lg-7 col-md-8">
+            <div class="hero__text">
+              <h4 class="text-light">{{banners.topHead3}}</h4>
+              <h2> {{banners.topText3}} </h2>
               <a href="/product-list" class="primary-btn">Shop now
                 <span class="arrow_right"></span></a>
 
@@ -111,10 +126,17 @@
             </div>
             <div class="product__item__text">
               <h6 class="text-secondary mb-2">{{this.productBrand}}</h6>
-              <a
-                onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
-                class="add-cart text-danger"
-              >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+              {{#if this.productVariants.0.offerPrice}}
+                <a
+                  onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
+                  class="add-cart text-danger"
+                >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+              {{else}}
+                <a
+                  onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
+                  class="add-cart text-danger"
+                >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+              {{/if}}
               <h6>{{this.productName}}</h6>
               <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
               <div class="rating">
@@ -124,7 +146,13 @@
                 <i class="fa text-warning fa-star"></i>
                 <i class="fa text-warning fa-star-o"></i>
               </div>
-              <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+              {{#if this.productVariants.0.offerPrice}}
+                <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
+                <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.productVariants.0.productPrice}}</span>
+              {{else}}
+                <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+                {{!-- <span class="text-decoration-line-through"> ₹{{this.productVariants.0.productPrice}}</span> --}}
+              {{/if}}
             </div>
           </div>
         </div>
@@ -151,7 +179,7 @@
       <div class="col-lg-4">
         <div class="categories__hot__deal">
           <img
-            src="/images/product-images/6198e7948af519eb8666afb0/6198e7948af519eb8666afaf_1.jpg"
+            src="/images/banner-images/offerBanner.jpg"
             alt=""
           />
           <div class="hot__deal__sticker">
@@ -162,8 +190,8 @@
       </div>
       <div class="col-lg-4 offset-lg-1">
         <div class="categories__deal__countdown">
-          <span>Deal Of The Week</span>
-          <h2>Oneplus Bullet Wireless Z Bass Edition</h2>
+          <span>{{banners.offerHead}}</span>
+          <h2>{{banners.offerText}}</h2>
 
           <a href="#" class="primary-btn">Shop now</a>
         </div>

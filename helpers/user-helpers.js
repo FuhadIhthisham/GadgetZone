@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 var objectId = require("mongodb").ObjectId;
 const { response } = require("express");
 
+
 const Razorpay = require("razorpay");
 const { resolve } = require("path");
 
@@ -160,7 +161,7 @@ module.exports = {
             });
         }
         else{
-          resolve({msg:"Product Already Exists"})
+          resolve({productExist:true})
         }
       } else {
         let cartObj = {
@@ -324,61 +325,39 @@ module.exports = {
         element.status = deliveryStatus
       });
 
-      // if(order === 'COD'){ 
-        let orderObj = {
-          deliveryDetails:{
-              addressType: address.addressType,
-              name: address.name,
-              phone: address.phone,
-              houseNumber: address.houseNumber,
-              streetAddress: address.streetAddress,
-              locality:address.locality,
-              pincode: address.pincode,
-              district:address.district,
-              state: address.state,
-          },
-          userId: objectId(userId),
-          dateISO: new Date().toLocaleString(),
-          date: new Date(),
-          paymentMethod: order,
-          totalAmount:total,
-          products:products,
-        }
+      let orderObj = {
+        deliveryDetails:{
+            addressType: address.addressType,
+            name: address.name,
+            phone: address.phone,
+            houseNumber: address.houseNumber,
+            streetAddress: address.streetAddress,
+            locality:address.locality,
+            pincode: address.pincode,
+            district:address.district,
+            state: address.state,
+        },
+        userId: objectId(userId),
+        dateISO: new Date().toLocaleString(),
+        date: new Date(),
+        paymentMethod: order,
+        totalAmount:total,
+        products:products,
+      }
+      if(order === 'COD'){ 
         
         db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
           db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(userId)})
           resolve()
         })
         
-      // }
-      // else{
+      }
+      else{
+        db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
+        })
 
-      // }
+      }
 
-      // let orderObj = {
-      //   deliveryDetails:{
-      //       addressType: address.addressType,
-      //       name: address.name,
-      //       phone: address.phone,
-      //       houseNumber: address.houseNumber,
-      //       streetAddress: address.streetAddress,
-      //       locality:address.locality,
-      //       pincode: address.pincode,
-      //       district:address.district,
-      //       state: address.state,
-      //   },
-      //   userId: objectId(userId),
-      //   dateISO: new Date().toISOString().slice(0,10),
-      //   date: new Date(),
-      //   paymentMethod: order,
-      //   totalAmount:total,
-      //   products:products,
-      // }
-
-      // db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
-      //   db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(userId)})
-      //   resolve()
-      // })
       resolve(orderObj)
 
 
@@ -423,10 +402,14 @@ module.exports = {
 
   changePaymentStatus:(orderDetails)=>{
     return new Promise((resolve,reject)=>{
-        db.get().collection(collections.ORDER_COLLECTION).updateOne({_id: objectId(orderDetails._id),"products.status": "Pending"},{
+      console.log(orderDetails);
+        db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{
           $set:{
             "products.$.status": "Placed"
           }
+        }).then(()=>{
+          db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(orderDetails.userId)})
+          resolve()
         })
 
         resolve(true)
@@ -492,7 +475,6 @@ module.exports = {
           $unwind: "$product.productVariants"
         }
       ]).toArray()
-      console.log(allOrders);
       resolve(allOrders)
     })
   },
@@ -680,5 +662,79 @@ module.exports = {
           resolve(resp)
         })
     })
-  }
+  },
+
+  editProfile:(userId,data)=>{
+    return new Promise(async (resolve,reject)=>{
+      console.log(data);
+      await db.get().collection(collections.USER_COLLECTION).updateOne(
+        {
+          _id: objectId(userId),
+        },
+        {
+          $set: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            email: data.email,
+            phone: data.phone,
+          }
+        }
+        ).then((resp)=>{
+          console.log(resp);
+          resolve(resp)
+        })
+    })
+  },
+
+  getOneUser:(userId)=>{
+    return new Promise(async(resolve,reject)=>{
+      let orders= await db.get().collection(collections.USER_COLLECTION).findOne({_id: objectId(userId)})
+      console.log(orders);
+      resolve(orders) 
+    })
+  },
+
+   // Change password
+   changePassword: (userId,userPass) => {
+    return new Promise(async (resolve, reject) => {
+
+      let user = await db
+        .get()
+        .collection(collections.USER_COLLECTION)
+        .findOne({ _id: objectId(userId)});
+        console.log(user);
+        if(user){
+          bcrypt.compare(userPass.currPass, user.password).then(async(status) => {
+            console.log(status);
+            console.log("dsafsadfsdfsdf");
+            if (status) {
+              userPass.newPass = await bcrypt.hash(userPass.newPass, 10);
+              db.get()
+                .collection(collections.USER_COLLECTION)
+                .updateOne(
+                  {_id: objectId(userId)},
+                  {
+                    $set: {
+                      password: userPass.newPass,
+                    },
+                  }
+                ).then((resp)=>{
+                  if(resp){
+                    console.log("Password Updated success");
+                    resolve({status:true})
+                  }
+                  else{
+                    console.log("not updated");
+                    console.log(resp);
+                    resolve({status:false,changePassMsg: 'Password not updated'})                  }
+                })
+            } 
+            else{
+              resolve({status:false,changePassMsg: 'Please Enter Current Password Correctly'})
+            }
+          })
+        }
+      });
+  },
 };
