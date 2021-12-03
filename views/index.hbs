@@ -6,10 +6,10 @@
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
             <div class="hero__text">
-              <h5 class="text-dark">{{banners.topHead1}}</h5>
-              <h2 class="text-lig text-dark">{{banners.topText1}}</h2>
-              <a href="/product-list" class="primary-btn">Shop now
-                <span class="arrow_right"></span></a>
+              <h5 class="text-light">{{banners.topHead1}}</h5>
+              <h2 class="text-white">{{banners.topText1}}</h2>
+              {{!-- <a href="/product-list" class="primary-btn">Shop now
+                <span class="arrow_right"></span></a> --}}
             </div>
           </div>
         </div>
@@ -21,10 +21,10 @@
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
             <div class="hero__text">
-              <h4 class="text-light">{{banners.topHead2}}</h4>
-              <h2 class="text-light"> {{banners.topText2}}</h2>
-              <a href="/product-list" class="primary-btn">Shop now
-                <span class="arrow_right"></span></a>
+              <h4 class="text-secondary">{{banners.topHead2}}</h4>
+              <h2 class="text-secondary"> {{banners.topText2}}</h2>
+              {{!-- <a href="/product-list" class="primary-btn">Shop now
+                <span class="arrow_right"></span></a> --}}
 
             </div>
           </div>
@@ -36,10 +36,10 @@
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
             <div class="hero__text">
-              <h4 class="text-light">{{banners.topHead3}}</h4>
-              <h2> {{banners.topText3}} </h2>
-              <a href="/product-list" class="primary-btn">Shop now
-                <span class="arrow_right"></span></a>
+              <h4 class="text-danger">{{banners.topHead3}}</h4>
+              <h2 class="text-white"> {{banners.topText3}} </h2>
+              {{!-- <a href="/product-list" class="primary-btn">Shop now
+                <span class="arrow_right"></span></a> --}}
 
             </div>
           </div>
@@ -112,16 +112,17 @@
         >
           <div class="product__item">
             <div
-              onclick="productDetail('{{this._id}}')"
               class="product__item__pic set-bg"
               style="cursor: pointer;"
               data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg"
             >
               <ul class="product__hover">
-                <li><a href="/wishlist"><img src="img/icon/heart.png" alt="" />
+                <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img src="img/icon/heart.png" alt="" />
                     <span>Wishlist</span></a></li>
                 <li><a href="#"><img src="img/icon/compare.png" alt="" />
                     <span>Compare</span></a></li>
+                <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
+                    <span>View</span></a></li>
               </ul>
             </div>
             <div class="product__item__text">
@@ -200,7 +201,11 @@
   </div>
 </section>
 <!-- Categories Section End -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  function productDetail(id){ window.location = `/product-details?id=${id}` }
+  function productDetail(id){ 
+    window.location = `/product-details?id=${id}`
+    }
+
 </script>

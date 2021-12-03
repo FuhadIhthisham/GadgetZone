@@ -283,7 +283,8 @@ module.exports = {
               item: "$products.item",
               quantity: "$products.quantity",
               subTotal: "$products.subTotal",
-              status: "$products.status"
+              status: "$products.status",
+              cancelled: "$products.cancelled"
             }
           },
           {
@@ -300,14 +301,29 @@ module.exports = {
               quantity:1,
               subTotal:1,
               status:1,
-              product: {
-                $arrayElemAt: ["$product",0]
-              }
+              cancelled:1,
+              products: "$product"
             }
           },
           {
-            $unwind: "$product.productVariants"
+            $unwind: "$products"
           },
+          // {
+          //   $unwind: "$products.productVariants"
+          // },
+          {
+            $project:{
+              item:1,
+              quantity:1,
+              subTotal:1,
+              status:1,
+              cancelled:1,
+              productName: "$products.productName",
+              productPrice: {
+               $arrayElemAt:["$products.productVariants.productPrice",0]
+              }
+            }
+          }
         ]).toArray()
         resolve(prod)
       })
@@ -320,59 +336,106 @@ module.exports = {
       return new Promise(async (resolve,reject)=>{
         data.discount = parseInt(data.discount)
         discount = parseInt(data.discount)
-        db.get().collection(collections.PRODUCT_OFFER).insertOne({data}).then(async(res)=>{
-          
-          let products = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
-            {
-              $match:{productName: data.offerProduct}
-            },
-            {
-              $unwind: "$productVariants"
-            }
-          ]).toArray()
 
-          await products.map(async(product)=>{
-            let productPrice = product.productVariants.productPrice
-            productPrice = parseInt(productPrice)
-            let discountPrice = productPrice-((productPrice*discount)/100)
-            discountPrice = parseInt(discountPrice.toFixed(2))
-            let variantId = product.productVariants.variantId + ""
-            
-            await db.get().collection(collections.PRODUCT_COLLECTION).updateOne(
+        let offerExist = await db.get().collection(collections.PRODUCT_OFFER).findOne({"data.offerProduct": data.offerProduct})
+
+        if(offerExist){
+          await db.get().collection(collections.PRODUCT_OFFER).updateOne({"data.offerProduct": data.offerProduct},{
+            $set: {
+              "data.discount" : data.discount,
+              "data.startDate" : data.startDate,
+              "data.expiryDate" : data.expiryDate,
+            }
+          })
+        }
+        else{
+            await db.get().collection(collections.PRODUCT_OFFER).insertOne({data})
+            }
+
+            let products = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
               {
-                _id:product._id,
-                "productVariants.variantId": objectId(variantId)
+                $match:{productName: data.offerProduct}
               },
               {
-                $set:{
-                  "productVariants.$.offerPrice": discountPrice
-                }
-              })
-          })
-          resolve({status:true})
-          
-        })
+                $unwind: "$productVariants"
+              }
+            ]).toArray()
+  
+            await products.map(async(product)=>{
+              let productPrice = product.productVariants.productPrice
+              productPrice = parseInt(productPrice)
+              let discountPrice = productPrice-((productPrice*discount)/100)
+              discountPrice = parseInt(discountPrice.toFixed(2))
+              let variantId = product.productVariants.variantId + ""
+              
+              await db.get().collection(collections.PRODUCT_COLLECTION).updateOne(
+                {
+                  _id:product._id,
+                  "productVariants.variantId": objectId(variantId)
+                },
+                {
+                  $set:{
+                    "productVariants.$[].offerPrice": discountPrice
+                  }
+                })
+            })
+            resolve({status:true})
+              
       })
     },
 
     getProductOffer:()=>{
       return new Promise(async(resolve,reject)=>{
-        let offerList = await db.get().collection(collections.PRODUCT_OFFER).find({}).toArray()
+        let offerList = await db.get().collection(collections.PRODUCT_OFFER).aggregate([
+          {
+            $lookup:{
+              from: collections.PRODUCT_COLLECTION,
+              localField: "data.offerProduct",
+              foreignField: "productName",
+              as: "products"
+            }
+          },
+          {
+            $unwind: "$products"
+          },
+          // {
+          //   $unwind: "$products.productVariants"
+          // },
+          {
+            $project:{
+              offerProduct: "$data.offerProduct",
+              discount: "$data.discount",
+              startDate: "$data.startDate",
+              expiryDate: "$data.expiryDate",
+              productPrice: {$arrayElemAt: ["$products.productVariants.productPrice",0]},
+              offerPrice: {$arrayElemAt: ["$products.productVariants.offerPrice",0]},
+              productId: "$products._id"
+            }
+          }
+        ]).toArray()
+
         console.log(offerList);
-
-        await offerList.map((product)=>{
-          console.log(product);
-        })
-
-        // let offerProducts = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
-        //   {
-        //     $match:{productName}
-        //   }
-        // ])
-        resolve(true)
+        resolve(offerList)
       })
-    }
-    
+    },
+
+    deleteProductOffer:(offerProId,offerId)=>{
+      return new Promise(async(resolve,reject)=>{
+        await db.get().collection(collections.PRODUCT_COLLECTION).updateOne(
+          {
+            _id: objectId(offerProId)
+          },
+          {
+            $unset:{
+              "productVariants.$[].offerPrice": ""
+            }
+          }).then((resp)=>{
+            db.get().collection(collections.PRODUCT_OFFER).deleteOne({_id: objectId(offerId)})
+          })
+        resolve()
+      })
+    },
+
 
 
 }

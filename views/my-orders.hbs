@@ -26,14 +26,20 @@
                             {{/if}}
                             <span><strong>{{this.product.productName}}</strong></span> <span class="label label-info"> {{this.product.productVariants.productColour}} </span><br />
                             <span>
-                                Quantity : {{this.quantity}} 
+                                Quantity : {{this.quantity}}
                                     <br>
                                 cost: ₹{{this.subTotal}} <br />
                             </span>
                             {{#if this.cancelled}}
-
+                            
                             {{else}}
+                                {{#if this.delivered}}
+                                
+                            {{else}}
+
                              <a data-placement="top" class="btn btn-danger btn-xs glyphicon glyphicon-trash" onclick="cancelOrder('{{this._id}}','{{this.product._id}}')" title="Danger">Cancel</a>
+                            
+                                {{/if}}
                             {{/if}}
                         </div>
                         <div class="col-md-12">Ordered On: {{this.dateISO}}</div>

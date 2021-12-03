@@ -178,6 +178,108 @@ module.exports = {
     });
   },
 
+  addToWishlist: (proId,userId)=>{
+    return new Promise(async (resolve,reject)=>{
+      let isExist = await db.get().collection(collections.USER_WISHLIST).findOne({user: objectId(userId)})
+      if(isExist){
+        let prodExist = isExist.products.findIndex((product)=> product.productId == proId)
+
+        if(prodExist == -1){
+          await db
+            .get()
+            .collection(collections.USER_WISHLIST)
+            .updateOne(
+              { user: objectId(userId) },
+              {
+                $push: { products:{"productId": objectId(proId) }},
+              }
+            )
+            .then((response) => {
+              resolve(response);
+            });
+        }
+        else{
+          resolve({productExist: true})
+        }
+      }
+      else{
+        let wishlistObj = {
+          user: objectId(userId),
+          products: [{productId:objectId(proId)}]
+        }
+
+        db.get()
+          .collection(collections.USER_WISHLIST)
+          .insertOne(wishlistObj)
+          .then(() => {
+            resolve();
+          });
+      }
+
+    })
+  },
+
+  getWishlist:(userId)=>{
+    return new Promise(async(resolve,reject)=>{
+      let wishlist = await db.get().collection(collections.USER_WISHLIST).aggregate([
+        {
+          $match:{user: objectId(userId)}
+        },
+        {
+          $unwind: "$products"
+        },
+        {
+          $project:{
+            item: "$products.productId"
+          }
+        },
+        {
+          $lookup:{
+            from: collections.PRODUCT_COLLECTION,
+            localField: "item",
+            foreignField: "_id",
+            as: "product"
+          }
+        },
+        {
+          $unwind: "$product"
+        },
+        {
+          $project:{
+            product: "$product",
+            _id: 0
+          }
+        }
+        
+      ]).toArray()
+      console.log(wishlist);
+      resolve(wishlist)
+    })
+  },
+
+  removeWishlist:(proId,userId)=>{
+    return new Promise(async(resolve,reject)=>{
+      await db.get().collection(collections.USER_WISHLIST).updateOne(
+        {
+          user: objectId(userId),
+          "products.productId": objectId(proId)
+        },
+        {
+          $pull:{
+            products:{
+              productId: objectId(proId)
+            }
+          }
+        }
+      ).then((res)=>{
+        console.log(res);
+        resolve(true)
+      })
+    })
+  },
+
+
+
   getCartProducts: (userId) => {
     return new Promise(async (resolve, reject) => {
       let cartItems = await db
@@ -405,7 +507,7 @@ module.exports = {
       console.log(orderDetails);
         db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{
           $set:{
-            "products.$.status": "Placed"
+            "products.$[].status": "Placed"
           }
         }).then(()=>{
           db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(orderDetails.userId)})
@@ -445,6 +547,7 @@ module.exports = {
             subTotal: "$products.subTotal",
             status: "$products.status",
             cancelled: "$products.cancelled",
+            delivered: "$products.delivered",
             dateISO: "$dateISO",
             deliveryDetails: "$deliveryDetails"
           }
@@ -466,6 +569,7 @@ module.exports = {
             dateISO:1,
             deliveryDetails:1,
             cancelled:1,
+            delivered:1,
             product: {
               $arrayElemAt: ["$products",0]
             }
@@ -473,6 +577,9 @@ module.exports = {
         },
         {
           $unwind: "$product.productVariants"
+        },
+        {
+          $sort:{dateISO: -1}
         }
       ]).toArray()
       resolve(allOrders)

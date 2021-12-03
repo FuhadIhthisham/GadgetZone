@@ -25,7 +25,13 @@ router.get("/", verifyLogin,async function (req, res, next) {
   let totalProducts = await adminHelper.getTotalProducts()
   let totalUsers = await adminHelper.getTotalUsers()
 
+  let topSelling = await adminHelper.getTopSelling()
 
+  if(totalRevenue==undefined){
+    totalRevenue = 0
+  }
+
+  
 
   res.render("admin/admin-dashboard", {
     title: "Admin",
@@ -35,6 +41,7 @@ router.get("/", verifyLogin,async function (req, res, next) {
     deliveredOrders,
     totalProducts,
     totalUsers,
+    topSelling
   });
 });
 
@@ -801,7 +808,7 @@ router.get("/ordered-products", verifyLogin, (req, res, next) => {
   let userId = req.query.userId;
   let proId = req.query.proId;
   productHelper.getOrderProducts(orderId, userId, proId).then((products) => {
-    console.log(products);
+
     res.render("admin/ordered-products", {
       products,
       title: "Ordered Products",
@@ -811,28 +818,17 @@ router.get("/ordered-products", verifyLogin, (req, res, next) => {
   });
 });
 
-router.post("/cancel-product", verifyLogin, (req, res) => {
-  let orderId = req.body.orderId;
-  let proId = req.body.proId;
-  adminHelper.cancelProduct(orderId, proId).then((resp) => {
-    if (response) {
-      console.log("product cancelled");
-      res.json({ status: true });
-    } else {
-      console.log("product not cancelled");
-      res.json({ status: false });
-    }
-  });
-});
 
 // Get product offer management page
 router.get("/product-offer", verifyLogin,async (req, res, next) => {
+  let offerList = await productHelper.getProductOffer()
   let allProducts = await productHelper.getAllProducts()
-  productHelper.getProductOffer()
+
   res.render("admin/product-offer", {
     title: "Offer Management",
     admin: true,
     header: "OFFER MANAGEMENT",
+    offerList,
     allProducts
   });
 });
@@ -841,11 +837,28 @@ router.get("/product-offer", verifyLogin,async (req, res, next) => {
 // Post product offer management page
 router.post("/product-offer", verifyLogin, (req, res, next) => {
   productHelper.addProductOffer(req.body).then((resp)=>{
-    res.redirect('/product-offer')
+    res.redirect('/admin/product-offer')
   })
 });
 
+// delete product offere
+router.post("/delete-product-offer", verifyLogin,async (req, res, next) => {
+  let proId = req.body.proId
+  let offerProId = req.body.offerId
+  await productHelper.deleteProductOffer(proId,offerProId)
+  res.json({status:true})
+});
 
+// Get category offer management page
+router.get("/category-offer", verifyLogin,async (req, res, next) => {
+
+
+  res.render("admin/category-offer", {
+    title: "Offer Management",
+    admin: true,
+    header: "OFFER MANAGEMENT",
+  });
+});
 
 
 module.exports = router;

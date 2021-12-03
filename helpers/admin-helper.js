@@ -164,13 +164,40 @@ viewOrders:()=>{
 
 deliveryStatusUpdate:(status,orderId,proId)=>{
   return new Promise(async (resolve,reject)=>{
-    db.get().collection(collections.ORDER_COLLECTION).updateOne({_id: objectId(orderId),"products.item": objectId(proId)},
-    {
-      $set:{ "products.$.status": status }
-    }).then((response)=>{
-        console.log(response);
-        resolve(true)
-    })
+    if(status == 'Cancelled'){
+        db.get().collection(collections.ORDER_COLLECTION).updateOne({_id: objectId(orderId),"products.item": objectId(proId)},
+      {
+        $set:{ 
+          "products.$.status": status,
+          "products.$.cancelled": true,
+          "products.$.delivered": false,
+         }
+      })
+    }
+    else if(status == 'Delivered'){
+      db.get().collection(collections.ORDER_COLLECTION).updateOne({_id: objectId(orderId),"products.item": objectId(proId)},
+      {
+        $set:{ 
+          "products.$.status": status,
+          "products.$.cancelled": false,
+          "products.$.delivered": true,
+
+         }
+      })
+    }
+    else{
+      db.get().collection(collections.ORDER_COLLECTION).updateOne({_id: objectId(orderId),"products.item": objectId(proId)},
+      {
+        $set:{ 
+          "products.$.status": status,
+          "products.$.cancelled": false,
+          "products.$.delivered": false,
+        }
+      }).then((response)=>{
+          console.log(response);
+        })
+      }
+      resolve(true)
   })
 },
 
@@ -228,9 +255,7 @@ getRevenue:()=>{
       }
     ]).toArray()
 
-    console.log("Total Revenue: "+revenue[0].totalRevenue);
-
-    resolve(revenue[0].totalRevenue)
+    resolve(revenue[0]?.totalRevenue)
   })
 },
 
@@ -266,8 +291,8 @@ getDeliveredOrders:()=>{
       }
     ]).toArray()
 
-    console.log('Delivered Count: '+deliveredOrders[0].deliveredCount);
-    resolve(deliveredOrders[0].deliveredCount)
+    console.log('Delivered Count: '+deliveredOrders[0]?.deliveredCount);
+    resolve(deliveredOrders[0]?.deliveredCount)
   })
 },
 
@@ -307,7 +332,6 @@ getdailySales:()=>{
         $limit: 7
       }
     ]).toArray()
-    // console.log(dailySale);
     resolve(dailySale)
   })
 },
@@ -356,8 +380,57 @@ getCatSales:()=>{
         }
       }
     ]).toArray()
-    console.log(catSales);
     resolve(catSales)
+  })
+},
+
+getTopSelling:()=>{
+  return new Promise(async(resolve,reject)=>{
+    let topSelling = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+      {
+        $unwind: "$products"
+      },
+      {
+        $project:{
+          item: "$products.item",
+          quantity: "$products.quantity",
+          subTotal: "$products.subTotal"
+        }
+      },
+      {
+        $lookup: {
+          from: collections.PRODUCT_COLLECTION,
+          localField: "item",
+          foreignField: "_id",
+          as: "products"
+        }
+      },
+      {
+        $unwind: "$products"
+      },
+      {
+        $project:{
+          quantity:1,
+          products: "$products",
+          productName: "$products.productName"
+        }
+      },
+      {
+        $group:{
+          _id: "$productName",
+          totalQty: {$sum: "$quantity"},
+        }
+      },
+      {
+        $sort:{totalQty:-1}
+      },
+      {
+        $limit: 10
+      }
+    ]).toArray()
+    console.log("top selling");
+    console.log(topSelling);
+    resolve(topSelling)
   })
 }
 

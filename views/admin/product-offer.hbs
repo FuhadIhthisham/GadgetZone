@@ -100,27 +100,17 @@
           </tr>
         </thead>
         <tbody>
-            <tr class="hidden">
-              <td class="align-middle">{{@index}}</td>
-              <td class="align-middle"></td>
-              <td class="align-middle"></td>
-              <td class="align-middle"></td>
-              <td class="align-middle"></td>
-              <td class="align-middle"></td>
-              <td class="align-middle"></td>
-              <td class="align-middle"></td>
-            </tr>
-          {{#each allProducts}}
+          {{#each offerList}}
             <tr>
               <td class="align-middle">{{@index}}</td>
-              <td class="align-middle"> {{this.productName}} </td>
-              <td class="align-middle">  </td>
-              <td class="align-middle"> {{this.productVariants.0.productPrice}} </td>
-              <td class="align-middle"> {{this.productVariants.0.offerPrice}} </td>
-              <td class="align-middle"> {{this.brandName}} </td>
-              <td class="align-middle"> {{this.brandName}} </td>
+              <td class="align-middle"> {{this.offerProduct}} </td>
+              <td class="align-middle"> {{this.discount}} </td>
+              <td class="align-middle"> {{this.productPrice}} </td>
+              <td class="align-middle"> {{this.offerPrice}} </td>
+              <td class="align-middle"> {{this.startDate}} </td>
+              <td class="align-middle"> {{this.expiryDate}} </td>
               <td class="align-middle">
-                <a onclick="deleteOffer('{{this.brandName}}')"  class="text-danger"><i class="fas fa-trash-alt"></i></a>        
+                <a onclick="deleteOffer('{{this.productId}}','{{this._id}}')"  class="text-danger"><i class="fas fa-trash-alt"></i></a>        
               </td>
             </tr>
           {{/each}}
@@ -173,52 +163,27 @@ setInputFilter(document.getElementById("discount"), function (value) {
 
 
     //sweet alert for delete category button
-  function deleteOffer(brand){ 
+  function deleteOffer(proId,offerId){ 
     swal({ 
      title: "Are you sure?",
-      text:"Do you want to delete all products of this Brand?",
+      text:"Do you want to delete the offer?",
       icon:"warning",
-      buttons: {
-        cancel: "Cancel",
-        yes: {
-          text: "Yes",
-          value: true,
-        },
-        no: {
-          text: "No",
-          value: false
-          }
-      },
+      buttons: true,
       dangerMode: true,
       })
       .then((willDelete) => {
-        if(willDelete===true) { 
+        if(willDelete) { 
           $.ajax({ 
-            url:"/admin/delete-brand",
+            url:"/admin/delete-product-offer",
             method:"POST",
-            data:{brandName:brand,isPro:"yes",isBrand:"yes"},
+            data:{proId,offerId},
             success:(result)=>{ 
               if(result.status){
-                swal("Brand and its products deleted Successfully", {
+                swal("Offer deleted Successfully", {
                   icon: "success", 
                 });
               } 
-              location.href='/admin/brand' 
-            }
-          });
-        }
-        if(willDelete===false) { 
-          $.ajax({ 
-            url:"/admin/delete-brand",
-            method:"POST",
-            data:{brandName:brand,isPro:"no",isBrand:"yes"},
-            success:(result)=>{ 
-              if(result.status){
-                swal("Brand deleted Successfully", {
-                  icon: "success", 
-                });
-              } 
-              location.href='/admin/brand' 
+              location.href='/admin/product-offer' 
             }
           });
         }

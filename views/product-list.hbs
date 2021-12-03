@@ -1,3 +1,4 @@
+
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
   <div class="container">
@@ -112,19 +113,20 @@
             <div class="col-lg-4 col-md-6 col-sm-6">
               <div class="product__item">
                 <div
-                  onclick="productDetail('{{this._id}}')"
                   class="product__item__pic set-bg"
                   style="cursor: pointer;"
                   data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg"
                 >
                   <ul class="product__hover">
-                    <li><a href="/wishlist"><img
+                    <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img
                           src="img/icon/heart.png"
                           alt=""
                         /></a></li>
                     <li><a href="#"><img src="img/icon/compare.png" alt="" />
                         <span>Compare</span></a>
                     </li>
+                    <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
+                    <span>View</span></a></li>
                   </ul>
                 </div>
                 <div class="product__item__text">
@@ -178,6 +180,11 @@
 </section>
 <!-- Shop Section End -->
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
-  function productDetail(id){ window.location = `/product-details?id=${id}` }
+  function productDetail(id){ 
+    window.location = `/product-details?id=${id}` 
+  }
 </script>

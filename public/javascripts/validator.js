@@ -320,12 +320,10 @@ addOfferForm.validate({
     },
     discount: {
       required: true,
-      minlength: 5,
       number: true
     },
     startDate: {
       required: true,
-      minlength:10
     },
     expiryDate: {
       required: true,

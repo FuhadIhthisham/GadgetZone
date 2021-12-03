@@ -22,9 +22,9 @@ const allStates = require("../config/lists").allStates;
 
 // twilio API
 
-const accountSid = "AC3ab377140a3e1f412bffe3886a8d895d"; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
-const authToken = "83f28caa569c1faf0ce9ff3483851f85";
-const serviceSid = "VA948aed94f34ad8455cee59a01dd989a6";
+const accountSid = ""; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
+const authToken = "";
+const serviceSid = "";
 const client = require("twilio")(accountSid, authToken);
 
 /* GET home page. */
@@ -683,9 +683,55 @@ router.post("/cancel-product", verifyBlock, function (req, res, next) {
     });
 });
 
-router.get("/wishlist", verifyBlock, function (req, res, next) {
-  res.render("wishlist", { title: "GadgetZone", user: req.session.user });
+
+// Get wishlist products
+router.get("/wishlist", verifyBlock,async function (req, res, next) {
+  var wishlistMsg
+  let wishlists = await userHelper.getWishlist(req.session.user._id)
+  if (req.session.user) {
+    cartCount = await userHelper.getCartCount(req.session.user._id);
+  }
+  if(wishlists.length == 0){
+    wishlistMsg = "Wishlist is Empty"
+  }
+  res.render("wishlist", { title: "GadgetZone", user: req.session.user, wishlists, cartCount, wishlistMsg });
+  wishlistMsg = null
 });
+
+// add products to wishlist
+router.post("/add-to-wishlist", verifyBlock, function (req, res, next) {
+  if(req.session?.user){
+    userHelper.addToWishlist(req.body.proId,req.body.userId).then((resp)=>{
+      if(resp?.productExist){
+        res.json({productExist:true})
+      }
+      else{
+        res.json({status:true})
+      }
+    })
+  }
+  else{
+    res.json({status:false})
+  }
+});
+
+
+// remopve products from wishlist
+router.post("/remove-wishlist", verifyBlock, function (req, res, next) {
+  if(req.session?.user){
+    userHelper.removeWishlist(req.body.proId,req.body.userId).then((resp)=>{
+      if(resp){
+        res.json({status:true})
+      }
+      else{
+        res.json({status:false})
+      }
+    })
+  }
+});
+
+
+
 
 // user profile page get
 var profileMsg;

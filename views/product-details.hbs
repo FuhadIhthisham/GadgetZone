@@ -137,7 +137,7 @@
                     style="background-color: #D38C49;"
                   >Buy now</a>
                   <div class="product__details__btns__option mt-sm-4">
-            <a href="#" style="font-size: 15px;"><i class="fa fa-heart"></i>
+            <a onclick="addToWishlist('{{this._id}}','{{../user._id}}')" style="font-size: 15px;"><i class="fa fa-heart"></i>
               add to wishlist</a>
             <a href="#" class="mt-2" style="font-size: 15px;"><i
                 class="fa fa-exchange"
@@ -279,6 +279,10 @@
   </div>
 </section>
 
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
   //   FILTER INPUT FIELDS
 function setInputFilter(textbox, inputFilter) {
@@ -313,14 +317,6 @@ setInputFilter(document.getElementById("number1"), function(value) {
   return /^\d*$/.test(value); 
 });
 
-
-
-
-
-
 </script>
-
-
-
 
 <script src="/javascripts/validator.js"></script>

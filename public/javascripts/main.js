@@ -239,18 +239,90 @@ function addToCart(proId,subTotal){
     method: 'post',
     success:(response)=>{
       if(response.status){
-        swal({
-          title: "Product Added To Cart",
-          icon: "success",
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        Toast.fire({
+          icon: 'success',
+          title: 'Product Added To Cart'
         })
         let count = $('.cart-count').html()
         count = parseInt(count) + 1
         $('.cart-count').html(count)
       }
       else if(response.productExist){
-        swal({
-          title: "Product Already Exists On Cart",
-          icon: "warning",
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        Toast.fire({
+          icon: 'warning',
+          title: 'Product Already Exists On Cart'
+        })
+      }
+      else{
+        location.replace('/login')
+      }
+    }
+  })
+}
+
+function addToWishlist(proId,userId){
+  $.ajax({
+    url: "/add-to-wishlist",
+    method: "post",
+    data: {proId,userId},
+    success:(res)=>{
+      if(res.status){ 
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        Toast.fire({
+          icon: 'success',
+          title: 'Wishlisted successfully'
+        })
+        // location.reload()
+      }
+      else if(res.productExist){
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        Toast.fire({
+          icon: 'warning',
+          title: 'Already in wishlist'
         })
       }
       else{

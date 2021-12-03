@@ -5,7 +5,7 @@ href="https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css"
 />
 
 <div class="row">
-    <div class="container report-card col">
+    <div class="report-card col">
         <div class="card bg-light">
             <div class="card-body flex flex-col">
             <!-- top -->
@@ -155,17 +155,66 @@ href="https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css"
 </div>
 
     <div class="row my-5">
-        <div class="col-5">
+        <div class="col-md-5">
             <h2>Weekly Sales</h2>
             <canvas id="weeklySalesChart" class='' width="300" height="250"></canvas>
         </div>
-        <div class="col-2"></div>
-        <div class="col-5">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
             <h2>Subcategory Wise Sales</h2>
-            <canvas id="categorySales" class='' width="250" height="250"></canvas>
+            <canvas id="categorySales" class='' width="200" height="200"></canvas>
         </div>
     </div>
     
+
+    <div class="row">
+        <table class="table table-success table-hover col-md-6">
+            <legend class="fs-2 fw-bold">Best Selling Products</legend>
+            <thead>
+                <tr>
+                <th scope="col">SL.No</th>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each topSelling}}
+                    <tr>
+                    <th scope="row"> {{@index}} </th>
+                    <td> {{this._id}} </td>
+                    <td>{{this.totalQty}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <table class="table table-success table-hover col-md-6">
+            <legend class="fs-2 fw-bold">Best Selling Products</legend>
+            <thead>
+                <tr>
+                <th scope="col">SL.No</th>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each topSelling}}
+                    <tr>
+                    <th scope="row"> {{@index}} </th>
+                    <td> {{this._id}} </td>
+                    <td>{{this.totalQty}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
 
 
 
