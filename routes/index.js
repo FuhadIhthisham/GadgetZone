@@ -418,21 +418,52 @@ router.get("/product-details", async (req, res, next) => {
   });
 });
 
+// get product lists
+
+var isSubProducts
+var subCatName
+
 router.get("/product-list", async function (req, res, next) {
   let cartCount = null;
   if (req.session.user) {
     cartCount = await userHelper.getCartCount(req.session.user._id);
   }
-  productHelper.getAllProducts().then(async (allProducts) => {
+  let allCategory = await productHelper.getAllSubcategory()
+
+  if(isSubProducts){
     let user = req.session?.user;
+    let subProducts = await productHelper.getSubcatProducts(subCatName)
     res.render("product-list", {
       title: "GadgetZone",
       user,
-      allProducts,
       cartCount,
+      allCategory,
+      subProducts,
     });
-  });
+  }
+  else{
+    productHelper.getAllProducts().then(async (allProducts) => {
+      let user = req.session?.user;
+      res.render("product-list", {
+        title: "GadgetZone",
+        user,
+        allProducts,
+        cartCount,
+        allCategory,
+      });
+    });
+  }
+  isSubProducts = false
+  subCatName = null
 });
+
+
+router.post("/getSubProducts",(req,res)=>{
+  isSubProducts = true
+  subCatName = req.body.subName
+  console.log(subCatName);
+  res.json({status:true})
+})
 
 // cart view page
 router.get("/cart", async (req, res, next) => {

@@ -36,7 +36,7 @@
                   <a
                     data-toggle="collapse"
                     data-target="#collapseOne"
-                  >Categories</a>
+                  >Sub Categories</a>
                 </div>
                 <div
                   id="collapseOne"
@@ -46,13 +46,9 @@
                   <div class="card-body">
                     <div class="shop__sidebar__categories">
                       <ul class="nice-scroll">
-                        <li><a href="#">Headphones (142)</a></li>
-                        <li><a href="#">Earphones (123)</a></li>
-                        <li><a href="#">Speakers (20)</a></li>
-                        <li><a href="#">Power Banks (20)</a></li>
-                        <li><a href="#">Cameras (20)</a></li>
-                        <li><a href="#">Smart Wearables (20)</a></li>
-                        <li><a href="#"> (20)</a></li>
+                        {{#each allCategory}}
+                        <li><a onclick="getSubProducts('{{this.subcategory}}')"> {{this.subcategory}} </a></li>
+                        {{/each}}
                       </ul>
                     </div>
                   </div>
@@ -98,16 +94,76 @@
             <div class="col-lg-6 col-md-6 col-sm-6">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
-              <div class="shop__product__option__right">
+              {{!-- <div class="shop__product__option__right">
                 <p>Sort by Price:</p>
                 <select>
                   <option value="">Low To High</option>
                   <option value="">High To Low</option>
                 </select>
-              </div>
+              </div> --}}
             </div>
           </div>
         </div>
+        {{#if subProducts}}
+        <div class="row">
+          {{#each subProducts}}
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="product__item">
+                <div
+                  class="product__item__pic set-bg"
+                  style="cursor: pointer;"
+                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg"
+                >
+                  <ul class="product__hover">
+                    <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img
+                          src="img/icon/heart.png"
+                          alt=""
+                        /></a></li>
+                    <li><a href="#"><img src="img/icon/compare.png" alt="" />
+                        <span>Compare</span></a>
+                    </li>
+                    <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
+                    <span>View</span></a></li>
+                  </ul>
+                </div>
+                <div class="product__item__text">
+                  <h6 class="text-secondary mb-2">{{this.productBrand}}</h6>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <a
+                      onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
+                      class="add-cart text-danger"
+                    >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{else}}
+                    <a
+                      onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
+                      class="add-cart text-danger"
+                    >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{/if}}
+                   <h6>{{this.productName}}</h6>
+              <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
+                  <div class="rating">
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star-o"></i>
+                  </div>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
+                    <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.productVariants.0.productPrice}}</span>
+                {{else}}
+                    <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+                    {{!-- <span class="text-decoration-line-through"> ₹{{this.productVariants.0.productPrice}}</span> --}}
+                {{/if}}
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+
+        {{else}}
+
+
         <div class="row">
           {{#each allProducts}}
             <div class="col-lg-4 col-md-6 col-sm-6">
@@ -163,7 +219,8 @@
             </div>
           {{/each}}
         </div>
-        <div class="row">
+        {{/if}}
+        {{!-- <div class="row">
           <div class="col-lg-12">
             <div class="product__pagination">
               <a class="active" href="#">1</a>
@@ -173,7 +230,7 @@
               <a href="#">21</a>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
     </div>
   </div>
@@ -186,5 +243,16 @@
 <script>
   function productDetail(id){ 
     window.location = `/product-details?id=${id}` 
+  }
+
+  function getSubProducts(subName){
+    $.ajax({
+      url: '/getSubProducts',
+      method: 'post',
+      data: {subName},
+      success:(status)=>{
+        location.reload()
+      }
+    })
   }
 </script>

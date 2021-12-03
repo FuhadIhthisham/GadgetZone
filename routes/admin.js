@@ -19,7 +19,7 @@ router.get("/", verifyLogin,async function (req, res, next) {
     "Cache-Control",
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
-
+    
   let totalRevenue = await adminHelper.getRevenue()
   let deliveredOrders = await adminHelper.getDeliveredOrders()
   let totalProducts = await adminHelper.getTotalProducts()
@@ -841,7 +841,7 @@ router.post("/product-offer", verifyLogin, (req, res, next) => {
   })
 });
 
-// delete product offere
+// delete product offer
 router.post("/delete-product-offer", verifyLogin,async (req, res, next) => {
   let proId = req.body.proId
   let offerProId = req.body.offerId
@@ -851,13 +851,29 @@ router.post("/delete-product-offer", verifyLogin,async (req, res, next) => {
 
 // Get category offer management page
 router.get("/category-offer", verifyLogin,async (req, res, next) => {
-
-
+  let allCategory = await adminHelper.getCategory()
+  let offerList = await productHelper.getCategoryOffer()
   res.render("admin/category-offer", {
     title: "Offer Management",
     admin: true,
     header: "OFFER MANAGEMENT",
+    allCategory,
+    offerList
   });
+});
+
+// Get category offer management page
+router.post("/category-offer", verifyLogin,async (req, res, next) => {
+  productHelper.addCategoryOffer(req.body).then((resp)=>{
+    res.redirect('/admin/category-offer')
+  })
+});
+
+// delete category offer
+router.post("/delete-category-offer", verifyLogin,async (req, res, next) => {
+  productHelper.deleteCategoryOffer(req.body.catName,req.body.offerId).then((resp)=>{
+    res.redirect('/admin/category-offer')
+  })
 });
 
 
