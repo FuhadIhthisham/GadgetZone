@@ -58,33 +58,33 @@
       <div class="col-lg-7 offset-lg-4">
         <div class="banner__item">
           <div class="banner__item__pic">
-            <img src="img/banner/banner-1.jpg" alt="" />
+            <img src="img/banner/banner-1.jpg" height="350px" alt="" />
           </div>
           <div class="banner__item__text">
-            <h2>Speaker Collections 2021</h2>
-            <a href="/product-list">Shop now</a>
+            <h2>Speaker Collections</h2>
+            <a onclick="getSubProducts('Speaker')">Shop now</a>
           </div>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="banner__item banner__item--middle">
           <div class="banner__item__pic">
-            <img src="img/banner/banner-2.jpg" height="300px" alt="" />
+            <img src="img/banner/banner-2.jpg" height="270px" alt="" />
           </div>
           <div class="banner__item__text">
-            <h2>Digital Cameras of 2021</h2>
-            <a href="/product-list">Shop now</a>
+            <h2>Digital Cameras</h2>
+            <a onclick="getSubProducts('DSLR')">Shop now</a>
           </div>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="banner__item banner__item--last">
           <div class="banner__item__pic">
-            <img src="img/banner/banner-3.jpg" height="300px" alt="" />
+            <img src="img/banner/banner-3.jpg" height="270px" alt="" />
           </div>
           <div class="banner__item__text">
-            <h2>Best Smart Bands of 2021</h2>
-            <a href="/product-list">Shop now</a>
+            <h2>Best Smart Bands</h2>
+            <a onclick="getSubProducts('Smart Band')">Shop now</a>
           </div>
         </div>
       </div>
@@ -100,8 +100,8 @@
       <div class="col-lg-12">
         <ul class="filter__controls">
           <li class="active" data-filter="*">Best Sellers</li>
-          <li data-filter=".new-arrivals">New Arrivals</li>
-          <li data-filter=".hot-sales">Hot Sales</li>
+          {{!-- <li data-filter=".new-arrivals">New Arrivals</li>
+          <li data-filter=".hot-sales">Hot Sales</li> --}}
         </ul>
       </div>
     </div>
@@ -208,4 +208,14 @@
     window.location = `/product-details?id=${id}`
     }
 
+   function getSubProducts(subName){
+    $.ajax({
+      url: '/getSubProducts',
+      method: 'post',
+      data: {subName},
+      success:(status)=>{
+        location.href = '/product-list'
+      }
+    })
+  }
 </script>

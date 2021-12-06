@@ -23,17 +23,6 @@
         <div class="row">
           <div class="col-lg-8 col-md-6">
 
-            {{#if checkoutAddressMsg}}
-
-            <div class="alert alert-success d-flex align-items-center" role="alert">
-              <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-              <div>
-                {{checkoutAddressMsg}}
-              </div>
-            </div>
-            {{/if}}
-
-
             <h6 class="coupon__code text-center fs-4">BILLING DETAILS</h6>
             <button
               type="button"
@@ -55,7 +44,7 @@
                 aria-labelledby="exampleModalLabel"
                 aria-hidden="true"
               >
-                <form action="/add-checkout-address" method="post" id="addAddressForm2">
+                <form action="/add-buynow-address" method="post" id="addAddressForm2">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -210,6 +199,7 @@
               {{/each}}
           </div>
           <div class="col-lg-4 col-md-6">
+
             <div class="cart__discount">
                 <h6>Coupon code</h6>
                 <div id="couponMsg"></div>
@@ -219,23 +209,32 @@
                 </form>
                 
             </div>
+
+
             <div class="checkout__order">
               <h4 class="order__title">Your order</h4>
               <div class="checkout__order__products fw-bold">Product
                 <span class="fw-bold">Total</span></div>
-              <ul class="checkout__total__products" type="circle">
                 {{#each products}}
-                  <li class=""> {{this.product.productName}} <span class="fw-bold">₹ {{this.subTotal}}</span></li>
-                {{/each}}
+              <ul class="checkout__total__products" type="circle">
+
+                    {{#if this.productVariants.0.offerPrice}}
+                        <li class=""> {{this.productName}} <span class="fw-bold">₹ {{this.productVariants.0.offerPrice}}</span></li>
+                    {{else}}
+                        <li class=""> {{this.productName}} <span class="fw-bold">₹ {{this.productVariants.0.productPrice}}</span></li>
+                    {{/if}}
+
+                
               </ul>
               <ul class="checkout__total__all">
-                <li>Items Price <span>₹ {{grandTotal}}</span></li>
-                <li>Coupon Discount<span
-                    class="discount__price"
-                    id="couponDiscount"
-                  > 0 </span><span class="discount__price">₹</span></li>
-                <li class="fs-4">Total <span id="totalPrice">{{grandTotal}}</span> <span>₹</span></li>
+                {{!-- <li>Items Price <span>₹ {{grandTotal}}</span></li> --}}
+                {{#if this.productVariants.0.offerPrice}}
+                    <li class="fs-4">Total <span>₹ {{this.productVariants.0.offerPrice}}</span></li>
+                {{else}}
+                    <li class="fs-4">Total <span>₹ {{this.productVariants.0.productPrice}}</span></li>
+                {{/if}}
               </ul>
+              {{/each}}
 
               <div class="form-check">
                 <input
@@ -301,51 +300,9 @@
 
 <script>
 
-
-  var grandTotal = {{grandTotal}}
-  let discount
-  var code
-
- function checkCoupon(){
-  code = document.getElementById('couponCode').value
-  code = code.toUpperCase()
-  $.ajax({
-    url: "/check-coupon",
-    method: "post",
-    data:{code},
-    success:(res)=>{
-      if(!res){
-        document.getElementById('couponForm').reset()
-        code = 'undefined'
-        document.getElementById('couponMsg').innerHTML = "This Coupon Does not Exist"
-        document.getElementById('couponMsg').style.color = "Red"
-        document.getElementById('couponDiscount').innerHTML = 0
-        discount = 0
-        document.getElementById('totalPrice').innerHTML = grandTotal
-      }
-      else if(res.isUsed){
-        document.getElementById('couponForm').reset()
-        code = 'undefined'
-        document.getElementById('couponMsg').innerHTML = "This Coupon is already used by this user"
-        document.getElementById('couponMsg').style.color = "Red"
-        document.getElementById('couponDiscount').innerHTML = 0
-        discount = 0
-        document.getElementById('totalPrice').innerHTML = grandTotal
-      }
-      else{
-        document.getElementById('couponMsg').innerHTML = "Coupon Applied Successfully"
-        document.getElementById('couponMsg').style.color = "green"
-        discount = (grandTotal*res.discount)/100
-        document.getElementById('couponDiscount').innerHTML = discount
-        document.getElementById('totalPrice').innerHTML = grandTotal-discount
-      }
-    }
-  })
-  }
-
  var checkoutAddressId
  var paymentMethod
-
+    var proId = '{{products.0._id}}'
 function selectAddress(id){
   checkoutAddressId = id
 }
@@ -383,7 +340,7 @@ function placeOrder(){
   }
   else{
     $.ajax({
-      url: `/place-order?payment=${paymentMethod}&addressId=${checkoutAddressId}&disc=${discount}&code=${code}`,
+      url: `/place-order-buynow?payment=${paymentMethod}&addressId=${checkoutAddressId}&proId=${proId}`,
       method: 'get',
       success:(res)=>{
         if(res.codSuccess){
@@ -438,10 +395,10 @@ rzp1.open();
 
 function verifyPayment(payment,order){
   $.ajax({
-    url: `/verify-payment`,
+    url: '/verify-payment',
     data:{
       payment,
-      order,
+      order
     },
     method: 'post',
 

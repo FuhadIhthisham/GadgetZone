@@ -331,6 +331,26 @@ addOfferForm.validate({
   },
 })
 
+// ADD OFFER VALIDATION
+var addOfferForm = $("#addCouponForm");
+addOfferForm.validate({
+  rules: {
+    couponCode: {
+      required: true,
+    },
+    discount: {
+      required: true,
+      number: true
+    },
+    startDate: {
+      required: true,
+    },
+    expiryDate: {
+      required: true,
+    },
+  },
+})
+
 
 
 //   FILTER INPUT FIELDS

@@ -95,19 +95,19 @@
         </div>
       </div>
       <div class="col-lg-4">
-        <div class="cart__discount">
+        {{!-- <div class="cart__discount">
           <h6>Discount codes</h6>
           <form action="#">
             <input type="text" placeholder="Coupon code" />
             <button type="submit">Apply</button>
           </form>
-        </div>
+        </div> --}}
         <div class="cart__total">
           <h6>Cart total</h6>
           <ul>
             <li>Items Price <span id="itemTotal"> {{grandTotal}} </span><span> ₹ </span></li>
-            <li>Coupon Discount
-              <span class="discount__price" id="discountPrice">0</span> <span class="discount__price">₹</span> </li>
+            {{!-- <li>Coupon Discount
+              <span class="discount__price" id="discountPrice">0</span> <span class="discount__price">₹</span> </li> --}}
             <li class="fs-4">Total <span id="grandTotal"> {{grandTotal}}</span> <span>₹</span> </li>
           </ul>
           <a href="/checkout" class="primary-btn">Proceed to checkout</a>

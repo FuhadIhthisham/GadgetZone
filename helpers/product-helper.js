@@ -336,6 +336,8 @@ module.exports = {
       return new Promise(async (resolve,reject)=>{
         data.discount = parseInt(data.discount)
         discount = parseInt(data.discount)
+        data.startDate = new Date(data.startDate)
+        data.expiryDate = new Date(data.expiryDate)
 
         let offerExist = await db.get().collection(collections.PRODUCT_OFFER).findOne({"data.offerProduct": data.offerProduct})
 
@@ -440,6 +442,8 @@ module.exports = {
       return new Promise(async(resolve,reject)=>{
         data.discount = parseInt(data.discount)
         discount = parseInt(data.discount)
+        data.startDate = new Date(data.startDate)
+        data.expiryDate = new Date(data.expiryDate)
 
         let offerExist = await db.get().collection(collections.CATEGORY_OFFER).findOne({"data.offerCategory": data.offerCategory})
 
@@ -510,6 +514,169 @@ module.exports = {
             db.get().collection(collections.CATEGORY_OFFER).deleteOne({_id: objectId(offerId)})
           })
         resolve()
+      })
+    },
+
+    addCouponOffer:(data)=>{
+        return new Promise(async (resolve,reject)=>{
+          data.discount = parseInt(data.discount)
+          discount = parseInt(data.discount)
+          data.startDate = new Date(data.startDate)
+          data.expiryDate = new Date(data.expiryDate)
+          data.couponCode = data.couponCode.toUpperCase()
+
+          console.log(data);
+
+          let couponExist = await db.get().collection(collections.COUPON_OFFER).findOne({"couponCode": data.couponCode})
+  
+          if(couponExist){
+            resolve({couponExists: true})
+          }
+          else{
+              await db.get().collection(collections.COUPON_OFFER).insertOne({
+                "couponCode": data.couponCode,
+                "discount" : data.discount,
+                "startDate" : data.startDate,
+                "expiryDate" : data.expiryDate,})
+
+                resolve({status:true})
+              }
+        })
+    },
+
+    getCouponOffer:()=>{
+      return new Promise(async (resolve,reject)=>{
+        let couponList = await db.get().collection(collections.COUPON_OFFER).find({}).toArray()
+        console.log(couponList);
+        resolve(couponList)
+      })
+    },
+
+    deleteCoupon:(couponId)=>{
+      return new Promise(async(resolve,reject)=>{
+        await db.get().collection(collections.COUPON_OFFER).deleteOne(
+          {
+            _id: objectId(couponId)
+          })
+
+          console.log("coupon deleted");
+
+        resolve()
+      })
+    },
+
+    checkCouponOffer:(code,userId)=>{
+      return new Promise(async(resolve,reject)=>{
+      let couponExist = await db.get().collection(collections.COUPON_OFFER).findOne({couponCode: code})
+      if(couponExist){
+
+       let isUsed = await db.get().collection(collections.COUPON_OFFER).findOne(
+          {
+            couponCode:code,
+            usedUsers: {
+              $elemMatch: {
+                userId: objectId(userId)
+              }
+            }
+          })
+        if(isUsed){
+          console.log(isUsed);
+          console.log("this coupon is already used by user");
+          resolve({isUsed: true})
+        }
+        else{
+          console.log("couponExistsssss");
+          resolve({status:true,couponExist})
+        }
+
+      }
+      else{
+        console.log("not Existsssss");
+        resolve({status:false})
+      }
+      })
+    },
+
+    checkOfferExpiry:(today)=>{
+      return new Promise(async (resolve,reject)=>{
+
+        // CHecking for category offer expiry
+        let offerExist = await db.get().collection(collections.CATEGORY_OFFER).find({
+          "data.expiryDate": {
+            $lte: today
+          },
+        }).toArray()
+
+
+        if(offerExist){
+
+          offerExist.map(async(data)=>{
+            await db.get().collection(collections.PRODUCT_COLLECTION).updateMany(
+              {
+                "productCategory": data.data.offerCategory
+              },
+              {
+                $unset:{
+                  "productVariants.$[].offerPrice": ""
+                }
+              })
+
+              console.log("deleted Offer ");
+            })
+
+            db.get().collection(collections.CATEGORY_OFFER).deleteMany({
+              "data.expiryDate": {
+                $lte: today
+            }})
+              
+        }
+        else{
+          console.log("Cat Offer Doesn't exist");
+        }
+        console.log(today);
+
+        // checking for product offer expiry
+        let proOfferExist = await db.get().collection(collections.PRODUCT_OFFER).find({
+          "data.expiryDate": {
+            $lte: today
+          },
+        }).toArray() 
+
+        if(proOfferExist){
+
+          proOfferExist.map(async(data)=>{
+            await db.get().collection(collections.PRODUCT_COLLECTION).updateMany(
+              {
+                "productName": data.data.offerProduct
+              },
+              {
+                $unset:{
+                  "productVariants.$[].offerPrice": ""
+                }
+              })
+
+              console.log("deleted Offer ");
+            })
+
+            db.get().collection(collections.PRODUCT_OFFER).deleteMany({
+              "data.expiryDate": {
+                $lte: today
+          }})
+              
+        }
+        else{
+          console.log(" prod Offer Doesn't exist");
+        }
+
+        // delete expired coupon code
+
+          await db.get().collection(collections.COUPON_OFFER).deleteMany({
+            "expiryDate": {
+              $lte: today
+              }
+          })
+
+        resolve(true)
       })
     },
     

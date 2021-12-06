@@ -31,11 +31,20 @@ const client = require("twilio")(accountSid, authToken);
 
 let cartCount;
 router.get("/", verifyLogin, async (req, res, next) => {
+
   if (req.session.user) {
     cartCount = await userHelper.getCartCount(req.session.user._id);
   } else {
     cartCount = null;
   }
+
+  const date = new Date()
+  
+  await productHelper.checkOfferExpiry(new Date).then((resp)=>{
+    console.log("responseeee>>>>>>>>>>>>>>");
+    console.log(resp);
+  })
+
   let banners = await adminHelper.getBanner();
   productHelper.getAllProducts().then((allProducts) => {
     let user = req.session.user;
@@ -525,6 +534,28 @@ router.post("/delete-cart-product", verifyBlock, (req, res) => {
     });
 });
 
+
+// post check coupon offer
+var couponMsg
+router.post("/check-coupon", verifyLogin,async (req, res, next) => {
+  console.log(req.body);
+  await productHelper.checkCouponOffer(req.body.code,req.session.user._id).then((resp)=>{
+    if(resp.status){
+      res.json(resp.couponExist)
+    }
+    else if(resp.isUsed){
+      console.log("Already Used by user>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<");
+      let isUsed = true
+      res.json({isUsed})
+    }
+    else{
+      resp = false
+      res.json(resp)
+    }
+  })
+});
+
+// View Checkout page 
 router.get("/checkout", verifyBlock, async function (req, res, next) {
   let products = await userHelper.getCartProducts(req.session.user._id);
   if (products.length != 0) {
@@ -541,24 +572,167 @@ router.get("/checkout", verifyBlock, async function (req, res, next) {
       checkoutAddressMsg,
     });
     checkoutAddressMsg = null;
-  } else {
+  }
+  else {
     res.redirect("/");
   }
 });
 
+
+// view checkout page on buy now
+router.get("/buy-now", verifyBlock, async function (req, res, next) {
+  var proId = req.query.proId
+  let products = await productHelper.getOneProduct(proId)
+    let addresses = await userHelper.getAddress(req.session.user._id);
+    console.log(products);
+    res.render("buy-now", {
+      title: "GadgetZone",
+      user: req.session.user,
+      addresses,
+      products,
+    });
+});
+
+router.post("/add-buynow-address", verifyBlock, function (req, res, next) {
+  userHelper.addAddress(req.session.user, req.body).then((resp) => {
+    if (resp?.addressExist) {
+      checkoutAddressMsg = "Sorry, This Address Already Exists";
+      console.log("address exist");
+      res.redirect("/buy-now");
+    } else {
+      checkoutAddressMsg = "New Address Added";
+      res.redirect("/buy-now");
+    }
+  });
+});
+
+// place order in checkout page
+var code
 router.get("/place-order", verifyBlock, async function (req, res, next) {
-  let products = await userHelper.getCartProductsList(req.session.user._id);
+  let discount
+  code = req.query.code
   let grandTotal = await userHelper.getGrandTotal(req.session.user._id);
+  let products = await userHelper.getCartProductsList(req.session.user._id);
   let address = await userHelper.getOneAddress(
     req.query.addressId,
     req.session.user._id
   );
-  let rzpId = new objectId(); // creating an id for razorpay
-  address = address[0].address;
   grandTotal = grandTotal[0]?.grandTotal;
   grandTotal = parseInt(grandTotal);
+  address = address[0].address;
+
+  if(req.query.code !== 'undefined'){
+    discount = parseInt(req.query.disc)
+    grandTotal = grandTotal-discount
+  }
+
+  isBuyNow = false
+  let rzpId = new objectId(); // creating an id for razorpay
   userHelper
     .placeOrder(
+      req.query.payment,
+      req.session.user._id,
+      address,
+      products,
+      grandTotal,
+      code
+    )
+    .then((resp) => {
+      // if payment method is COD
+      if (req.query.payment == "COD") {
+        res.json({ codSuccess: true });
+      }
+
+      // If payment method is paypal
+      else if (req.query.payment == "paypal") {
+        req.session.orderDetails = resp;
+        console.log(resp);
+        console.log(grandTotal);
+        dollarTotal = (grandTotal / 70).toFixed(2);
+        dollarTotal = dollarTotal.toString();
+        const create_payment_json = {
+          intent: "sale",
+          payer: {
+            payment_method: "paypal",
+          },
+          redirect_urls: {
+            return_url: "http://localhost:3000/success",
+            cancel_url: "http://localhost:3000/cancel",
+          },
+          transactions: [
+            {
+              item_list: {
+                items: [
+                  {
+                    name: "GadgetZone",
+                    sku: "1212",
+                    price: dollarTotal,
+                    currency: "USD",
+                    quantity: 1,
+                  },
+                ],
+              },
+              amount: {
+                currency: "USD",
+                total: dollarTotal,
+              },
+              description: "Thanks for shopping with GadgetZone",
+            },
+          ],
+        };
+
+        paypal.payment.create(create_payment_json, function (error, payment) {
+          if (error) {
+            throw error;
+          } else {
+            for (let i = 0; i < payment.links.length; i++) {
+              if (payment.links[i].rel == "approval_url") {
+                let url = payment.links[i].href;
+                res.json({ data: true, url });
+              }
+            }
+          }
+        });
+      }
+
+      // if payment method is razorpay
+      else {
+        req.session.orderDetails = resp;
+        grandTotal = parseInt(grandTotal);
+        userHelper.generateRazorpay(rzpId, grandTotal).then((resp) => {
+          res.json(resp);
+        });
+      }
+    });
+});
+
+
+// place order in buynow page
+var isBuyNow
+router.get("/place-order-buynow", verifyBlock, async function (req, res, next) {
+  let proId = req.query.proId
+  let products
+  let grandTotal
+  let address
+  isBuyNow = true
+  products = await productHelper.getOneProduct(proId);
+
+  if(products[0].productVariants[0].offerPrice){
+    grandTotal = products[0].productVariants[0].offerPrice
+  }
+  else{
+    grandTotal = products[0].productVariants[0].productPrice
+  }
+  address = await userHelper.getOneAddress(
+  req.query.addressId,
+  req.session.user._id
+  );
+
+  
+  let rzpId = new objectId(); // creating an id for razorpay
+  address = address[0].address;
+  userHelper
+    .placeBuynowOrder(
       req.query.payment,
       req.session.user._id,
       address,
@@ -634,6 +808,8 @@ router.get("/place-order", verifyBlock, async function (req, res, next) {
     });
 });
 
+
+
 // if paypal is success
 var dollarTotal;
 router.get("/success", async (req, res) => {
@@ -661,7 +837,7 @@ router.get("/success", async (req, res) => {
       } else {
         console.log(JSON.stringify(payment));
 
-        userHelper.changePaymentStatus(req.session.orderDetails).then(() => {
+        userHelper.changePaymentStatus(req.session.orderDetails,isBuyNow,code,req.session.user._id).then(() => {
           console.log("Payment Success");
           res.redirect("/order-placed");
         });
@@ -676,12 +852,13 @@ router.get("/cancel", (req, res) => {
 
 router.post("/verify-payment", verifyBlock, function (req, res, next) {
   console.log(req.body);
+  console.log(code+" this is code>>>>>>>>>>>>>>>>>");
   let orderDetails = req.session.orderDetails;
   console.log(orderDetails);
   userHelper
     .verifyPayment(req.body)
     .then(() => {
-      userHelper.changePaymentStatus(orderDetails).then(() => {
+      userHelper.changePaymentStatus(orderDetails,isBuyNow,code).then(() => {
         console.log("Payment Success");
         res.json({ status: true });
       });
@@ -696,12 +873,18 @@ router.get("/order-placed", verifyBlock, async function (req, res, next) {
   res.render("order-placed", { title: "GadgetZone", user: req.session.user });
 });
 
-router.get("/my-orders", verifyBlock, function (req, res, next) {
+router.get("/my-orders", verifyBlock,async function (req, res, next) {
+  if (req.session.user) {
+    cartCount = await userHelper.getCartCount(req.session.user._id);
+  } else {
+    cartCount = null;
+  }
   userHelper.getAllOrders(req.session.user._id).then((allOrders) => {
     res.render("my-orders", {
       title: "GadgetZone",
       user: req.session.user,
       allOrders,
+      cartCount
     });
   });
 });

@@ -419,7 +419,7 @@ module.exports = {
 
 
 
-  placeOrder:(order,userId,address,products,total)=>{
+  placeOrder:(order,userId,address,products,total,code)=>{
     return new Promise((resolve,reject)=>{
 
       let deliveryStatus = order=="COD"?'Placed':'Pending'
@@ -448,6 +448,25 @@ module.exports = {
       }
       if(order === 'COD'){ 
         
+
+        if(code == 'undefined'){
+          console.log("No coupon code used");
+          console.log(code);
+        }
+        else{
+          console.log("????????????????????? "+code);
+          db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
+            $set:{
+              usedUsers:[
+                {
+                  userId: objectId(userId)
+                }
+              ]
+            }
+          })
+        }
+
+        
         db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
           db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(userId)})
           resolve()
@@ -463,6 +482,52 @@ module.exports = {
       resolve(orderObj)
 
 
+    })
+  },
+
+
+  placeBuynowOrder:(order,userId,address,products,total)=>{
+    return new Promise((resolve,reject)=>{
+
+      let deliveryStatus = order=="COD"?'Placed':'Pending'
+
+      let prod
+
+      products.map((elem)=>{
+        prod = elem
+      })
+
+      let product = [{
+        item: prod._id,
+        quantity:1,
+        subTotal:total,
+        status: deliveryStatus,
+      }]
+
+      let orderObj = {
+        deliveryDetails:{
+            addressType: address.addressType,
+            name: address.name,
+            phone: address.phone,
+            houseNumber: address.houseNumber,
+            streetAddress: address.streetAddress,
+            locality:address.locality,
+            pincode: address.pincode,
+            district:address.district,
+            state: address.state,
+        },
+        userId: objectId(userId),
+        dateISO: new Date().toLocaleString(),
+        date: new Date(),
+        paymentMethod: order,
+        totalAmount:total,
+        products:product,
+      }
+
+      db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
+      })
+      
+      resolve(orderObj)
     })
   },
 
@@ -502,9 +567,50 @@ module.exports = {
     })
   },
 
-  changePaymentStatus:(orderDetails)=>{
+  // changePaymentStatus:(orderDetails)=>{
+  //   return new Promise((resolve,reject)=>{
+  //     console.log(orderDetails);
+  //       db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{
+  //         $set:{
+  //           "products.$[].status": "Placed"
+  //         }
+  //       }).then(()=>{
+  //         db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(orderDetails.userId)})
+  //         resolve()
+  //       })
+
+  //       resolve(true)
+
+  //   })
+  // },
+
+  
+  changePaymentStatus:(orderDetails,isBuyNow,code,userId)=>{
     return new Promise((resolve,reject)=>{
       console.log(orderDetails);
+
+      if(code == 'undefined'){
+        console.log("No coupon code used");
+      }
+      else{
+        console.log("????????????????????? "+code);
+        db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
+          $push:{
+            usedUsers: {
+              userId: objectId(userId)
+            }
+          }
+        })
+      }
+
+      if(isBuyNow){
+        db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{
+          $set:{
+            "products.$[].status": "Placed"
+          }
+        })
+      }
+      else{
         db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{
           $set:{
             "products.$[].status": "Placed"
@@ -513,6 +619,7 @@ module.exports = {
           db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(orderDetails.userId)})
           resolve()
         })
+      }
 
         resolve(true)
 
@@ -549,6 +656,7 @@ module.exports = {
             cancelled: "$products.cancelled",
             delivered: "$products.delivered",
             dateISO: "$dateISO",
+            date: "$date",
             deliveryDetails: "$deliveryDetails"
           }
         },
@@ -567,6 +675,7 @@ module.exports = {
             subTotal:1,
             status:1,
             dateISO:1,
+            date:1,
             deliveryDetails:1,
             cancelled:1,
             delivered:1,
@@ -579,7 +688,7 @@ module.exports = {
           $unwind: "$product.productVariants"
         },
         {
-          $sort:{dateISO: -1}
+          $sort:{date: -1}
         }
       ]).toArray()
       resolve(allOrders)

@@ -8,5 +8,6 @@ module.exports = {
     BANNER_COLLECTION: 'banner',
     PRODUCT_OFFER: 'productOffer',
     CATEGORY_OFFER: 'categoryOffer',
+    COUPON_OFFER: 'couponOffer',
     USER_WISHLIST: 'wishlist',
 }

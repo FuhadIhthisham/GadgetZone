@@ -862,7 +862,7 @@ router.get("/category-offer", verifyLogin,async (req, res, next) => {
   });
 });
 
-// Get category offer management page
+// post category offer management page
 router.post("/category-offer", verifyLogin,async (req, res, next) => {
   productHelper.addCategoryOffer(req.body).then((resp)=>{
     res.redirect('/admin/category-offer')
@@ -875,6 +875,43 @@ router.post("/delete-category-offer", verifyLogin,async (req, res, next) => {
     res.redirect('/admin/category-offer')
   })
 });
+
+// Get coupon offer management page
+router.get("/coupon-offer", verifyLogin,async (req, res, next) => {
+  let couponList = await productHelper.getCouponOffer()
+  res.render("admin/coupon-offer", {
+    title: "Coupon Management",
+    admin: true,
+    header: "COUPON MANAGEMENT",
+    couponList,
+    couponMsg
+  });
+  couponMsg = null
+});
+
+
+// post coupon offer management page
+var couponMsg
+router.post("/coupon-offer", verifyLogin,async (req, res, next) => {
+  await productHelper.addCouponOffer(req.body).then((resp)=>{
+    console.log(resp);
+    if(resp.couponExists){
+      couponMsg = "This Coupon Already Exists"
+    }
+    else{
+      couponMsg = "Coupon Added Successfully"
+    }
+    res.redirect('/admin/coupon-offer')
+  })
+});
+
+// delete coupon offer
+router.post("/delete-coupon", verifyLogin,async (req, res, next) => {
+  productHelper.deleteCoupon(req.body.couponId).then((resp)=>{
+    res.redirect('/admin/category-offer')
+  })
+});
+
 
 
 module.exports = router;
