@@ -432,7 +432,35 @@ getTopSelling:()=>{
     console.log(topSelling);
     resolve(topSelling)
   })
-}
+},
+
+// getUserReport:()=>{
+//   return new Promise(async(resolve,reject)=>{
+//     let userReport = await db.get().collection(collections.USER_COLLECTION).aggregate([
+//       {
+//         $lookup:{
+//           from: collections.ORDER_COLLECTION,
+//           localField: "_id",
+//           foreignField: "userId",
+//           as: "userOrders"
+//         }
+//       },
+//       {
+//         $project:{
+//           userName: "$firstName",
+//           phone: "$phone",
+//           email: "$email",
+//           userOrders: "$userOrders"
+//         }
+//       },
+//       {
+//         $unwind: "$userOrders"
+//       }
+//     ]).toArray()
+//     console.log(userReport);
+//     resolve()
+//   })
+// }
 
 
 

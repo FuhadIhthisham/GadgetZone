@@ -1,3 +1,4 @@
+
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
   <div class="product__details__pic">
@@ -61,22 +62,22 @@
           <div class="tab-content">
             <div class="tab-pane active" id="tabs-1" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg" alt="" />
+                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg" alt="" class="imageZoom1" />
               </div>
             </div>
             <div class="tab-pane" id="tabs-2" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.jpg" alt="" />
+                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.jpg" alt="" class="imageZoom2" />
               </div>
             </div>
             <div class="tab-pane" id="tabs-3" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.jpg" alt="" />
+                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.jpg" alt="" class="imageZoom3" />
               </div>
             </div>
             <div class="tab-pane" id="tabs-4" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.jpg" alt="" />
+                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.jpg" alt="" class="imageZoom4" />
               </div>
             </div>
           </div>
@@ -94,21 +95,10 @@
                   </h3>
                 {{else}}
                   <h3>₹{{this.productVariants.0.productPrice}} 
-                    {{!-- <span>{{this.productVariants.0.offerPrice}}</span>      --}}
                   </h3>
                 {{/if}}
 
 
-                {{!-- <div class="product__details__option__size"> --}}
-                 {{!--  <span class="font-weight-bold">Variant:</span>   // If variant 
-                  <label for="44mm">44MM
-                    <input type="radio" id="44mm" /> 
-                  </label>
-                  <label class="active" for="40mm">40MM
-                    <input type="radio" id="40mm" />
-                  </label>
-                  --}}
-                {{!-- </div> --}}
                 <div class="product__details__option__color ml-sm-3 mt-sm-4">
                   <span class="font-weight-bold">Color:</span>
                   <label class="" style="background-color: {{this.productVariants.0.productColour}};" for="sp-1">
@@ -165,7 +155,7 @@
 
           <div class="product__details__last__option mt-sm-5">
             <h5><span>Guaranteed Safe Checkout</span></h5>
-            <img src="img/shop-details/details-payment.png" alt="" />
+            <img src="/img/payment.png" alt="" />
           </div>
 
         </div>
@@ -205,7 +195,10 @@
                     <ul class="mt-3" style="font-size: 20px !important;">
                       <li type="none">
                       
-                       <pre> {{this.productDescription}}  </pre>
+                       {{!-- <pre> --}}
+                          {{this.productDescription}}  
+
+                       {{!-- </pre> --}}
                         
                       </li>
                     </ul>
@@ -216,29 +209,12 @@
               <div class="tab-pane" id="tabs-6" role="tabpanel">
                 <div class="product__details__tab__content">
                   <div class="product__details__tab__content__item">
-                    <h5>Products Infomation</h5>
-                    <p>A Pocket PC is a handheld computer, which features many
-                      of the same capabilities as a modern PC. These handy
-                      little devices allow individuals to retrieve and store
-                      e-mail messages, create a contact file.</p>
-                    <p>As is the case with any new technology product, the cost
-                      of a Pocket PC was substantial during it’s early release.
-                      For approximately ₹700.00, consumers could purchase one of
-                      top-of-the-line Pocket PCs in 2003. These days, customers
-                      are finding that prices have become much more reasonable
-                      now that the newness is wearing off. For approximately
-                      ₹350.00, a new Pocket PC can now be purchased.</p>
+                    {{!-- <h5>Products Infomation</h5> --}}
+                    <p></p>
                   </div>
                   <div class="product__details__tab__content__item">
-                    <h5>Material used</h5>
-                    <p>Polyester is deemed lower quality due to its none natural
-                      quality’s. Made from synthetic materials, not natural like
-                      wool. Polyester suits become creased easily and are known
-                      for not being breathable. Polyester suits tend to have a
-                      shine to them compared to wool and cotton suits, this can
-                      make the suit look cheap. The texture of velvet is
-                      luxurious and breathable. Velvet is a great choice for
-                      dinner party jacket and can be worn all year round.</p>
+                    {{!-- <h5>Material used</h5> --}}
+                    <p></p>
                   </div>
                 </div>
               </div>
@@ -249,21 +225,7 @@
                   </p>
                   <div class="product__details__tab__content__item">
                     <h5>Products Infomation</h5>
-                    <p>A Pocket PC is a handheld computer, which features many
-                      of the same capabilities as a modern PC. These handy
-                      little devices allow individuals to retrieve and store
-                      e-mail messages, create a contact file, coordinate
-                      appointments, surf the internet, exchange text messages
-                      and more. Every product that is labeled as a Pocket PC
-                      must be accompanied with specific software to operate the
-                      unit and must feature a touchscreen and touchpad.</p>
-                    <p>As is the case with any new technology product, the cost
-                      of a Pocket PC was substantial during it’s early release.
-                      For approximately ₹700.00, consumers could purchase one of
-                      top-of-the-line Pocket PCs in 2003. These days, customers
-                      are finding that prices have become much more reasonable
-                      now that the newness is wearing off. For approximately
-                      ₹350.00, a new Pocket PC can now be purchased.</p>
+                    <p></p>
                   </div>
                 </div>
               </div>
@@ -271,52 +233,37 @@
           </div>
         </div>
       </div>
-
-            {{/each}}
-     
-
+      {{/each}}
     </div>
   </div>
 </section>
 
-
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="/stylesheets/image-zoom.css" />
+
+<script src="/javascripts/jquery-3.3.1.min.js"></script>
+<script src="/javascripts/image-zoom.js" defer></script>
+<script src="/javascripts/image-zoom.min.js"></script>
 
 
 <script>
-  //   FILTER INPUT FIELDS
-function setInputFilter(textbox, inputFilter) {
-  [
-    "input",
-    "keydown",
-    "keyup",
-    "mousedown",
-    "mouseup",
-    "select",
-    "contextmenu",
-    "drop",
-  ].forEach(function (event) {
-    textbox.addEventListener(event, function () {
-      if (inputFilter(this.value)) {
-        this.oldValue = this.value;
-        this.oldSelectionStart = this.selectionStart;
-        this.oldSelectionEnd = this.selectionEnd;
-      } else if (this.hasOwnProperty("oldValue")) {
-        this.value = this.oldValue;
-        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-      } else {
-        this.value = "";
-      }
-    });
+
+  $(function(){
+    $('.imageZoom1').imageZoom();
   });
-}
 
+  $(function(){
+    $('.imageZoom2').imageZoom();
+  });
 
-// ONLY INTEGER NUMBERS
-setInputFilter(document.getElementById("number1"), function(value) {
-  return /^\d*$/.test(value); 
-});
+  $(function(){
+    $('.imageZoom3').imageZoom();
+  });
 
+  $(function(){
+    $('.imageZoom4').imageZoom();
+  });
 </script>
 
 <script src="/javascripts/validator.js"></script>

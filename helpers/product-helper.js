@@ -707,7 +707,161 @@ module.exports = {
         ]).toArray()
         resolve(subProducts)
       })
-    }
+    },
 
-
+    getSalesReport:(fromDate,tillDate)=>{
+      return new Promise(async (resolve,reject)=>{
+        let salesReport = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              item: "$products.item",
+              quantity: "$products.quantity",
+              subTotal: "$products.subTotal",
+              status: "$products.status",
+              date: "$date"
+            }
+          },
+          {
+            $match: {
+               $or:[ {status: "Delivered"},{status: "Placed"},{status:"Packed"},{status: "Shipped"} ],
+               date:{
+                 $gte:fromDate,
+                 $lte:tillDate
+               }
+            }
+          },
+          {
+            $lookup: {
+              from: collections.PRODUCT_COLLECTION,
+              localField: "item",
+              foreignField: "_id",
+              as: "products"
+            }
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              quantity:1,
+              subTotal:1,
+              products: "$products",
+              productName: "$products.productName"
+            }
+          },
+          {
+            $unwind: "$products.productVariants"
+          },
+          {
+            $project:{
+              quantity:1,
+              subTotal:1,
+              productCategory: "$products.productCategory",
+              productName: "$products.productName",
+              productVariants: "$products.productVariants"
+            }
+          },
+          {
+            $group:{
+              _id: "$productName",
+              totalQty: {$sum: "$quantity"},
+              totalSale: {$sum: "$productVariants.productPrice"},
+              productVariants: {"$first": "$productVariants"},
+              netCost: {
+                $sum:{
+                  $multiply: ["$quantity","$productVariants.landingCost"]
+                }
+              },
+            },
+          },
+          {
+            $project:{
+              _id:1,
+              totalQty:1,
+              totalSale:1,
+              productVariants:1,
+              netCost:1,
+              profit: {
+                $subtract:["$totalSale","$netCost"]
+              }
+            }
+          }
+        ]).toArray()
+        
+        resolve(salesReport)
+      })
+    },
+    getStockReport:()=>{
+      return new Promise(async (resolve,reject)=>{
+        let stockReport = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              item: "$products.item",
+              quantity: "$products.quantity",
+              subTotal: "$products.subTotal",
+              status: "$products.status",
+              date: "$date"
+            }
+          },
+          {
+            $match: {
+               $or:[ {status: "Delivered"},{status: "Placed"},{status:"Packed"},{status: "Shipped"} ],
+            }
+          },
+          {
+            $lookup: {
+              from: collections.PRODUCT_COLLECTION,
+              localField: "item",
+              foreignField: "_id",
+              as: "products"
+            }
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              quantity:1,
+              subTotal:1,
+              products: "$products",
+              productName: "$products.productName"
+            }
+          },
+          {
+            $unwind: "$products.productVariants"
+          },
+          {
+            $project:{
+              quantity:1,
+              subTotal:1,
+              productCategory: "$products.productCategory",
+              productName: "$products.productName",
+              productVariants: "$products.productVariants"
+            }
+          },
+          {
+            $group:{
+              _id: "$productName",
+              totalQty: {$sum: "$quantity"},
+              productVariants: {"$first": "$productVariants"},
+            },
+          },
+          {
+            $project:{
+              _id:1,
+              totalQty:1,
+              productVariants:1,
+            }
+          }
+        ]).toArray()
+        console.log(stockReport);
+        resolve(stockReport)
+      })
+    },
 }

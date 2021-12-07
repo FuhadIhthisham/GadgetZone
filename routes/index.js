@@ -407,8 +407,10 @@ router.get("/signupOtp", (req, res) => {
 });
 
 router.get("/logout", function (req, res, next) {
-  req.session.user.loggedIn = false;
-  req.session.user = null;
+  if(req.session?.user){
+    req.session.user.loggedIn = false;
+    req.session.user = null;
+  }
   res.redirect("/");
 });
 
@@ -519,7 +521,6 @@ router.post("/add-to-cart/:id", function (req, res, next) {
 // change cart product quantity
 router.post("/change-quantity", verifyBlock, (req, res) => {
   userHelper.changeQuantity(req.body).then(async (response) => {
-    console.log(req.body);
     // response.total = await userHelper.totalAmount(req.session.user._id)
     res.json(response);
   });
@@ -714,14 +715,25 @@ router.get("/place-order-buynow", verifyBlock, async function (req, res, next) {
   let products
   let grandTotal
   let address
+  let discount
+  code = req.query.code
   isBuyNow = true
   products = await productHelper.getOneProduct(proId);
+  discount = parseInt(req.query.disc)
 
   if(products[0].productVariants[0].offerPrice){
     grandTotal = products[0].productVariants[0].offerPrice
+    
+    if(req.query.code !== 'undefined'){
+      grandTotal = grandTotal-discount
+    }
   }
   else{
     grandTotal = products[0].productVariants[0].productPrice
+
+    if(req.query.code !== 'undefined'){
+      grandTotal = grandTotal-discount
+    }
   }
   address = await userHelper.getOneAddress(
   req.query.addressId,
@@ -737,7 +749,8 @@ router.get("/place-order-buynow", verifyBlock, async function (req, res, next) {
       req.session.user._id,
       address,
       products,
-      grandTotal
+      grandTotal,
+      code
     )
     .then((resp) => {
       // if payment method is COD

@@ -128,7 +128,6 @@ function changeQuantity(cartId,proId,variantId,stock,price,count){
   count = parseInt(count)
   let itemTotal = parseInt(document.getElementById('itemTotal').innerHTML)
   let grandTotal = parseInt(document.getElementById('grandTotal').innerHTML)
-  let discountPrice = parseInt(document.getElementById('discountPrice').innerHTML)
   let subTotal = parseInt(document.getElementById(variantId).innerHTML)
   let quantity = parseInt(document.getElementById(proId+variantId).innerHTML)
   let mrp = document.getElementById(proId+'MRP').innerHTML
@@ -161,7 +160,7 @@ function changeQuantity(cartId,proId,variantId,stock,price,count){
         document.getElementById(proId+variantId).innerHTML = quantity+count
         document.getElementById(variantId).innerHTML = (quantity+count)*price
         document.getElementById("itemTotal").innerHTML = itemTotal + (price*count)
-        document.getElementById("grandTotal").innerHTML = (itemTotal + (price*count)) - discountPrice
+        document.getElementById("grandTotal").innerHTML = (itemTotal + (price*count))
       }
     }
   })

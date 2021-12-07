@@ -228,10 +228,14 @@
               </ul>
               <ul class="checkout__total__all">
                 {{!-- <li>Items Price <span>₹ {{grandTotal}}</span></li> --}}
+                <li>Coupon Discount<span
+                    class="discount__price"
+                    id="couponDiscount"
+                  > 0 </span><span class="discount__price">₹</span></li>
                 {{#if this.productVariants.0.offerPrice}}
-                    <li class="fs-4">Total <span>₹ {{this.productVariants.0.offerPrice}}</span></li>
+                    <li class="fs-4">Total <span id="grandTotal">{{this.productVariants.0.offerPrice}}</span> <span>₹</span> </li>
                 {{else}}
-                    <li class="fs-4">Total <span>₹ {{this.productVariants.0.productPrice}}</span></li>
+                    <li class="fs-4">Total <span id="grandTotal"> {{this.productVariants.0.productPrice}}</span> <span>₹</span> </li>
                 {{/if}}
               </ul>
               {{/each}}
@@ -300,6 +304,52 @@
 
 <script>
 
+var grandTotal = document.getElementById('grandTotal').innerHTML
+  grandTotal = parseInt(grandTotal)
+  let discount
+  var code
+
+ function checkCoupon(){
+  code = document.getElementById('couponCode').value
+  code = code.toUpperCase()
+  $.ajax({
+    url: "/check-coupon",
+    method: "post",
+    data:{code},
+    success:(res)=>{
+      if(!res){
+        document.getElementById('couponForm').reset()
+        code = 'undefined'
+        document.getElementById('couponMsg').innerHTML = "This Coupon Does not Exist"
+        document.getElementById('couponMsg').style.color = "Red"
+        document.getElementById('couponDiscount').innerHTML = 0
+        discount = 0
+        document.getElementById('grandTotal').innerHTML = grandTotal
+      }
+      else if(res.isUsed){
+        document.getElementById('couponForm').reset()
+        code = 'undefined'
+        document.getElementById('couponMsg').innerHTML = "This Coupon is already used by this user"
+        document.getElementById('couponMsg').style.color = "Red"
+        document.getElementById('couponDiscount').innerHTML = 0
+        discount = 0
+        document.getElementById('grandTotal').innerHTML = grandTotal
+      }
+      else{
+        document.getElementById('couponMsg').innerHTML = "Coupon Applied Successfully"
+        document.getElementById('couponMsg').style.color = "green"
+        discount = (grandTotal*res.discount)/100
+        document.getElementById('couponDiscount').innerHTML = discount
+        document.getElementById('grandTotal').innerHTML = grandTotal-discount
+      }
+    }
+  })
+  }
+
+
+
+
+
  var checkoutAddressId
  var paymentMethod
     var proId = '{{products.0._id}}'
@@ -340,7 +390,7 @@ function placeOrder(){
   }
   else{
     $.ajax({
-      url: `/place-order-buynow?payment=${paymentMethod}&addressId=${checkoutAddressId}&proId=${proId}`,
+      url: `/place-order-buynow?payment=${paymentMethod}&addressId=${checkoutAddressId}&proId=${proId}&disc=${discount}&code=${code}`,
       method: 'get',
       success:(res)=>{
         if(res.codSuccess){

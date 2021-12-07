@@ -349,6 +349,19 @@ addOfferForm.validate({
       required: true,
     },
   },
+
+})
+// ADD OFFER VALIDATION
+var salesReportForm = $("#salesReportForm");
+salesReportForm.validate({
+  rules: {
+    fromDate: {
+      required: true,
+    },
+    tillDate: {
+      required: true,
+    },
+  },
 })
 
 

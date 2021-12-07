@@ -168,7 +168,7 @@ href="https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css"
     
 
     <div class="row">
-        <table class="table table-success table-hover col-md-6">
+        <table class="table table-secondary table-hover col-md-6" id="topSelling" style="box-shadow: 2px 3px 15px;">
             <legend class="fs-2 fw-bold">Best Selling Products</legend>
             <thead>
                 <tr>
@@ -180,7 +180,7 @@ href="https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css"
             <tbody>
                 {{#each topSelling}}
                     <tr>
-                    <th scope="row"> {{@index}} </th>
+                    <td> {{@index}} </td>
                     <td> {{this._id}} </td>
                     <td>{{this.totalQty}}</td>
                     </tr>

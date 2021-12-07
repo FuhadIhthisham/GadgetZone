@@ -28,8 +28,18 @@
                             <span>
                                 Quantity : {{this.quantity}}
                                     <br>
-                                cost: ₹{{this.subTotal}} <br />
+                                cost: ₹{{this.subTotal}} <br /> <br>
                             </span>
+                            <div>
+                                <span class="fw-bold">
+                                    Address:
+                                </span>
+                                <span class="fw-lighter">
+                                    {{deliveryDetails.houseNumber}}
+                                    {{deliveryDetails.streetAddress}}
+                                    {{deliveryDetails.locality}}
+                                </span>
+                            </div>
                             {{#if this.cancelled}}
                             
                             {{else}}

@@ -166,7 +166,7 @@ setInputFilter(document.getElementById("productQuantity"), function (value) {
         var fileInput = document.getElementById(file);
         
         var filePath = fileInput.value;
-        var allowedExtensions = /(\.jpg|\.png|\.jpeg|\.JPEG)$/i;
+        var allowedExtensions = /(\.jpg|\.png|\.jpeg|\.JPEG|\.webp)$/i;
         if (!allowedExtensions.exec(filePath)) {
             {{!-- swal({
               title: "Please Select Payment Method to Place Order",

@@ -7,6 +7,7 @@ const { response } = require("express");
 
 const Razorpay = require("razorpay");
 const { resolve } = require("path");
+const productHelper = require("./product-helper");
 
 var instance = new Razorpay({
   key_id: 'rzp_test_GT3btMNJZ1MvHn',
@@ -342,7 +343,6 @@ module.exports = {
   changeQuantity: (data) => {
     productTotal = parseInt(data.productTotal)
     price = parseInt(data.price)
-    console.log(price);
     count = parseInt(data.count);
     return new Promise((resolve, reject) => {
       if (data.count == -1 && data.quantity == 1) {
@@ -448,23 +448,26 @@ module.exports = {
       }
       if(order === 'COD'){ 
         
-
-        if(code == 'undefined'){
-          console.log("No coupon code used");
-          console.log(code);
-        }
-        else{
+        // if order is COD, then add the user id on coupon collection
+        if(code != 'undefined'){
           console.log("????????????????????? "+code);
           db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
-            $set:{
-              usedUsers:[
-                {
-                  userId: objectId(userId)
-                }
-              ]
+            $push:{
+              usedUsers: {
+                userId: objectId(userId)
+              }
             }
           })
         }
+
+        // Decrease stock count on placing order for COD orders
+        products.map((product)=>{
+          db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id: objectId(product.item)},{
+            $inc:{
+              "productVariants.$[].productQuantity": -product.quantity
+            }
+          })          // FOR DECREASING STOCK ON PRODUCT VARIANTS, NEEDED TO CHANGE THIS QUERY 
+        })
 
         
         db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
@@ -486,7 +489,7 @@ module.exports = {
   },
 
 
-  placeBuynowOrder:(order,userId,address,products,total)=>{
+  placeBuynowOrder:(order,userId,address,products,total,code)=>{
     return new Promise((resolve,reject)=>{
 
       let deliveryStatus = order=="COD"?'Placed':'Pending'
@@ -523,6 +526,30 @@ module.exports = {
         totalAmount:total,
         products:product,
       }
+
+      if(order == 'COD'){
+
+        // if order is COD, then add the user id on coupon collection
+        if(code != 'undefined'){
+          console.log("????????????????????? "+code);
+          db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
+            $push:{
+              usedUsers: {
+                userId: objectId(userId)
+              }
+            }
+          })
+        }
+      }
+      // Decrease stock count on placing order for COD orders
+      product.map((products)=>{
+        db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id: objectId(products.item)},{
+          $inc:{
+            "productVariants.$[].productQuantity": -products.quantity
+          }
+        })          // FOR DECREASING STOCK ON PRODUCT VARIANTS, NEEDED TO CHANGE THIS QUERY 
+      })
+
 
       db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((resp)=>{
       })
@@ -587,7 +614,6 @@ module.exports = {
   
   changePaymentStatus:(orderDetails,isBuyNow,code,userId)=>{
     return new Promise((resolve,reject)=>{
-      console.log(orderDetails);
 
       if(code == 'undefined'){
         console.log("No coupon code used");
@@ -602,6 +628,17 @@ module.exports = {
           }
         })
       }
+
+
+      // Decrease stock count on placing orders
+      orderDetails.products.map((product)=>{
+        db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id: objectId(product.item)},{
+          $inc:{
+            "productVariants.$[].productQuantity": -product.quantity
+          }
+        })          // FOR DECREASING STOCK ON PRODUCT VARIANTS, NEEDED TO CHANGE THIS QUERY 
+      })
+      
 
       if(isBuyNow){
         db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{

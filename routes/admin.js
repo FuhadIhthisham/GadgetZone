@@ -733,7 +733,7 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
 
   if (topBannerImg1) {
     topBannerImg1.mv(
-      `./public/images/banner-images/topBanner1.jpg`,
+      `./public/images/banner-images/topBanner1.webp`,
       (err, done) => {
         console.log("Image 1 updated.....");
       }
@@ -741,7 +741,7 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
   }
   if (topBannerImg2) {
     topBannerImg2.mv(
-      `./public/images/banner-images/topBanner2.jpg`,
+      `./public/images/banner-images/topBanner2.webp`,
       (err, done) => {
         console.log("Image 2 updated.....");
       }
@@ -749,7 +749,7 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
   }
   if (topBannerImg3) {
     topBannerImg3.mv(
-      `./public/images/banner-images/topBanner3.jpg`,
+      `./public/images/banner-images/topBanner3.webp`,
       (err, done) => {
         console.log("Image 3 updated.....");
       }
@@ -757,7 +757,7 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
   }
   if (offerImg) {
     offerImg.mv(
-      `./public/images/banner-images/offerBanner.jpg`,
+      `./public/images/banner-images/offerBanner.webp`,
       (err, done) => {
         console.log("Image 4 updated.....");
       }
@@ -910,6 +910,43 @@ router.post("/delete-coupon", verifyLogin,async (req, res, next) => {
   productHelper.deleteCoupon(req.body.couponId).then((resp)=>{
     res.redirect('/admin/category-offer')
   })
+});
+
+// Get sales report
+router.get("/sales-report", verifyLogin,async (req, res, next) => {
+  let fromDate = new Date(req.query.fromDate)
+  let tillDate = new Date(req.query.tillDate)
+  let salesReport = await productHelper.getSalesReport(fromDate,tillDate)
+  res.render("admin/sales-report", {
+    title: "Sales Report",
+    admin: true,
+    header: "SALES REPORT",
+    salesReport
+  });
+});
+
+// Get stock report
+router.get("/stock-report", verifyLogin,async (req, res, next) => {
+  let stockReport = await productHelper.getStockReport()
+  res.render("admin/stock-report", {
+    title: "Sales Report",
+    admin: true,
+    header: "SALES REPORT",
+    stockReport
+  });
+});
+
+
+// Get user report
+router.get("/user-report", verifyLogin,async (req, res, next) => {
+  let userReport = await adminHelper.getUsers()
+
+  res.render("admin/user-report", {
+    title: "User Report",
+    admin: true,
+    header: "USER REPORT",
+    userReport
+  });
 });
 
 

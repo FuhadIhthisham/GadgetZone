@@ -22,6 +22,7 @@
     />
 
 
+
 {{!-- Croppie CSS 5 --}}
 
     <link
@@ -36,6 +37,7 @@
     />
 
 
+
  {{! data tables css cdn }}
     <link
       rel="stylesheet"
@@ -47,12 +49,12 @@
       type="text/css"
       href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"
     />
+    
+    <link href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css ">
+    <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
     {{! data tables css cdn }}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"
-    />
+  
 
     {{!-- bootstrap 4 --}}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -98,6 +100,9 @@
     {{else}}
       {{> user-footer}}
     {{/if}}
+
+
+    
 
 {{!-- bootstrap 5 --}}
     <script
@@ -179,9 +184,127 @@
       charset="utf8"
       src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"
     ></script>
+
+    {{!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+    <scrip src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
+
+
+
     <script type="text/javascript">
       $(document).ready(function() {
-      $('#categoryTable').DataTable(); } );
+        $('#categoryTable').DataTable(); 
+        } );
+
+
+      $(document).ready(function() {
+        $('#viewProducts').DataTable(); 
+        } );
+        
+      $(document).ready(function() {
+        $('#brandTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#viewUserTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#brandTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#blockedUserTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#couponTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#productOfferTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#categoryOfferTable').DataTable(); 
+        } );
+
+      $(document).ready(function() {
+        $('#productOfferTable').DataTable(); 
+        } );
+
+
+
+
+      $(document).ready(function() {
+       $('#stockReport').DataTable( {
+          dom: 'Bfrtip',
+          buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+          ]
+          } );
+      } );
+
+      $(document).ready(function() {
+       $('#userReport').DataTable( {
+          dom: 'Bfrtip',
+          buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+          ]
+          } );
+      } );
+
+
+      // To Start HBS index with 1
+      $('#stockReport tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#userReport tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#topSelling tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#viewProducts tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#categoryTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#brandTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#viewUserTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#blockedUserTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#couponTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#productOfferTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#categoryOfferTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+      
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
