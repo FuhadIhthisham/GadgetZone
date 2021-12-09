@@ -36,8 +36,8 @@
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
             <div class="hero__text">
-              <h4 class="text-danger">{{banners.topHead3}}</h4>
-              <h2 class="text-white"> {{banners.topText3}} </h2>
+              <h4 class="text-black">{{banners.topHead3}}</h4>
+              <h2 class="text-black"> {{banners.topText3}} </h2>
               {{!-- <a href="/product-list" class="primary-btn">Shop now
                 <span class="arrow_right"></span></a> --}}
 
@@ -193,8 +193,6 @@
         <div class="categories__deal__countdown">
           <span>{{banners.offerHead}}</span>
           <h2>{{banners.offerText}}</h2>
-
-          <a href="#" class="primary-btn">Shop now</a>
         </div>
       </div>
     </div>
@@ -207,15 +205,4 @@
   function productDetail(id){ 
     window.location = `/product-details?id=${id}`
     }
-
-   function getSubProducts(subName){
-    $.ajax({
-      url: '/getSubProducts',
-      method: 'post',
-      data: {subName},
-      success:(status)=>{
-        location.href = '/product-list'
-      }
-    })
-  }
 </script>

@@ -11,7 +11,7 @@
             <div class="col row">
               <div class="signup__input col">
                 <p>From Date: </p>
-                <input type="date" name="fromDate" id="fromDate" />
+                <input type="date" name="fromDate" id="fromDate" onchange="getFromDate()" />
               </div>
               <div class="signup__input col">
                 <p>Till Date: </p>
@@ -38,7 +38,7 @@
     </form>
   </div>
 </div>
-
+{{#if salesReport}}
 <div class="text-center py-3 bg-green-200">
   <div class="">
     <main class="">
@@ -75,6 +75,8 @@
   </div>
 </div>
 
+{{/if}}
+
 
 <script>
   function getReports(){
@@ -84,7 +86,7 @@
       url: `/admin/sales-report?fromDate=${fromDate}&tillDate=${tillDate}`,
       method: "get",
       success:()=>{
-
+        
       }
     })
   }
@@ -102,9 +104,26 @@
       
       var maxDate = year + '-' + month + '-' + day;
       $('#fromDate').attr('max', maxDate);
-      $('#tillDate').attr('max', maxDate);
   });
 
+function getFromDate(){
+  var dtToday = new Date();
+      
+      var month = dtToday.getMonth() + 1;
+      var day = dtToday.getDate();
+      var year = dtToday.getFullYear();
+      if(month < 10)
+          month = '0' + month.toString();
+      if(day < 10)
+          day = '0' + day.toString();
+      
+      var maxDate = year + '-' + month + '-' + day;
+      
+  let fromDate = document.getElementById('fromDate').value
+  document.getElementById('tillDate').setAttribute('min',fromDate)
+  document.getElementById('tillDate').setAttribute('max',maxDate)
+
+}
 
 
 </script>

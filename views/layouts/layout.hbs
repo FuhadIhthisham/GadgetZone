@@ -50,8 +50,14 @@
       href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"
     />
     
-    <link href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css ">
-    <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link 
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link 
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css ">
 
     {{! data tables css cdn }}
   
@@ -129,7 +135,7 @@
     <script src="javascripts/jquery.nice-select.min.js"></script>
     <script src="javascripts/jquery.nicescroll.min.js"></script>
     <script src="javascripts/jquery.magnific-popup.min.js"></script>
-    <script src="javascripts/jquery.countdown.min.js"></script>
+    {{!-- <script src="javascripts/jquery.countdown.min.js"></script> --}}
     <script src="javascripts/jquery.slicknav.js"></script>
     <script src="javascripts/mixitup.min.js"></script>
     <script src="javascripts/owl.carousel.min.js"></script>
@@ -302,6 +308,10 @@
       })
 
       $('#categoryOfferTable tbody tr').each(function (idx){
+        $(this).children("td:eq(0)").html(idx+1)
+      })
+
+      $('#stockOut tbody tr').each(function (idx){
         $(this).children("td:eq(0)").html(idx+1)
       })
       

@@ -12,16 +12,18 @@
                 <th>Last Name</th>
                 <th>Phone</th>
                 <th>E-Mail</th>
+                <th>Total Order</th>
             </tr>
         </thead>
         <tbody>
             {{#each userReport}}
             <tr>
                 <td> {{@index}} </td>
-                <td>{{this.firstName}}</td>
+                <td>{{this._id}}</td>
                 <td>{{this.lastName}}</td>
                 <td>{{this.phone}}</td>
                 <td>{{this.email}}</td>
+                <td>{{this.totalAmount}}</td>
             </tr>
             {{/each}}
         </tbody>
@@ -29,3 +31,5 @@
     </div> 
   </div>
 </div>
+
+

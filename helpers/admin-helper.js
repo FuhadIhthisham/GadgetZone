@@ -425,42 +425,93 @@ getTopSelling:()=>{
         $sort:{totalQty:-1}
       },
       {
-        $limit: 10
+        $limit: 5
       }
     ]).toArray()
     console.log("top selling");
-    console.log(topSelling);
     resolve(topSelling)
   })
 },
 
-// getUserReport:()=>{
-//   return new Promise(async(resolve,reject)=>{
-//     let userReport = await db.get().collection(collections.USER_COLLECTION).aggregate([
-//       {
-//         $lookup:{
-//           from: collections.ORDER_COLLECTION,
-//           localField: "_id",
-//           foreignField: "userId",
-//           as: "userOrders"
-//         }
-//       },
-//       {
-//         $project:{
-//           userName: "$firstName",
-//           phone: "$phone",
-//           email: "$email",
-//           userOrders: "$userOrders"
-//         }
-//       },
-//       {
-//         $unwind: "$userOrders"
-//       }
-//     ]).toArray()
-//     console.log(userReport);
-//     resolve()
-//   })
-// }
+getStockOut:()=>{
+  return new Promise(async(resolve,reject)=>{
+    let stockOut = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
+      {
+        $unwind: "$productVariants"
+      },
+      {
+        $project:{
+          productName: "$productName",
+          quantity: "$productVariants.productQuantity",
+        }
+      },
+      {
+        $group:{
+          _id: "$productName",
+          stock: {$sum: "$quantity"},
+        }
+      },
+      {
+        $sort:{stock:1}
+      },
+      {
+        $match:{
+          stock:{
+            $lte: 30
+          }
+        }
+      }
+    ]).toArray()
+    resolve(stockOut)
+  })
+},
+
+getUserReport:()=>{
+  return new Promise(async(resolve,reject)=>{
+    let userReport = await db.get().collection(collections.USER_COLLECTION).aggregate([
+      {
+        $lookup:{
+          from: collections.ORDER_COLLECTION,
+          localField: "_id",
+          foreignField: "userId",
+          as: "userOrders"
+        }
+      },
+      {
+        $project:{
+          firstName: "$firstName",
+          lastName: "$lastName",
+          phone: "$phone",
+          email: "$email",
+          userOrders: "$userOrders"
+        }
+      },
+      {
+        $unwind: "$userOrders"
+      },
+      {
+        $project:{
+          firstName: 1,
+          lastName:1,
+          phone: 1,
+          email: 1,
+          totalAmount: "$userOrders.totalAmount",
+          paymentMethod: "$userOrders.paymentMethod"
+        }
+      },
+      {
+        $group:{
+          _id: "$firstName",
+          totalAmount: {$sum: "$totalAmount"},
+          phone: {$first: "$phone"},
+          email: {$first: "$email"},
+          lastName: {$first: "$lastName"},
+        }
+      }
+    ]).toArray()
+    resolve(userReport)
+  })
+}
 
 
 

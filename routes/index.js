@@ -433,6 +433,8 @@ router.get("/product-details", async (req, res, next) => {
 
 var isSubProducts
 var subCatName
+var isBrandProducts
+var brandName
 
 router.get("/product-list", async function (req, res, next) {
   let cartCount = null;
@@ -440,25 +442,37 @@ router.get("/product-list", async function (req, res, next) {
     cartCount = await userHelper.getCartCount(req.session.user._id);
   }
   let allCategory = await productHelper.getAllSubcategory()
-
+  let allBrands = await productHelper.getAllBrands()
+  let user = req.session?.user;
   if(isSubProducts){
-    let user = req.session?.user;
     let subProducts = await productHelper.getSubcatProducts(subCatName)
     res.render("product-list", {
       title: "GadgetZone",
       user,
       cartCount,
       allCategory,
+      allBrands,
       subProducts,
+    });
+  }
+  else if(isBrandProducts){
+    let brandProducts = await productHelper.getBrandProducts(brandName)
+    res.render("product-list", {
+      title: "GadgetZone",
+      user,
+      cartCount,
+      allCategory,
+      allBrands,
+      brandProducts,
     });
   }
   else{
     productHelper.getAllProducts().then(async (allProducts) => {
-      let user = req.session?.user;
       res.render("product-list", {
         title: "GadgetZone",
         user,
         allProducts,
+        allBrands,
         cartCount,
         allCategory,
       });
@@ -466,13 +480,20 @@ router.get("/product-list", async function (req, res, next) {
   }
   isSubProducts = false
   subCatName = null
+  isBrandProducts = false
+  brandName = null
 });
 
 
 router.post("/getSubProducts",(req,res)=>{
   isSubProducts = true
   subCatName = req.body.subName
-  console.log(subCatName);
+  res.json({status:true})
+})
+
+router.get("/getBrandProducts",(req,res)=>{
+  isBrandProducts = true
+  brandName = req.query.brandName
   res.json({status:true})
 })
 

@@ -416,3 +416,15 @@ function deleteAddress(addressId){
     }
   })
 }
+
+
+function getSubProducts(subName){
+  $.ajax({
+    url: '/getSubProducts',
+    method: 'post',
+    data: {subName},
+    success:(status)=>{
+      location.href = '/product-list'
+    }
+  })
+}

@@ -696,6 +696,14 @@ module.exports = {
       })
     },
 
+    // get all brands for product list page
+    getAllBrands:()=>{
+      return new Promise(async(resolve,reject)=>{
+        let allBrands = await db.get().collection(collections.BRAND_COLLECTION).find({}).toArray()
+        resolve(allBrands)
+      })
+    },
+
     getSubcatProducts:(subName)=>{
       return new Promise(async (resolve,reject)=>{
         let subProducts = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
@@ -706,6 +714,19 @@ module.exports = {
           }
         ]).toArray()
         resolve(subProducts)
+      })
+    },
+
+    getBrandProducts:(brandName)=>{
+      return new Promise(async (resolve,reject)=>{
+        let brandProducts = await db.get().collection(collections.PRODUCT_COLLECTION).aggregate([
+          {
+            $match:{
+              productBrand: brandName
+            }
+          }
+        ]).toArray()
+        resolve(brandProducts)
       })
     },
 

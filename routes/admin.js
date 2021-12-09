@@ -26,6 +26,8 @@ router.get("/", verifyLogin,async function (req, res, next) {
   let totalUsers = await adminHelper.getTotalUsers()
 
   let topSelling = await adminHelper.getTopSelling()
+  let stockOut = await adminHelper.getStockOut()
+
 
   if(totalRevenue==undefined){
     totalRevenue = 0
@@ -41,7 +43,8 @@ router.get("/", verifyLogin,async function (req, res, next) {
     deliveredOrders,
     totalProducts,
     totalUsers,
-    topSelling
+    topSelling,
+    stockOut
   });
 });
 
@@ -627,32 +630,32 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
   });
 });
 
-// Add product variant
-router.get("/add-variant/", verifyLogin, function (req, res, next) {
-  productHelper.getOneProduct(req.query).then((result) => {
-    if (result) {
-      adminHelper.getBrand().then((allBrand) => {
-        if (allBrand) {
-          adminHelper.getCategory().then((allCategory) => {
-            res.render("admin/add-variant", {
-              title: "Add Variant",
-              admin: true,
-              header: "PRODUCT MANAGEMENT",
-              productEditMsg,
-              allCategory,
-              allBrand,
-              result,
-              colours,
-            });
-          });
-        }
-      });
-    } else {
-      console.log("Couldn't get add product variant page[no result]");
-      res.redirect("/admin/view-product");
-    }
-  });
-});
+// // Add product variant
+// router.get("/add-variant/", verifyLogin, function (req, res, next) {
+//   productHelper.getOneProduct(req.query).then((result) => {
+//     if (result) {
+//       adminHelper.getBrand().then((allBrand) => {
+//         if (allBrand) {
+//           adminHelper.getCategory().then((allCategory) => {
+//             res.render("admin/add-variant", {
+//               title: "Add Variant",
+//               admin: true,
+//               header: "PRODUCT MANAGEMENT",
+//               productEditMsg,
+//               allCategory,
+//               allBrand,
+//               result,
+//               colours,
+//             });
+//           });
+//         }
+//       });
+//     } else {
+//       console.log("Couldn't get add product variant page[no result]");
+//       res.redirect("/admin/view-product");
+//     }
+//   });
+// });
 
 // Get view user page
 router.get("/view-users", verifyLogin, (req, res, next) => {
@@ -939,7 +942,8 @@ router.get("/stock-report", verifyLogin,async (req, res, next) => {
 
 // Get user report
 router.get("/user-report", verifyLogin,async (req, res, next) => {
-  let userReport = await adminHelper.getUsers()
+  let userReport = await adminHelper.getUserReport()
+
 
   res.render("admin/user-report", {
     title: "User Report",

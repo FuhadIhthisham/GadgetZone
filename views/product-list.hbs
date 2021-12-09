@@ -69,16 +69,9 @@
                   <div class="card-body">
                     <div class="shop__sidebar__brand">
                       <ul>
-                        <li><a href="#">Apple</a></li>
-                        <li><a href="#">Mi</a></li>
-                        <li><a href="#">Oneplus</a></li>
-                        <li><a href="#">JBL</a></li>
-                        <li><a href="#">boAt</a></li>
-                        <li><a href="#">Beats</a></li>
-                        <li><a href="#">Sony</a></li>
-                        <li><a href="#">Canon</a></li>
-                        <li><a href="#">Samsung</a></li>
-                        <li><a href="#">Nikon</a></li>
+                        {{#each allBrands}}
+                          <li><a onclick="getBrandProducts('{{this.brandName}}')"> {{this.brandName}} </a></li>
+                        {{/each}}
                       </ul>
                     </div>
                   </div>
@@ -107,6 +100,65 @@
         {{#if subProducts}}
         <div class="row">
           {{#each subProducts}}
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="product__item">
+                <div
+                  class="product__item__pic set-bg"
+                  style="cursor: pointer;"
+                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg"
+                >
+                  <ul class="product__hover">
+                    <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img
+                          src="img/icon/heart.png"
+                          alt=""
+                        /></a></li>
+                    <li><a href="#"><img src="img/icon/compare.png" alt="" />
+                        <span>Compare</span></a>
+                    </li>
+                    <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
+                    <span>View</span></a></li>
+                  </ul>
+                </div>
+                <div class="product__item__text">
+                  <h6 class="text-secondary mb-2">{{this.productBrand}}</h6>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <a
+                      onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
+                      class="add-cart text-danger"
+                    >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{else}}
+                    <a
+                      onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
+                      class="add-cart text-danger"
+                    >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                  {{/if}}
+                   <h6>{{this.productName}}</h6>
+              <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
+                  <div class="rating">
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star"></i>
+                    <i class="fa text-warning fa-star-o"></i>
+                  </div>
+                  {{#if this.productVariants.0.offerPrice}}
+                    <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
+                    <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.productVariants.0.productPrice}}</span>
+                {{else}}
+                    <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+                    {{!-- <span class="text-decoration-line-through"> ₹{{this.productVariants.0.productPrice}}</span> --}}
+                {{/if}}
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+
+        {{else}}
+
+        {{#if brandProducts}}
+        <div class="row">
+          {{#each brandProducts}}
             <div class="col-lg-4 col-md-6 col-sm-6">
               <div class="product__item">
                 <div
@@ -220,6 +272,7 @@
           {{/each}}
         </div>
         {{/if}}
+        {{/if}}
         {{!-- <div class="row">
           <div class="col-lg-12">
             <div class="product__pagination">
@@ -250,6 +303,16 @@
       url: '/getSubProducts',
       method: 'post',
       data: {subName},
+      success:(status)=>{
+        location.href = '/product-list'
+      }
+    })
+  }
+
+  function getBrandProducts(brand){
+    $.ajax({
+      url: `/getBrandProducts?brandName=${brand}`,
+      method: 'get',
       success:(status)=>{
         location.href = '/product-list'
       }
