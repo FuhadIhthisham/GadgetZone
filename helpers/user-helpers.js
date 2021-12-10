@@ -48,7 +48,7 @@ module.exports = {
             resolve(response);
           } else {
             console.log("login Failed");
-            console.log(response);
+           
             resolve({ status: false });
           }
         });
@@ -100,8 +100,8 @@ module.exports = {
   resetPass: (resetData) => {
     return new Promise(async (resolve, reject) => {
       resetData.newPass = await bcrypt.hash(resetData.newPass, 10);
-      console.log(resetData.newPass);
-      console.log(resetData.phonenumber);
+      
+      
       db.get()
         .collection(collections.USER_COLLECTION)
         .updateOne(
@@ -253,7 +253,7 @@ module.exports = {
         }
         
       ]).toArray()
-      console.log(wishlist);
+      
       resolve(wishlist)
     })
   },
@@ -273,7 +273,7 @@ module.exports = {
           }
         }
       ).then((res)=>{
-        console.log(res);
+        
         resolve(true)
       })
     })
@@ -334,7 +334,7 @@ module.exports = {
         .findOne({user: objectId(userId) });
       if (cart) {
         count = cart.products.length;
-        console.log(count);
+       
       }
       resolve(count);
     });
@@ -594,23 +594,6 @@ module.exports = {
     })
   },
 
-  // changePaymentStatus:(orderDetails)=>{
-  //   return new Promise((resolve,reject)=>{
-  //     console.log(orderDetails);
-  //       db.get().collection(collections.ORDER_COLLECTION).updateMany({_id: objectId(orderDetails._id),"products.status": "Pending"},{
-  //         $set:{
-  //           "products.$[].status": "Placed"
-  //         }
-  //       }).then(()=>{
-  //         db.get().collection(collections.CART_COLLECTION).deleteOne({user: objectId(orderDetails.userId)})
-  //         resolve()
-  //       })
-
-  //       resolve(true)
-
-  //   })
-  // },
-
   
   changePaymentStatus:(orderDetails,isBuyNow,code,userId)=>{
     return new Promise((resolve,reject)=>{
@@ -619,7 +602,7 @@ module.exports = {
         console.log("No coupon code used");
       }
       else{
-        console.log("????????????????????? "+code);
+        
         db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
           $push:{
             usedUsers: {
@@ -781,7 +764,7 @@ module.exports = {
           )
           .then((response) => {
             if (response) {
-              console.log(response);
+              
               console.log("address exist");
               resolve({addressExist:true});
             } else {
@@ -857,7 +840,7 @@ module.exports = {
             }
           }
         }).then((response)=>{
-          console.log(response);
+          
           resolve(resolve)
         })
     })
@@ -882,7 +865,7 @@ module.exports = {
         },
         
       ]).toArray()  
-      console.log(oneAddress);
+      
       resolve(oneAddress);
     })
   },
@@ -890,8 +873,7 @@ module.exports = {
   // edit user address
   editAddress:(userId,data,addressId)=>{
     return new Promise(async (resolve,reject)=>{
-      console.log(data);
-      console.log(addressId);
+      
       await db.get().collection(collections.USER_COLLECTION).updateOne(
         {
           _id: objectId(userId),
@@ -911,7 +893,7 @@ module.exports = {
           }
         }
         ).then((resp)=>{
-          console.log(resp);
+          
           resolve(resp)
         })
     })
@@ -919,7 +901,7 @@ module.exports = {
 
   editProfile:(userId,data)=>{
     return new Promise(async (resolve,reject)=>{
-      console.log(data);
+      
       await db.get().collection(collections.USER_COLLECTION).updateOne(
         {
           _id: objectId(userId),
@@ -934,7 +916,7 @@ module.exports = {
           }
         }
         ).then((resp)=>{
-          console.log(resp);
+          
           resolve(resp)
         })
     })
@@ -943,7 +925,7 @@ module.exports = {
   getOneUser:(userId)=>{
     return new Promise(async(resolve,reject)=>{
       let orders= await db.get().collection(collections.USER_COLLECTION).findOne({_id: objectId(userId)})
-      console.log(orders);
+      
       resolve(orders) 
     })
   },
@@ -956,7 +938,7 @@ module.exports = {
         .get()
         .collection(collections.USER_COLLECTION)
         .findOne({ _id: objectId(userId)});
-        console.log(user);
+        
         if(user){
           bcrypt.compare(userPass.currPass, user.password).then(async(status) => {
             console.log(status);

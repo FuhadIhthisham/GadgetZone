@@ -126,39 +126,6 @@
     horizrailenabled: false,
   });
 
-  /*------------------
-        CountDown
-    --------------------*/
-  // For demo preview start
-  // var today = new Date();
-  // var dd = String(today.getDate()).padStart(2, '0');
-  // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  // var yyyy = today.getFullYear();
-
-  // if(mm == 12) {
-  //     mm = '01';
-  //     yyyy = yyyy + 1;
-  // } else {
-  //     mm = parseInt(mm) + 1;
-  //     mm = String(mm).padStart(2, '0');
-  // }
-  // var timerdate = mm + '/' + dd + '/' + yyyy;
-  // For demo preview end
-
-  // Uncomment below and use your date //
-
-  /* var timerdate = "2020/12/30" */
-
-  // $("#countdown").countdown(timerdate, function (event) {
-  //     $(this).html(event.strftime("<div class='cd-item'><span>%D</span> <p>Days</p> </div>" + "<div class='cd-item'><span>%H</span> <p>Hours</p> </div>" + "<div class='cd-item'><span>%M</span> <p>Minutes</p> </div>" + "<div class='cd-item'><span>%S</span> <p>Seconds</p> </div>"));
-  // });
-
-  /*------------------
-		Magnific
-	--------------------*/
-  $(".video-popup").magnificPopup({
-    type: "iframe",
-  });
 
   /*-------------------
 		Quantity change
@@ -330,34 +297,6 @@ function addToWishlist(proId,userId){
   })
 }
 
-
-// function changeQuantity(cartId,proId,variantId,stock,price,count){
-//   stock = parseInt(stock)
-//   price = parseInt(price)
-//   let grandTotal = document.getElementById('grandTotal')
-//   document.getElementById(variantId).innerHTML = price
-//   let quantity = parseInt(document.getElementById(proId+variantId).innerHTML)
-//   count = parseInt(count)
-//   $.ajax({
-//     url: '/change-quantity',
-//     data: {
-//       cartId:cartId,
-//       product: proId,
-//       count:count,
-//       quantity: quantity
-//     },
-//     method: 'post',
-//     success:(response)=>{
-//       if(response.removeProduct){
-//         location.reload()
-//         alert("Product removed form cart")
-//       }
-//       else {
-//         document.getElementById(proId+variantId).innerHTML = quantity+count
-//       }
-//     }
-//   })
-// }
 
 function deleteCartProduct(cartId,proId,variantId){
 

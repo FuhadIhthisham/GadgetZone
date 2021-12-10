@@ -138,14 +138,12 @@
                     <li type="square">
                       {{this}}
                       <a onclick="deleteSub('{{../this.category}}','{{this}}')"  class="text-danger"><i class="fas fa-trash-alt"></i></a>
-                      {{!-- <a onclick="deleteSub('{{../this.category}}','{{this}}')"  class="text-primary ms-2"><i class="far fa-edit"></i></a> --}}
                     </li>
                   </ul>
                 {{/each}}
               </td>
               <td class="align-middle">
                       <a onclick="deleteCat('{{this.category}}')" class="text-danger"><i class="fas fa-trash-alt"></i></a>
-                      {{!-- <a onclick="deleteCat('{{this.category}}')" class="text-primary ms-4"><i class="far fa-edit"></i></a> --}}
               </td>
             </tr>
           {{/each}}

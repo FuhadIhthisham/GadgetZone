@@ -1,7 +1,7 @@
 <div class="container col-7 mt-3 mb-5 justify-content-center">
   <div class="signup__form row">
     
-      {{#each result}}
+    {{#each result}}
     <form
       action="/admin/edit-product?id={{this._id}}&varId={{this.productVariants.0.variantId}}"
       class="col"
@@ -157,7 +157,7 @@
 
                 <div class="mt-5">
                   <label for="">Product Image 1 </label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.jpg" alt="" style="width: 100px; height:auto" id="imgview1">
+                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp" alt="" style="width: 100px; height:auto" id="imgview1">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_1" id="file1" class="form-control"
                       onchange="return fileValidation('file1','image1','imgview1')">
@@ -169,7 +169,7 @@
 
                 <div class="mt-5">
                   <label for="">Product Image 2</label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.jpg" alt="" style="width: 100px; height:auto" id="imgview2">
+                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp" alt="" style="width: 100px; height:auto" id="imgview2">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_2" id="file2" class="form-control"
                       onchange="return fileValidation('file2','image2','imgview2')">
@@ -180,7 +180,7 @@
                 
                 <div class="mt-5">
                   <label for="">Product Image 3</label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.jpg" alt="" style="width: 100px; height:auto" id="imgview3">
+                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp" alt="" style="width: 100px; height:auto" id="imgview3">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_3" id="file3" class="form-control"
                       onchange="return fileValidation('file3','image3','imgview3')">
@@ -191,7 +191,7 @@
 
                 <div class="mt-5">
                   <label for="">Product Image 4 </label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.jpg" alt="" style="width: 100px; height:auto" id="imgview4">
+                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp" alt="" style="width: 100px; height:auto" id="imgview4">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_4" id="file4" class="form-control"
                       onchange="return fileValidation('file4','image4','imgview4')">
@@ -304,7 +304,7 @@ setInputFilter(document.getElementById("productQuantity"), function (value) {
         var fileInput = document.getElementById(file);
         
         var filePath = fileInput.value;
-        var allowedExtensions = /(\.jpg|\.png|\.jpeg|\.JPEG)$/i;
+        var allowedExtensions = /(\.jpg|\.png|\.jpeg|\.JPEG|\.webp)$/i;
         if (!allowedExtensions.exec(filePath)) {
             alert('Please upload image files only.');
             fileInput.value = '';

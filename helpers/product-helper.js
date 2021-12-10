@@ -38,7 +38,6 @@ module.exports = {
                 productPrice:productData.productPrice,
               }]
             }).then((result)=>{
-            console.log(result);
             resolve({
               result,
               status: true,
@@ -77,13 +76,11 @@ module.exports = {
    //   delete product
    deleteProduct: (data) => {
     return new Promise(async (resolve, reject) => {
-      console.log("deleting id: "+data);
         await db
         .get()
         .collection(collections.PRODUCT_COLLECTION)
         .deleteOne({ _id: objectId(data) })
         .then((response) => {
-          console.log(response);
           resolve(response);
         });
     });
@@ -147,7 +144,6 @@ module.exports = {
                 })
 
 
-              console.log(result);
               resolve({
                 isProduct,
                 status: true,
@@ -156,8 +152,6 @@ module.exports = {
             })
           } 
           else {
-            console.log(productId);
-            console.log(isProduct);
             //if there is no document of product name
             console.log("No product found...Failed update");
             resolve({
@@ -400,9 +394,6 @@ module.exports = {
           {
             $unwind: "$products"
           },
-          // {
-          //   $unwind: "$products.productVariants"
-          // },
           {
             $project:{
               offerProduct: "$data.offerProduct",
@@ -416,7 +407,6 @@ module.exports = {
           }
         ]).toArray()
 
-        console.log(offerList);
         resolve(offerList)
       })
     },
@@ -495,7 +485,6 @@ module.exports = {
     getCategoryOffer:()=>{
       return new Promise(async (resolve,reject)=>{
         let offerList = await db.get().collection(collections.CATEGORY_OFFER).find({}).toArray()
-        console.log(offerList);
         resolve(offerList)
       })
     },
@@ -525,7 +514,7 @@ module.exports = {
           data.expiryDate = new Date(data.expiryDate)
           data.couponCode = data.couponCode.toUpperCase()
 
-          console.log(data);
+      
 
           let couponExist = await db.get().collection(collections.COUPON_OFFER).findOne({"couponCode": data.couponCode})
   
@@ -547,7 +536,7 @@ module.exports = {
     getCouponOffer:()=>{
       return new Promise(async (resolve,reject)=>{
         let couponList = await db.get().collection(collections.COUPON_OFFER).find({}).toArray()
-        console.log(couponList);
+       
         resolve(couponList)
       })
     },
@@ -580,7 +569,7 @@ module.exports = {
             }
           })
         if(isUsed){
-          console.log(isUsed);
+          
           console.log("this coupon is already used by user");
           resolve({isUsed: true})
         }
@@ -633,7 +622,7 @@ module.exports = {
         else{
           console.log("Cat Offer Doesn't exist");
         }
-        console.log(today);
+        
 
         // checking for product offer expiry
         let proOfferExist = await db.get().collection(collections.PRODUCT_OFFER).find({
@@ -881,7 +870,7 @@ module.exports = {
             }
           }
         ]).toArray()
-        console.log(stockReport);
+        
         resolve(stockReport)
       })
     },

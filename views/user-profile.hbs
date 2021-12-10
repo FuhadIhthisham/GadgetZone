@@ -1,302 +1,302 @@
-<div class="container rounded bg-white mt-5 mb-5">
-  <div class="row">
-    <div class="col-md-3 border-right">
-      <div
-        class="d-flex flex-column align-items-center text-center mt-2 p-3 py-5 profile-div"
-      >
-        <img
-          class="rounded-circle mt-5"
-          width="150px"
-          src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-        />
-        <span class="font-weight-bold">{{user.firstName}} {{user.lastName}}</span>
-        <span class="text-black-50">{{user.email}}</span>
-        <span>
-          <a href="/edit-profile" class="text-primary" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
-              class="fas fa-user-edit mt-4"
-            ></i></a>
-        </span>
-        <span class="mt-4">
-          <a href="/my-orders" class="text-dark text-decoration-none">
-            My Orders <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
-          </a>
-        </span>
-        <span class="my-2">
-          <a href="" class="text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@mdo">
-            Change Password <i class="fa fa-user-circle" aria-hidden="true"></i>
-          </a>
-        </span>
-      </div>
-    </div>
-    
-    <div class="col-md-9 border-right">
-      <div class="p-3 col-md-8 centered mb-5">
-        {{#if profileMsg}}
-          <div
-            class="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <strong>{{profileMsg}}</strong>
-          </div>
-
-        {{/if}}
-
-        {{#if changePassMsg}}
-          <div
-            class="alert alert-danger alert-dismissible fade show"
-            role="alert"
-          >
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <strong>{{changePassMsg}}</strong>
-          </div>
-
-        {{/if}}
-
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h3 class="text-dark p-3 text-center font-weight-bold">Profile</h3>
-        </div>
-        <div class="row mt-2 profile-view">
-          <div class="col-md-6"><label class="labels">First Name</label><input
-              type="text"
-              class="form-control"
-              placeholder="first name"
-              value="{{user.firstName}}"
-              disabled
-            /></div>
-          <div class="col-md-6 mt-1"><label class="labels">Last Name</label><input
-              type="text"
-              class="form-control"
-              value="{{user.lastName}}"
-              placeholder=""
-              disabled
-            /></div>
-          <div class="col-md-12 mt-1"><label class="labels">Mobile Number</label><input
-              type="text"
-              class="form-control"
-              placeholder="enter phone number"
-              value="{{user.phone}}"
-              disabled
-            /></div>
-          <div class="col-md-12 mt-1"><label class="labels">Email ID</label><input
-              type="text"
-              class="form-control"
-              placeholder="ihthisham.v@gmail.com"
-              value="{{user.email}}"
-              disabled
-            /></div>
+  <div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+      <div class="col-md-3 border-right">
+        <div
+          class="d-flex flex-column align-items-center text-center mt-2 p-3 py-5 profile-div"
+        >
+          <img
+            class="rounded-circle mt-5"
+            width="150px"
+            src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+          />
+          <span class="font-weight-bold">{{user.firstName}} {{user.lastName}}</span>
+          <span class="text-black-50">{{user.email}}</span>
+          <span>
+            <a href="/edit-profile" class="text-primary" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
+                class="fas fa-user-edit mt-4"
+              ></i></a>
+          </span>
+          <span class="mt-4">
+            <a href="/my-orders" class="text-dark text-decoration-none">
+              My Orders <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+            </a>
+          </span>
+          <span class="my-2">
+            <a href="" class="text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@mdo">
+              Change Password <i class="fa fa-user-circle" aria-hidden="true"></i>
+            </a>
+          </span>
         </div>
       </div>
-      <div class="p-3 col-md-8 centered mb-5">
-        <div class="p-md-3">
-          <p
-            class="bg-gray-300 font-weight-bold mt-2"
-            style="font-size: 25px;"
-          >Saved Addresses
-            <a
-              class="btn btn-outline-primary btn-sm ms-3 px-1"
-              href="/add-address"
-              style="font-size: 13px;"
-            >Add New</a>
-          </p>
-          {{#each resp}}
-          <div class="card mt-4">
-            <p class="p-1">
-              <span
-                class="p-1"
-                style="background-color: rgba(56, 59, 59, 0.37); font-size: 13px;"
-              > {{this.address.addressType}} </span>
+      
+      <div class="col-md-9 border-right">
+        <div class="p-3 col-md-8 centered mb-5">
+          {{#if profileMsg}}
+            <div
+              class="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>{{profileMsg}}</strong>
+            </div>
+
+          {{/if}}
+
+          {{#if changePassMsg}}
+            <div
+              class="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <strong>{{changePassMsg}}</strong>
+            </div>
+
+          {{/if}}
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3 class="text-dark p-3 text-center font-weight-bold">Profile</h3>
+          </div>
+          <div class="row mt-2 profile-view">
+            <div class="col-md-6"><label class="labels">First Name</label><input
+                type="text"
+                class="form-control"
+                placeholder="first name"
+                value="{{user.firstName}}"
+                disabled
+              /></div>
+            <div class="col-md-6 mt-1"><label class="labels">Last Name</label><input
+                type="text"
+                class="form-control"
+                value="{{user.lastName}}"
+                placeholder=""
+                disabled
+              /></div>
+            <div class="col-md-12 mt-1"><label class="labels">Mobile Number</label><input
+                type="text"
+                class="form-control"
+                placeholder="enter phone number"
+                value="{{user.phone}}"
+                disabled
+              /></div>
+            <div class="col-md-12 mt-1"><label class="labels">Email ID</label><input
+                type="text"
+                class="form-control"
+                placeholder="ihthisham.v@gmail.com"
+                value="{{user.email}}"
+                disabled
+              /></div>
+          </div>
+        </div>
+        <div class="p-3 col-md-8 centered mb-5">
+          <div class="p-md-3">
+            <p
+              class="bg-gray-300 font-weight-bold mt-2"
+              style="font-size: 25px;"
+            >Saved Addresses
+              <a
+                class="btn btn-outline-primary btn-sm ms-3 px-1"
+                href="/add-address"
+                style="font-size: 13px;"
+              >Add New</a>
             </p>
-            
-            <div class="card-body px-1 my-0 py-0">
-              <p class="fw-bold">{{this.address.name}} {{this.address.phone}}</p>
-              <p class="text-muted" style="font-size: 14px;">
-                {{this.address.houseNumber}} {{this.address.streetAddress}}
-                <br />
-                {{this.address.pincode}}
+            {{#each resp}}
+            <div class="card mt-4">
+              <p class="p-1">
+                <span
+                  class="p-1"
+                  style="background-color: rgba(56, 59, 59, 0.37); font-size: 13px;"
+                > {{this.address.addressType}} </span>
               </p>
-              <div class="text-right text-secondary me-3 mt-0">
-                {{this.address.district}},&nbsp;{{this.address.state}}
-              </div>
-              <div class="text-center mt-0">
-                <a href="/edit-address?id={{this.address.addressId}}" class="">
-                  <i class="fas fa-edit text-primary"></i>
-                </a>
-                <a onclick="deleteAddress('{{this.address.addressId}}')">
-                  <i class="fas fa-trash text-danger ms-4"></i>
-                </a>
+              
+              <div class="card-body px-1 my-0 py-0">
+                <p class="fw-bold">{{this.address.name}} {{this.address.phone}}</p>
+                <p class="text-muted" style="font-size: 14px;">
+                  {{this.address.houseNumber}} {{this.address.streetAddress}}
+                  <br />
+                  {{this.address.pincode}}
+                </p>
+                <div class="text-right text-secondary me-3 mt-0">
+                  {{this.address.district}},&nbsp;{{this.address.state}}
+                </div>
+                <div class="text-center mt-0">
+                  <a href="/edit-address?id={{this.address.addressId}}" class="">
+                    <i class="fas fa-edit text-primary"></i>
+                  </a>
+                  <a onclick="deleteAddress('{{this.address.addressId}}')">
+                    <i class="fas fa-trash text-danger ms-4"></i>
+                  </a>
+                </div>
               </div>
             </div>
+            {{/each}}
           </div>
-          {{/each}}
         </div>
       </div>
+    </div>
+  </div>
+
+
+
+{{!--EDIT PROFILE MODAL --}}
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <form action="/edit-profile" method="post" id="editProfileForm" enctype="multipart/form-data">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+
+          <label class="labels">Profile Pic <br> </label>
+          <input type="file" name="profilePic" id="">
+
+
+
+            <div class="">
+              <label class="labels">First Name</label><input
+                type="text"
+                name="firstName"
+                class="form-control"
+                value="{{user.firstName}}"
+                placeholder="Last Name"
+              />
+            </div>
+            <div class="">
+              <label class="labels">Last Name</label><input
+                type="text"
+                name="lastName"
+                value="{{user.lastName}}"
+                class="form-control"
+                placeholder="Last Name"
+              />
+            </div>
+            <div class="">
+              <label class="labels">Mobile Number</label><input
+                type="text"
+                name="phone"
+                value="{{user.phone}}"
+                class="form-control"
+                placeholder="Phone"
+                id="phonenumber"
+              />
+            </div>
+
+            <div class="">
+              <label class="labels">Email</label><input
+                type="text"
+                name="email"
+                value="{{user.email}}"
+                id="email"
+                class="form-control"
+                placeholder="Phone"
+              />
+            </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </form>
     </div>
   </div>
 </div>
 
 
 
-{{!--EDIT PROFILE MODAL --}}
-              <div
-                class="modal fade"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <form action="/edit-profile" method="post" id="editProfileForm" enctype="multipart/form-data">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header bg-secondary">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-
-                      <label class="labels">Profile Pic <br> </label>
-                      <input type="file" name="profilePic" id="">
-
-
-
-                        <div class="">
-                          <label class="labels">First Name</label><input
-                            type="text"
-                            name="firstName"
-                            class="form-control"
-                            value="{{user.firstName}}"
-                            placeholder="Last Name"
-                          />
-                        </div>
-                        <div class="">
-                          <label class="labels">Last Name</label><input
-                            type="text"
-                            name="lastName"
-                            value="{{user.lastName}}"
-                            class="form-control"
-                            placeholder="Last Name"
-                          />
-                        </div>
-                        <div class="">
-                          <label class="labels">Mobile Number</label><input
-                            type="text"
-                            name="phone"
-                            value="{{user.phone}}"
-                            class="form-control"
-                            placeholder="Phone"
-                            id="phonenumber"
-                          />
-                        </div>
-
-                        <div class="">
-                          <label class="labels">Email</label><input
-                            type="text"
-                            name="email"
-                            value="{{user.email}}"
-                            id="email"
-                            class="form-control"
-                            placeholder="Phone"
-                          />
-                        </div>
-                      
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >Cancel</button>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                  </div>
-                </form>
-                </div>
-              </div>
-            </div>
-
-
-
 {{!-- CHANGE PASSWORD MODAL --}}
-              <div
-                class="modal fade"
-                id="exampleModal2"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <form action="/change-password" method="post" id="changePassForm">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header bg-secondary">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
+    <div
+      class="modal fade"
+      id="exampleModal2"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <form action="/change-password" method="post" id="changePassForm">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-secondary">
+            <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
 
-                        <div class="">
-                          <label class="labels">Current Password</label><input
-                            type="password"
-                            name="currPass"
-                            class="form-control"
-                          />
-                        </div>
-                        <div class="">
-                          <label class="labels">New Password</label><input
-                            type="password"
-                            name="newPass"
-                            class="form-control"
-                            id="newPassword"
-                          />
-                        </div>
-                        <div class="">
-                          <label class="labels">Type New Password Again</label><input
-                            type="password"
-                            name="retryNewPass"
-                            class="form-control"
-                            id="retryNewPass"
-                          />
-                        </div>
-                      
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >Cancel</button>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                  </div>
-                </form>
-                </div>
+              <div class="">
+                <label class="labels">Current Password</label><input
+                  type="password"
+                  name="currPass"
+                  class="form-control"
+                />
               </div>
-            </div>
+              <div class="">
+                <label class="labels">New Password</label><input
+                  type="password"
+                  name="newPass"
+                  class="form-control"
+                  id="newPassword"
+                />
+              </div>
+              <div class="">
+                <label class="labels">Type New Password Again</label><input
+                  type="password"
+                  name="retryNewPass"
+                  class="form-control"
+                  id="retryNewPass"
+                />
+              </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
 
 
 <script

@@ -173,7 +173,7 @@ router.post("/delete-subcategory", verifyLogin, function (req, res, next) {
         for (i = 0; i < prod.length; i++) {
           for (let j = 1; j <= 4; j++) {
             fs.unlink(
-              `./public/images/product-images/${prod[i]._id}_${j}.jpg`,
+              `./public/images/product-images/${prod[i]._id}_${j}.webp`,
               (err) => {
                 if (err) {
                   console.log(err);
@@ -205,7 +205,7 @@ router.post("/delete-category", verifyLogin, function (req, res, next) {
         for (i = 0; i < prod.length; i++) {
           for (let j = 1; j <= 4; j++) {
             fs.unlink(
-              `./public/images/product-images/${prod[i]._id}_${j}.jpg`,
+              `./public/images/product-images/${prod[i]._id}_${j}.webp`,
               (err) => {
                 if (err) {
                   console.log(err);
@@ -277,7 +277,7 @@ router.post("/delete-brand/", verifyLogin, function (req, res, next) {
         for (i = 0; i < prod.length; i++) {
           for (let j = 1; j <= 4; j++) {
             fs.unlink(
-              `./public/images/product-images/${prod[i]._id}_${j}.jpg`,
+              `./public/images/product-images/${prod[i]._id}_${j}.webp`,
               (err) => {
                 if (err) {
                   console.log(err);
@@ -375,22 +375,22 @@ router.post("/add-product", verifyLogin, function (req, res, next) {
 
         // Moving Image 1
         prodImg1.mv(
-          `./public/images/product-images/${proid}/${variantId}_1.jpg`,
+          `./public/images/product-images/${proid}/${variantId}_1.webp`,
           (err, done) => {
             if (!err) {
               // Moving Image 2
               prodImg2.mv(
-                `./public/images/product-images/${proid}/${variantId}_2.jpg`,
+                `./public/images/product-images/${proid}/${variantId}_2.webp`,
                 (err, done) => {
                   if (!err) {
                     // Moving Image 3
                     prodImg3.mv(
-                      `./public/images/product-images/${proid}/${variantId}_3.jpg`,
+                      `./public/images/product-images/${proid}/${variantId}_3.webp`,
                       (err, done) => {
                         if (!err) {
                           // Moving Image 4
                           prodImg4.mv(
-                            `./public/images/product-images/${proid}/${variantId}_4.jpg`,
+                            `./public/images/product-images/${proid}/${variantId}_4.webp`,
                             (err, done) => {
                               if (!err) {
                                 console.log("Images Added Success.........");
@@ -494,7 +494,7 @@ router.post("/delete-product", verifyLogin, function (req, res, next) {
 //         // To delete each product images
 //         for (i = 1; i <= 4; i++) {
 //           fs.unlink(
-//             `./public/images/product-images/${req.body.id}_${i}.jpg`,
+//             `./public/images/product-images/${req.body.id}_${i}.webp`,
 //             (err) => {
 //               if (err) {
 //                 console.log(err);
@@ -553,11 +553,11 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
 
     if (prodImg1) {
       fs.unlink(
-        `./public/images/product-images/${prodId}/${varId}_1.jpg`,
+        `./public/images/product-images/${prodId}/${varId}_1.webp`,
         (err, done) => {
           if (!err) {
             prodImg1.mv(
-              `./public/images/product-images/${prodId}/${varId}_1.jpg`,
+              `./public/images/product-images/${prodId}/${varId}_1.webp`,
               (err, done) => {
                 console.log("Image 1 updated.....");
               }
@@ -570,11 +570,11 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
     }
     if (prodImg2) {
       fs.unlink(
-        `./public/images/product-images/${prodId}/${varId}_2.jpg`,
+        `./public/images/product-images/${prodId}/${varId}_2.webp`,
         (err, done) => {
           if (!err) {
             prodImg2.mv(
-              `./public/images/product-images/${prodId}/${varId}_2.jpg`,
+              `./public/images/product-images/${prodId}/${varId}_2.webp`,
               (err, done) => {
                 console.log("Image 2 updated.....");
               }
@@ -587,11 +587,11 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
     }
     if (prodImg3) {
       fs.unlink(
-        `./public/images/product-images/${prodId}/${varId}_3.jpg`,
+        `./public/images/product-images/${prodId}/${varId}_3.webp`,
         (err, done) => {
           if (!err) {
             prodImg3.mv(
-              `./public/images/product-images/${prodId}/${varId}_3.jpg`,
+              `./public/images/product-images/${prodId}/${varId}_3.webp`,
               (err, done) => {
                 console.log("Image 3 updated.....");
               }
@@ -604,11 +604,11 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
     }
     if (prodImg4) {
       fs.unlink(
-        `./public/images/product-images/${prodId}/${varId}_4.jpg`,
+        `./public/images/product-images/${prodId}/${varId}_4.webp`,
         (err, done) => {
           if (!err) {
             prodImg4.mv(
-              `./public/images/product-images/${prodId}/${varId}_4.jpg`,
+              `./public/images/product-images/${prodId}/${varId}_4.webp`,
               (err, done) => {
                 console.log("Image 4 updated.....");
               }

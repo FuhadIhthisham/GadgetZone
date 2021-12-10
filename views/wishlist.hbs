@@ -34,11 +34,6 @@
           </div>
         {{/if}}
       <div class="col-lg-9">
-        
-
-
-
-
         <div class="row">
           {{#each wishlists}}
             <div class="col-lg-4 col-md-6 col-sm-6">
@@ -46,7 +41,7 @@
                 <div
                   class="product__item__pic set-bg"
                   style="cursor: pointer;"
-                  data-setbg="/images/product-images/{{this.product._id}}/{{this.product.productVariants.0.variantId}}_1.jpg"
+                  data-setbg="/images/product-images/{{this.product._id}}/{{this.product.productVariants.0.variantId}}_1.webp"
                 >
                   <ul class="product__hover">
                     <li><a onclick="removeWishlist('{{this.product._id}}','{{../user._id}}')"><img
@@ -87,7 +82,6 @@
                     <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.product.productVariants.0.productPrice}}</span>
                 {{else}}
                     <h5> ₹{{this.product.productVariants.0.productPrice}}</h5>
-                    {{!-- <span class="text-decoration-line-through"> ₹{{this.productVariants.0.productPrice}}</span> --}}
                 {{/if}}
                 </div>
               </div>

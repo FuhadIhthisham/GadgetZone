@@ -92,7 +92,6 @@ module.exports = {
       } else {
         //if thereis no document of brand, add brand
         await db.get().collection(collections.BRAND_COLLECTION).insertOne(brandData).then((result)=>{
-          console.log(result);
           resolve({
             result,
             status: true,
@@ -119,7 +118,6 @@ module.exports = {
       .collection(collections.USER_COLLECTION)
       .updateOne({ _id: objectId(userId) }, { $set: { userBlocked: true } })
       .then((data) => {
-        console.log(response);
         resolve(data);
       });
   });
@@ -132,7 +130,6 @@ module.exports = {
       .collection(collections.USER_COLLECTION)
       .updateOne({ _id: objectId(userId) }, { $set: { userBlocked: false } })
       .then((data) => {
-        console.log(response);
         resolve(data);
       });
   });
@@ -194,7 +191,6 @@ deliveryStatusUpdate:(status,orderId,proId)=>{
           "products.$.delivered": false,
         }
       }).then((response)=>{
-          console.log(response);
         })
       }
       resolve(true)
@@ -270,8 +266,6 @@ getTotalProducts:()=>{
         $count: "prdouctsCount"
       }
     ]).toArray()
-
-    console.log("Total Products:>>>>>>>>>"+totalProducts[0].prdouctsCount);
     resolve(totalProducts[0].prdouctsCount)
   })
 },
@@ -300,8 +294,6 @@ getDeliveredOrders:()=>{
 getTotalUsers:()=>{
   return new Promise(async (resolve,reject)=>{
     let totalUsers = await db.get().collection(collections.USER_COLLECTION).find({}).count()
-
-    console.log('Total users Count: '+totalUsers);
     resolve(totalUsers)
   })
 },
@@ -428,7 +420,6 @@ getTopSelling:()=>{
         $limit: 5
       }
     ]).toArray()
-    console.log("top selling");
     resolve(topSelling)
   })
 },
