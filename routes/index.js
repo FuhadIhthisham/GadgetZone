@@ -10,8 +10,8 @@ const paypal = require("paypal-rest-sdk");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
-  client_id: "ASXKDw5IGYcTR1oV9aYV-oG9ZlUN5M2rwIWBVsQTK713O5tRp7iq0CQRnfQieWzWeDvabX57PRhVhDPy",
-  client_secret: "ECUMa0lsTfQvU3jRP_21gg2MT8L4yElZv3Ppb-f0XnqBeSiCTjLx8-Iv4U9ZI1MVzKdeMa1XKofrJgm2",
+  client_id: process.env.CLIENT,
+  client_secret: process.env.SECRET,
 });
 
 var objectId = require("mongodb").ObjectId;
