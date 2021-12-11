@@ -266,7 +266,7 @@ getTotalProducts:()=>{
         $count: "prdouctsCount"
       }
     ]).toArray()
-    resolve(totalProducts[0].prdouctsCount)
+    resolve(totalProducts[0]?.prdouctsCount)
   })
 },
 

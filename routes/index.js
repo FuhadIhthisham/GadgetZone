@@ -10,10 +10,8 @@ const paypal = require("paypal-rest-sdk");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
-  client_id:
-    "ASXKDw5IGYcTR1oV9aYV-oG9ZlUN5M2rwIWBVsQTK713O5tRp7iq0CQRnfQieWzWeDvabX57PRhVhDPy",
-  client_secret:
-    "ECUMa0lsTfQvU3jRP_21gg2MT8L4yElZv3Ppb-f0XnqBeSiCTjLx8-Iv4U9ZI1MVzKdeMa1XKofrJgm2",
+  client_id: "ASXKDw5IGYcTR1oV9aYV-oG9ZlUN5M2rwIWBVsQTK713O5tRp7iq0CQRnfQieWzWeDvabX57PRhVhDPy",
+  client_secret: "ECUMa0lsTfQvU3jRP_21gg2MT8L4yElZv3Ppb-f0XnqBeSiCTjLx8-Iv4U9ZI1MVzKdeMa1XKofrJgm2",
 });
 
 var objectId = require("mongodb").ObjectId;
@@ -22,9 +20,9 @@ const allStates = require("../config/lists").allStates;
 
 // twilio API
 
-const accountSid = ""; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
-const authToken = "";
-const serviceSid = "";
+const accountSid = process.env.accountSid; ///// REMOVE THESE LINES BEFORE PUSING TO GIT
+const authToken = process.env.authToken;
+const serviceSid = process.env.serviceSid;
 const client = require("twilio")(accountSid, authToken);
 
 /* GET home page. */
@@ -678,8 +676,8 @@ router.get("/place-order", verifyBlock, async function (req, res, next) {
             payment_method: "paypal",
           },
           redirect_urls: {
-            return_url: "http://localhost:3000/success",
-            cancel_url: "http://localhost:3000/cancel",
+            return_url: "https://www.gadgetzone.site/success",
+            cancel_url: "https://www.gadgetzone.site/cancel",
           },
           transactions: [
             {
@@ -792,8 +790,8 @@ router.get("/place-order-buynow", verifyBlock, async function (req, res, next) {
             payment_method: "paypal",
           },
           redirect_urls: {
-            return_url: "http://localhost:3000/success",
-            cancel_url: "http://localhost:3000/cancel",
+            return_url: "https://www.gadgetzone.site/success",
+            cancel_url: "https://www.gadgetzone.site/cancel",
           },
           transactions: [
             {
