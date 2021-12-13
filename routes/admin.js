@@ -10,8 +10,8 @@ const fs = require("fs");
 const { response, json } = require("express");
 
 const adminData = {
-  email: "fuhad@mail.com",
-  pass: "12345",
+  email: process.env.adminEmail,
+  pass: process.env.adminPass,
 };
 /* GET admin dashboard. */
 router.get("/", verifyLogin,async function (req, res, next) {
