@@ -133,6 +133,10 @@ router.get("/logout", function (req, res, next) {
 // category management
 var catMsg;
 router.get("/category", verifyLogin, function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   adminHelper.getCategory().then((allCategory) => {
     res.render("admin/category", {
       admin: true,
@@ -233,6 +237,10 @@ router.post("/delete-category", verifyLogin, function (req, res, next) {
 // Brand management
 var brandMsg;
 router.get("/brand", verifyLogin, function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   adminHelper.getBrand().then((allBrand) => {
     res.render("admin/brand-manage", {
       admin: true,
@@ -437,6 +445,10 @@ router.post("/add-product", verifyLogin, function (req, res, next) {
 
 // find subcategory
 router.get("/find-subcategory", verifyLogin, function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   productHelper.getSubcategory(req.query).then((response) => {
     res.send(response);
   });
@@ -444,6 +456,10 @@ router.get("/find-subcategory", verifyLogin, function (req, res, next) {
 
 // View products
 router.get("/view-product", verifyLogin, function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   productHelper.getAllProducts().then((response) => {
     console.log(response);
     if (response) {
@@ -516,6 +532,10 @@ router.post("/delete-product", verifyLogin, function (req, res, next) {
 // get edit product page
 var productEditMsg;
 router.get("/edit-product/", verifyLogin, function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   productHelper.getOneProduct(req.query.id).then((result) => {
     if (result) {
       adminHelper.getBrand().then((allBrand) => {
@@ -659,6 +679,10 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
 
 // Get view user page
 router.get("/view-users", verifyLogin, (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   adminHelper.getUsers().then((response) => {
     if (response) {
       res.render("admin/view-users", {
@@ -701,6 +725,10 @@ router.post("/unblock-user", verifyLogin, (req, res) => {
 
 // Get blocked users list page
 router.get("/blocked-users", verifyLogin, (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   adminHelper.getBlockedUsers().then((response) => {
     console.log(response);
     if (response) {
@@ -716,6 +744,10 @@ router.get("/blocked-users", verifyLogin, (req, res, next) => {
 
 // BANNER MANAGEMENT
 router.get("/manage-banner", verifyLogin, async (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let allBanner = await adminHelper.getBanner();
   res.render("admin/manage-banner", {
     title: "Banner Management",
@@ -778,6 +810,10 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
 
 // Get order management page
 router.get("/manage-orders", verifyLogin, (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   adminHelper.viewOrders().then((response) => {
     if (response) {
       console.log(response);
@@ -807,6 +843,10 @@ router.post("/status-update", verifyLogin, (req, res) => {
 });
 
 router.get("/ordered-products", verifyLogin, (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let orderId = req.query.orderId;
   let userId = req.query.userId;
   let proId = req.query.proId;
@@ -824,6 +864,10 @@ router.get("/ordered-products", verifyLogin, (req, res, next) => {
 
 // Get product offer management page
 router.get("/product-offer", verifyLogin,async (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let offerList = await productHelper.getProductOffer()
   let allProducts = await productHelper.getAllProducts()
 
@@ -854,6 +898,10 @@ router.post("/delete-product-offer", verifyLogin,async (req, res, next) => {
 
 // Get category offer management page
 router.get("/category-offer", verifyLogin,async (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let allCategory = await adminHelper.getCategory()
   let offerList = await productHelper.getCategoryOffer()
   res.render("admin/category-offer", {
@@ -881,6 +929,10 @@ router.post("/delete-category-offer", verifyLogin,async (req, res, next) => {
 
 // Get coupon offer management page
 router.get("/coupon-offer", verifyLogin,async (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let couponList = await productHelper.getCouponOffer()
   res.render("admin/coupon-offer", {
     title: "Coupon Management",
@@ -917,6 +969,10 @@ router.post("/delete-coupon", verifyLogin,async (req, res, next) => {
 
 // Get sales report
 router.get("/sales-report", verifyLogin,async (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let fromDate = new Date(req.query.fromDate)
   let tillDate = new Date(req.query.tillDate)
   let salesReport = await productHelper.getSalesReport(fromDate,tillDate)
@@ -930,6 +986,10 @@ router.get("/sales-report", verifyLogin,async (req, res, next) => {
 
 // Get stock report
 router.get("/stock-report", verifyLogin,async (req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let stockReport = await productHelper.getStockReport()
   res.render("admin/stock-report", {
     title: "Sales Report",
@@ -942,8 +1002,13 @@ router.get("/stock-report", verifyLogin,async (req, res, next) => {
 
 // Get user report
 router.get("/user-report", verifyLogin,async (req, res, next) => {
-  let userReport = await adminHelper.getUserReport()
 
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  
+  let userReport = await adminHelper.getUserReport()
 
   res.render("admin/user-report", {
     title: "User Report",

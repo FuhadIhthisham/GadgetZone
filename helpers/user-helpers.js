@@ -258,6 +258,13 @@ module.exports = {
     })
   },
 
+  getSearchProduct:(data)=>{
+    return new Promise(async(resolve,reject)=>{
+      let result = await db.get().collection(collections.PRODUCT_COLLECTION).find({productName:{$regex: new RegExp('^'+data+'.*','i')}}).toArray()
+      resolve(result)
+    })
+  },
+
   removeWishlist:(proId,userId)=>{
     return new Promise(async(resolve,reject)=>{
       await db.get().collection(collections.USER_WISHLIST).updateOne(

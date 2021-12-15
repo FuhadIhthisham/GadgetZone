@@ -207,13 +207,11 @@ function addToCart(proId,subTotal){
 
         const Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: 'bottom-end',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1500,
           timerProgressBar: true,
           didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
         Toast.fire({
@@ -228,13 +226,11 @@ function addToCart(proId,subTotal){
 
         const Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: 'bottom-end',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1500,
           timerProgressBar: true,
           didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
         Toast.fire({
@@ -258,13 +254,11 @@ function addToWishlist(proId,userId){
       if(res.status){ 
         const Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: 'bottom-end',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1500,
           timerProgressBar: true,
           didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
         Toast.fire({
@@ -276,13 +270,11 @@ function addToWishlist(proId,userId){
       else if(res.productExist){
         const Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: 'bottom-end',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1500,
           timerProgressBar: true,
           didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
         Toast.fire({

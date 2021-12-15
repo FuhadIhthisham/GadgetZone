@@ -874,4 +874,53 @@ module.exports = {
         resolve(stockReport)
       })
     },
+
+    getBestSelling:()=>{
+      return new Promise(async(resolve,reject)=>{
+        let topSelling = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              item: "$products.item",
+              quantity: "$products.quantity",
+              subTotal: "$products.subTotal"
+            }
+          },
+          {
+            $lookup: {
+              from: collections.PRODUCT_COLLECTION,
+              localField: "item",
+              foreignField: "_id",
+              as: "products"
+            }
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              quantity:1,
+              products: "$products",
+              productName: "$products.productName"
+            }
+          },
+          {
+            $group:{
+              _id: "$productName",
+              totalQty: {$sum: "$quantity"},
+              products: {"$first": "$products"},
+            }
+          },
+          {
+            $sort:{totalQty:-1}
+          },
+          {
+            $limit: 8
+          }
+        ]).toArray()
+        resolve(topSelling)
+      })
+    },
 }
