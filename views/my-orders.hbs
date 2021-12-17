@@ -15,7 +15,7 @@
             {{#each allOrders}}
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-1"><img src="/images/product-images/{{this.product._id}}/{{this.product.productVariants.variantId}}_1.webp" class="media-object img-thumbnail" /></div>
+                    <div class="col-md-1"><img src="http://3.145.64.18/images/product-images/{{this.product._id}}/{{this.product.productVariants.variantId}}_1.webp" class="media-object img-thumbnail" /></div>
                     <div class="col-md-11">
                         <div class="row">
                             
@@ -29,7 +29,9 @@
                                 <span>
                                     Quantity : {{this.quantity}}
                                         <br>
-                                    cost: ₹{{this.subTotal}} <br /> <br>
+                                    cost: ₹{{this.subTotal}} <br>
+                                    Payment Method: {{this.paymentMethod}}
+                                     <br> <br>
                                 </span>
                                 <div>
                                     <span class="fw-bold">

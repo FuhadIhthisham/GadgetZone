@@ -724,8 +724,8 @@ router.get("/place-order", verifyBlock, async function (req, res, next) {
             payment_method: "paypal",
           },
           redirect_urls: {
-            return_url: "https://www.gadgetzone.site/success",
-            cancel_url: "https://www.gadgetzone.site/cancel",
+            return_url: "http://www.gadgetzone.site/success",
+            cancel_url: "http://www.gadgetzone.site/cancel",
           },
           transactions: [
             {
@@ -842,8 +842,8 @@ router.get("/place-order-buynow", verifyBlock, async function (req, res, next) {
             payment_method: "paypal",
           },
           redirect_urls: {
-            return_url: "https://www.gadgetzone.site/success",
-            cancel_url: "https://www.gadgetzone.site/cancel",
+            return_url: "http://www.gadgetzone.site/success",
+            cancel_url: "http://www.gadgetzone.site/cancel",
           },
           transactions: [
             {

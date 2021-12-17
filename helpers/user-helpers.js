@@ -260,7 +260,7 @@ module.exports = {
 
   getSearchProduct:(data)=>{
     return new Promise(async(resolve,reject)=>{
-      let result = await db.get().collection(collections.PRODUCT_COLLECTION).find({productName:{$regex: new RegExp('^'+data+'.*','i')}}).toArray()
+      let result = await db.get().collection(collections.PRODUCT_COLLECTION).find({productName:{$regex: new RegExp(data+'.*','i')}}).toArray()
       resolve(result)
     })
   },
@@ -684,6 +684,7 @@ module.exports = {
             delivered: "$products.delivered",
             dateISO: "$dateISO",
             date: "$date",
+            paymentMethod: "$paymentMethod",
             deliveryDetails: "$deliveryDetails"
           }
         },
@@ -706,6 +707,7 @@ module.exports = {
             deliveryDetails:1,
             cancelled:1,
             delivered:1,
+            paymentMethod:1,
             product: {
               $arrayElemAt: ["$products",0]
             }

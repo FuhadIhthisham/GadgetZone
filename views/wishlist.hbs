@@ -41,7 +41,7 @@
                 <div
                   class="product__item__pic set-bg"
                   style="cursor: pointer;"
-                  data-setbg="/images/product-images/{{this.product._id}}/{{this.product.productVariants.0.variantId}}_1.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this.product._id}}/{{this.product.productVariants.0.variantId}}_1.webp"
                 >
                   <ul class="product__hover">
                     <li><a onclick="removeWishlist('{{this.product._id}}','{{../user._id}}')"><img
@@ -71,11 +71,6 @@
                    <h6>{{this.product.productName}}</h6>
               <h6 class="text-secondary mt-2">{{this.product.productSubcategory}}</h6>
                   <div class="rating">
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star-o"></i>
                   </div>
                   {{#if this.product.productVariants.0.offerPrice}}
                     <h5> ₹{{this.product.productVariants.0.offerPrice}}</h5>
