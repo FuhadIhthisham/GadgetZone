@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "connect-mongo": "^4.6.0",
+    "connect-mongostore": "^0.1.4",
     "cookie-parser": "~1.4.4",
     "cropperjs": "^1.5.12",
     "croppie": "^2.6.5",
