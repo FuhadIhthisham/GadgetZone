@@ -44,6 +44,7 @@ app.use(fileUpload())
 // session middleware
 app.use(session({
   secret: 'key',
+  cookie: {maxAge: 6000000},
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
