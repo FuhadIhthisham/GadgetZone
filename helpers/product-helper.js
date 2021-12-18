@@ -99,6 +99,11 @@ module.exports = {
 
     // Update products
     updateProduct: (productId,productData) => {
+
+      productData.productQuantity = parseInt(productData.productQuantity);
+      productData.landingCost = parseInt(productData.landingCost);
+      productData.productPrice = parseInt(productData.productPrice);
+
       return new Promise(async (resolve, reject) => {
         let isProduct = await db
           .get()
