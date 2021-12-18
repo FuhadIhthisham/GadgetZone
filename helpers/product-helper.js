@@ -8,6 +8,10 @@ const { Collection } = require("mongodb");
 module.exports = {
      // Add product to Database
   addProduct: (productData) => {
+    productData.productQuantity = parseInt(productData.productQuantity);
+    productData.landingCost = parseInt(productData.landingCost);
+    productData.productPrice = parseInt(productData.productPrice);
+    console.log(productData);
     return new Promise(async (resolve, reject) => {
       let variantid = new objectId()
       let isProduct = await db
