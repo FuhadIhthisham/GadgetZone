@@ -49,7 +49,6 @@
 
     var otpnumber =`${first}${second}${third}${fourth}`
     var phoneNumber = document.getElementById("phonenumber").value;
-    console.log("Phone number:::: "+phoneNumber)
 
 $.ajax({
     url:'/otp-verify?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,

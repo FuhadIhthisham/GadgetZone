@@ -43,7 +43,6 @@ router.get("/", verifyLogin, async (req, res, next) => {
   const date = new Date()
   
   await productHelper.checkOfferExpiry(new Date).then((resp)=>{
-    console.log(resp);
   })
 
   let banners = await adminHelper.getBanner();
@@ -110,11 +109,9 @@ router.post("/signup", (req, res, next) => {
   userHelper.userCheck(req.body).then((ress) => {
     let errorMsg = ress.msg;
     if (ress.userExist) {
-      console.log("User exist");
       res.render("signup", { errorMsg });
     } else {
       userSignup = req.body;
-      console.log("not exist");
 
       // sent OTP
       client.verify
@@ -124,9 +121,7 @@ router.post("/signup", (req, res, next) => {
           channel: "sms",
         })
         .then((ress) => {
-          console.log("phone check ress>>>>>>" + ress);
           let signupPhone = req.body.phone;
-          console.log(signupPhone);
           res.render("signupOtp", { signupPhone });
         });
     }
@@ -160,7 +155,6 @@ router.post("/login", (req, res, next) => {
   userHelper.loginUser(req.body).then((response) => {
     if (response.status) {
       if (!response.user.userBlocked) {
-        console.log("login success");
         req.session.user = response.user;
         req.session.user.loggedIn = true;
         res.redirect("/");
@@ -194,9 +188,7 @@ router.post("/phone-verify", function (req, res, next) {
           channel: "sms",
         })
         .then((ress) => {
-          console.log("phone check ress>>>>>>" + ress);
           OtpPhone = phone;
-          console.log(OtpPhone);
           res.render("otp-verify", { OtpPhone });
         });
     } else {
@@ -215,8 +207,6 @@ router.get("/otp-verify", (req, res) => {
   );
   let phoneNumber = req.query.phonenumber;
   let otpNumber = req.query.otpnumber;
-  console.log("phone::::" + phoneNumber);
-  console.log("otp::::" + otpNumber);
   client.verify
     .services(serviceSid)
     .verificationChecks.create({
@@ -227,7 +217,6 @@ router.get("/otp-verify", (req, res) => {
       if (resp.valid) {
         userHelper.phoneCheck(phoneNumber).then((response) => {
           req.session.user = response.user;
-          console.log("session user in otp>>>>> " + req.session.user);
           req.session.user.loggedIn = true;
           let valid = true;
           req.session.mob = null;
@@ -254,9 +243,7 @@ router.get("/resendOtp", (req, res) => {
       channel: "sms",
     })
     .then((ress) => {
-      console.log("phone check ress>>>>>>" + ress);
       let OtpPhone = req.session.mob;
-      console.log(OtpPhone);
       res.render("otp-verify", { OtpPhone });
     });
 });
@@ -289,7 +276,6 @@ router.post("/forgot-pass", function (req, res, next) {
         })
         .then((ress) => {
           OtpPhone = phone;
-          console.log(OtpPhone);
           res.render("forget-otp", { OtpPhone });
         });
     } else {
@@ -309,8 +295,6 @@ router.get("/forgot-otp", (req, res) => {
   let phoneNumber = req.query.phonenumber;
   req.session.mob = phoneNumber;
   let otpNumber = req.query.otpnumber;
-  console.log("phone::::" + phoneNumber);
-  console.log("otp::::" + otpNumber);
   client.verify
     .services(serviceSid)
     .verificationChecks.create({
@@ -319,12 +303,10 @@ router.get("/forgot-otp", (req, res) => {
     })
     .then((resp) => {
       if (resp.valid) {
-        console.log("forgot pass OTP verified ");
         let valid = true;
         res.send(valid);
       } else {
         let valid = false;
-        console.log("OTP  ERRORRRRRRRRRRR!!!!!!!!!!!!!!");
         res.send(valid);
       }
     });
@@ -343,9 +325,7 @@ router.get("/resendotp", (req, res) => {
       channel: "sms",
     })
     .then((ress) => {
-      console.log("phone check ress>>>>>>" + ress);
       let OtpPhone = req.session.mob;
-      console.log(OtpPhone);
       res.render("otp-verify", { OtpPhone });
     });
 });
@@ -356,14 +336,12 @@ router.get("/reset-password", function (req, res, next) {
     "Cache-Control",
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
-  console.log("reset otp>>>>>>>>>>>>>>" + OtpPhone);
   req.session.mob = null;
   res.render("reset-password", { title: "GadgetZone", OtpPhone });
 });
 
 // post resetted password
 router.post("/reset-pass", (req, res, next) => {
-  console.log(req.body);
   userHelper.resetPass(req.body).then((response) => {
     if (response) {
       signupSuccess = "Password Reset Success";
@@ -381,8 +359,6 @@ router.get("/signupOtp", (req, res) => {
   );
   let phoneNumber = req.query.phonenumber;
   let otpNumber = req.query.otpnumber;
-  console.log("phone::::" + phoneNumber);
-  console.log("otp::::" + otpNumber);
   client.verify
     .services(serviceSid)
     .verificationChecks.create({
@@ -393,14 +369,12 @@ router.get("/signupOtp", (req, res) => {
       if (resp.valid) {
         userHelper.addUser(userSignup).then((response) => {
           if (response.status) {
-            console.log("Signup Success");
             let valid = true;
             signupSuccess = "Welcome and Happy Shopping, Signup Success";
             res.send(valid);
           } else {
             let valid = false;
             res.send(valid);
-            console.log("Signup ERRORRRRRRRRRRR!!!!!!!!!!!!!!");
           }
         });
       }
@@ -525,7 +499,6 @@ router.get("/cart", async (req, res, next) => {
   );
   if (req.session?.user?.loggedIn) {
     let products = await userHelper.getCartProducts(req.session.user._id);
-    console.log(products);
     let grandTotal = await userHelper.getGrandTotal(req.session.user._id);
     if (products.length == 0) {
       cartMsg = "Cart is Empty";
@@ -584,13 +557,11 @@ router.post("/delete-cart-product", verifyBlock, (req, res) => {
 // post check coupon offer
 var couponMsg
 router.post("/check-coupon", verifyLogin,async (req, res, next) => {
-  console.log(req.body);
   await productHelper.checkCouponOffer(req.body.code,req.session.user._id).then((resp)=>{
     if(resp.status){
       res.json(resp.couponExist)
     }
     else if(resp.isUsed){
-      console.log("Already Used by user>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<");
       let isUsed = true
       res.json({isUsed})
     }
@@ -612,7 +583,6 @@ router.get("/checkout", verifyBlock, async function (req, res, next) {
   let products = await userHelper.getCartProducts(req.session.user._id);
   if (products.length != 0) {
     let addresses = await userHelper.getAddress(req.session.user._id);
-    console.log(products);
     let grandTotal = await userHelper.getGrandTotal(req.session.user._id);
     grandTotal = grandTotal[0]?.grandTotal;
     res.render("checkout", {
@@ -642,7 +612,6 @@ router.get("/buy-now", verifyBlock, async function (req, res, next) {
   var proId = req.query.proId
   let products = await productHelper.getOneProduct(proId)
     let addresses = await userHelper.getAddress(req.session.user._id);
-    console.log(products);
     res.render("buy-now", {
       title: "GadgetZone",
       user: req.session.user,
@@ -659,7 +628,6 @@ router.post("/add-buynow-address", verifyBlock, function (req, res, next) {
   userHelper.addAddress(req.session.user, req.body).then((resp) => {
     if (resp?.addressExist) {
       checkoutAddressMsg = "Sorry, This Address Already Exists";
-      console.log("address exist");
       res.redirect("/buy-now");
     } else {
       checkoutAddressMsg = "New Address Added";
@@ -714,8 +682,6 @@ router.get("/place-order", verifyBlock, async function (req, res, next) {
       // If payment method is paypal
       else if (req.query.payment == "paypal") {
         req.session.orderDetails = resp;
-        console.log(resp);
-        console.log(grandTotal);
         dollarTotal = (grandTotal / 70).toFixed(2);
         dollarTotal = dollarTotal.toString();
         const create_payment_json = {
@@ -832,8 +798,6 @@ router.get("/place-order-buynow", verifyBlock, async function (req, res, next) {
       // If payment method is paypal
       else if (req.query.payment == "paypal") {
         req.session.orderDetails = resp;
-        console.log(resp);
-        console.log(grandTotal);
         dollarTotal = (grandTotal / 70).toFixed(2);
         dollarTotal = dollarTotal.toString();
         const create_payment_json = {
@@ -903,7 +867,6 @@ router.get("/success", async (req, res) => {
   );
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
-  console.log(dollarTotal);
   const execute_payment_json = {
     payer_id: payerId,
     transactions: [
@@ -920,13 +883,10 @@ router.get("/success", async (req, res) => {
     execute_payment_json,
     function (error, payment) {
       if (error) {
-        console.log(error.response);
         throw error;
       } else {
-        console.log(JSON.stringify(payment));
 
         userHelper.changePaymentStatus(req.session.orderDetails,isBuyNow,code,req.session.user._id).then(() => {
-          console.log("Payment Success");
           res.redirect("/order-placed");
         });
       }
@@ -943,20 +903,15 @@ router.get("/cancel", (req, res) => {
 });
 
 router.post("/verify-payment", verifyBlock, function (req, res, next) {
-  console.log(req.body);
-  console.log(code+" this is code>>>>>>>>>>>>>>>>>");
   let orderDetails = req.session.orderDetails;
-  console.log(orderDetails);
   userHelper
     .verifyPayment(req.body)
     .then(() => {
       userHelper.changePaymentStatus(orderDetails,isBuyNow,code).then(() => {
-        console.log("Payment Success");
         res.json({ status: true });
       });
     })
     .catch((err) => {
-      console.log(err);
       res.json({ status: false });
     });
 });
@@ -1082,7 +1037,6 @@ router.post("/change-password", verifyBlock, function (req, res, next) {
       res.redirect("/user-profile");
     } else {
       changePassMsg = resp.changePassMsg;
-      console.log("Password not updated");
       res.redirect("/user-profile");
     }
   });
@@ -1106,11 +1060,9 @@ router.get("/add-address", verifyBlock, function (req, res, next) {
 // add address post
 var addressMsg;
 router.post("/add-address", verifyBlock, function (req, res, next) {
-  console.log(req.body);
   userHelper.addAddress(req.session.user, req.body).then((resp) => {
     if (resp?.addressExist) {
       addressMsg = "Sorry, This Address Already Exists";
-      console.log("address exist");
       res.redirect("/add-address");
     } else {
       profileMsg = "New Address Added";
@@ -1124,7 +1076,6 @@ router.post("/add-checkout-address", verifyBlock, function (req, res, next) {
   userHelper.addAddress(req.session.user, req.body).then((resp) => {
     if (resp?.addressExist) {
       checkoutAddressMsg = "Sorry, This Address Already Exists";
-      console.log("address exist");
       res.redirect("/checkout");
     } else {
       checkoutAddressMsg = "New Address Added";
@@ -1160,7 +1111,6 @@ router.post("/edit-address", verifyBlock, function (req, res, next) {
         profileMsg = "Address Updated Successfully";
         res.redirect("/user-profile");
       } else {
-        console.log("Address not updated");
       }
     });
 });
@@ -1172,14 +1122,12 @@ router.post("/edit-profile", verifyBlock, function (req, res, next) {
       profileMsg = "Profile Updated Successfully";
       res.redirect("/user-profile");
     } else {
-      console.log("Profile not updated");
     }
   });
 });
 
 // delete address
 router.post("/delete-address", verifyBlock, function (req, res, next) {
-  console.log(req.body.addressId);
   userHelper.deleteAddress(req.session.user._id, req.body.addressId).then((resp) => {
     res.json({ status: true });
   });

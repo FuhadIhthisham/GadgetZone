@@ -211,7 +211,6 @@
 <script type="text/javascript">
   function catChange(){
   var currCategory = document.getElementById('categoryChange').value
-  console.log(currCategory)
   $.ajax({
     url: '/admin/find-subcategory?category='+currCategory,
     method: 'get',

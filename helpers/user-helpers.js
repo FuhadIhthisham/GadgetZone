@@ -47,13 +47,11 @@ module.exports = {
             response.status = true;
             resolve(response);
           } else {
-            console.log("login Failed");
            
             resolve({ status: false });
           }
         });
       } else {
-        console.log("User not found");
         resolve({ status: false });
       }
     });
@@ -66,10 +64,8 @@ module.exports = {
         .collection(collections.USER_COLLECTION)
         .findOne({ phone: userPhone });
       if (user) {
-        console.log("Phone found on db");
         resolve({ userExist: true, user });
       } else {
-        console.log("Phone not found");
         resolve({ userExist: false });
       }
     });
@@ -90,7 +86,6 @@ module.exports = {
           msg: "User with this Phone number or email already exist",
         });
       } else {
-        console.log("Phone not found");
         resolve({ userExist: false });
       }
     });
@@ -457,7 +452,6 @@ module.exports = {
         
         // if order is COD, then add the user id on coupon collection
         if(code != 'undefined'){
-          console.log("????????????????????? "+code);
           db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
             $push:{
               usedUsers: {
@@ -538,7 +532,6 @@ module.exports = {
 
         // if order is COD, then add the user id on coupon collection
         if(code != 'undefined'){
-          console.log("????????????????????? "+code);
           db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
             $push:{
               usedUsers: {
@@ -578,8 +571,6 @@ module.exports = {
           console.log(err);
         }
         else{
-
-          console.log(order);
           resolve(order)
         }
       })
@@ -606,7 +597,6 @@ module.exports = {
     return new Promise((resolve,reject)=>{
 
       if(code == 'undefined'){
-        console.log("No coupon code used");
       }
       else{
         
@@ -773,8 +763,7 @@ module.exports = {
           )
           .then((response) => {
             if (response) {
-              
-              console.log("address exist");
+            
               resolve({addressExist:true});
             } else {
               db.get()
@@ -788,7 +777,6 @@ module.exports = {
                   }
                 )
                 .then(() => {
-                  console.log("address updated");
                   resolve()
                 });
             }
@@ -950,8 +938,6 @@ module.exports = {
         
         if(user){
           bcrypt.compare(userPass.currPass, user.password).then(async(status) => {
-            console.log(status);
-            console.log("dsafsadfsdfsdf");
             if (status) {
               userPass.newPass = await bcrypt.hash(userPass.newPass, 10);
               db.get()
@@ -965,12 +951,9 @@ module.exports = {
                   }
                 ).then((resp)=>{
                   if(resp){
-                    console.log("Password Updated success");
                     resolve({status:true})
                   }
                   else{
-                    console.log("not updated");
-                    console.log(resp);
                     resolve({status:false,changePassMsg: 'Password not updated'})                  }
                 })
             } 

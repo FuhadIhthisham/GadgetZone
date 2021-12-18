@@ -285,7 +285,6 @@ getDeliveredOrders:()=>{
       }
     ]).toArray()
 
-    console.log('Delivered Count: '+deliveredOrders[0]?.deliveredCount);
     resolve(deliveredOrders[0]?.deliveredCount)
   })
 },

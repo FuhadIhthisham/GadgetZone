@@ -153,7 +153,6 @@ module.exports = {
           } 
           else {
             //if there is no document of product name
-            console.log("No product found...Failed update");
             resolve({
               status: false,
               msg: "Product Update Failed",
@@ -178,7 +177,6 @@ module.exports = {
           .collection(collections.PRODUCT_COLLECTION)
           .deleteMany({ productSubcategory: proData.subcategory })
           .then((response) => {
-            console.log("Delete Product success::::::::: ")
           });
         }
         if(proData.item==='sub'){
@@ -189,7 +187,6 @@ module.exports = {
             { category: proData.category },
             { $pull: { subcategory: proData.subcategory } }
             ).then((res)=>{
-              console.log("Delete Subcategory success ");
             })
           }
           resolve({allProducts})
@@ -210,7 +207,6 @@ module.exports = {
           .collection(collections.PRODUCT_COLLECTION)
           .deleteMany({productCategory: proData.category})
           .then((response) => {
-            console.log("Delete Product Success::::::: ")
           });
         }
         if(proData.item==='cat'){
@@ -219,7 +215,6 @@ module.exports = {
           .collection(collections.PRODUCT_CATEGORY)
           .deleteOne({ category: proData.category })
           .then((res)=>{
-              console.log("Delete Category Success: ");
             })
           }
           resolve({allProducts})
@@ -245,7 +240,6 @@ module.exports = {
             .collection(collections.PRODUCT_COLLECTION)
             .deleteMany({productBrand: proData.brandName})
             .then((response) => {
-              console.log("Delete Product Success::::::: ")
             });
 
           }
@@ -256,7 +250,6 @@ module.exports = {
               .collection(collections.BRAND_COLLECTION)
               .deleteOne({ brandName: proData.brandName })
               .then((response) => {
-                console.log("Delete Brand Success: ");
               });
             }
             resolve({allProducts,getBrandId})
@@ -548,8 +541,6 @@ module.exports = {
             _id: objectId(couponId)
           })
 
-          console.log("coupon deleted");
-
         resolve()
       })
     },
@@ -569,18 +560,15 @@ module.exports = {
             }
           })
         if(isUsed){
-          
-          console.log("this coupon is already used by user");
+        
           resolve({isUsed: true})
         }
         else{
-          console.log("couponExistsssss");
           resolve({status:true,couponExist})
         }
 
       }
       else{
-        console.log("not Existsssss");
         resolve({status:false})
       }
       })
@@ -610,7 +598,6 @@ module.exports = {
                 }
               })
 
-              console.log("deleted Offer ");
             })
 
             db.get().collection(collections.CATEGORY_OFFER).deleteMany({
@@ -620,7 +607,6 @@ module.exports = {
               
         }
         else{
-          console.log("Cat Offer Doesn't exist");
         }
         
 
@@ -644,7 +630,6 @@ module.exports = {
                 }
               })
 
-              console.log("deleted Offer ");
             })
 
             db.get().collection(collections.PRODUCT_OFFER).deleteMany({
@@ -654,7 +639,6 @@ module.exports = {
               
         }
         else{
-          console.log(" prod Offer Doesn't exist");
         }
 
         // delete expired coupon code

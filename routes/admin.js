@@ -69,7 +69,6 @@ router.get('/getChartDates',async(req,res)=>{
   dailySales.map(daily=>{
     daysOfWeek.push(daily._id) //Array of days in a week
   })
-  console.log(daysOfWeek);
 
 
   // mapping category name and category amount
@@ -77,8 +76,6 @@ router.get('/getChartDates',async(req,res)=>{
     categoryName.push(cat._id)
     catSaleAmount.push(cat.totalAmount)
   })
-  console.log(categoryName);
-  console.log(catSaleAmount);
 
 
 
@@ -115,7 +112,6 @@ router.post("/login", function (req, res, next) {
     adminData.email === req.body?.email &&
     adminData.pass === req.body?.pass
   ) {
-    console.log("login success");
     req.session.adminLoggedIn = true;
     res.redirect("/admin");
   } else {
@@ -182,7 +178,6 @@ router.post("/delete-subcategory", verifyLogin, function (req, res, next) {
                 if (err) {
                   console.log(err);
                 } else {
-                  console.log("product image is deleted.");
                 }
               }
             );
@@ -193,7 +188,6 @@ router.post("/delete-subcategory", verifyLogin, function (req, res, next) {
   }
   if (req.body.isPro === "no" && req.body.item === "sub") {
     productHelper.deleteProAndSubcat(req.body).then((response) => {
-      console.log("subcat deleted");
     });
   }
   res.json({ status: true });
@@ -214,7 +208,6 @@ router.post("/delete-category", verifyLogin, function (req, res, next) {
                 if (err) {
                   console.log(err);
                 } else {
-                  console.log("product image is deleted.");
                 }
               }
             );
@@ -225,9 +218,7 @@ router.post("/delete-category", verifyLogin, function (req, res, next) {
     res.json({ status: true });
   }
   if (req.body.isPro === "no" && req.body.item === "cat") {
-    console.log(req.body);
     productHelper.deleteProAndCat(req.body).then((response) => {
-      console.log("Category deleted");
     });
 
     res.json({ status: true });
@@ -261,15 +252,12 @@ router.post("/addBrand", verifyLogin, function (req, res, next) {
       let id = response.result.insertedId;
       brandLogo.mv("./public/images/brand-logo/" + id + ".png", (err, done) => {
         if (!err) {
-          console.log("Brand added success");
           res.redirect("/admin/brand");
         } else {
-          console.log("brand added failed");
           res.redirect("/admin/brand");
         }
       });
     } else {
-      console.log("brand already exists");
       res.redirect("/admin/brand");
     }
   });
@@ -290,7 +278,6 @@ router.post("/delete-brand/", verifyLogin, function (req, res, next) {
                 if (err) {
                   console.log(err);
                 } else {
-                  console.log("product image is deleted.");
                 }
               }
             );
@@ -302,7 +289,6 @@ router.post("/delete-brand/", verifyLogin, function (req, res, next) {
             if (err) {
               console.log(err);
             } else {
-              console.log("Brand logo is deleted.");
             }
           }
         );
@@ -310,8 +296,6 @@ router.post("/delete-brand/", verifyLogin, function (req, res, next) {
     });
     res.json({ status: true });
   } else if (req.body.isPro === "no" && req.body.isBrand === "yes") {
-    console.log(req.body);
-    console.log("noooooooo");
 
     productHelper.deleteBrand(req.body).then((response) => {
       fs.unlink(
@@ -320,11 +304,9 @@ router.post("/delete-brand/", verifyLogin, function (req, res, next) {
           if (err) {
             console.log(err);
           } else {
-            console.log("brand logo is deleted.");
           }
         }
       );
-      console.log("Brand deleted");
     });
 
     res.json({ status: true });
@@ -350,7 +332,6 @@ router.get("/add-product", verifyLogin, function (req, res, next) {
         }
       });
     } else {
-      console.log("Category get Unsuccess...!!!");
     }
   });
 });
@@ -378,7 +359,6 @@ router.post("/add-product", verifyLogin, function (req, res, next) {
           if (err) {
             throw err;
           }
-          console.log("folder created");
         });
 
         // Moving Image 1
@@ -401,14 +381,12 @@ router.post("/add-product", verifyLogin, function (req, res, next) {
                             `./public/images/product-images/${proid}/${variantId}_4.webp`,
                             (err, done) => {
                               if (!err) {
-                                console.log("Images Added Success.........");
                                 productAddMsg.status = true;
                                 res.redirect("/admin/add-product");
                               }
                             }
                           );
                         } else {
-                          console.log("Image 3 Adding issue!!!!!!!!");
                           productAddMsg.status = false;
                           productAddMsg.imageErr = "Image Upload Failed";
                           res.redirect("/admin/add-product");
@@ -416,7 +394,6 @@ router.post("/add-product", verifyLogin, function (req, res, next) {
                       }
                     );
                   } else {
-                    console.log("Image 2 Adding issue!!!!!!!!");
                     productAddMsg.status = false;
                     productAddMsg.imageErr = "Image Upload Failed";
                     res.redirect("/admin/add-product");
@@ -424,20 +401,16 @@ router.post("/add-product", verifyLogin, function (req, res, next) {
                 }
               );
             } else {
-              console.log("Image 1 Adding issue!!!!!!!!");
               productAddMsg.status = false;
               productAddMsg.imageErr = "Image Upload Failed";
               res.redirect("/admin/add-product");
             }
           }
         );
-        console.log("..............product added successfully............");
       } else {
-        console.log("product adding unsuccessful response.status problem");
         res.redirect("/admin/add-product");
       }
     } else {
-      console.log("product adding unsuccessful no response from db");
       res.redirect("/admin/add-product");
     }
   });
@@ -461,7 +434,6 @@ router.get("/view-product", verifyLogin, function (req, res, next) {
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
   productHelper.getAllProducts().then((response) => {
-    console.log(response);
     if (response) {
       res.render("admin/view-products", {
         title: "View Product",
@@ -471,7 +443,6 @@ router.get("/view-product", verifyLogin, function (req, res, next) {
         allProducts: response,
       });
     } else {
-      console.log("view product response error!!!!");
     }
     productEditMsg = null;
   });
@@ -488,14 +459,10 @@ router.post("/delete-product", verifyLogin, function (req, res, next) {
         try {
           fs.rmdirSync(path, { recursive: true });
 
-          console.log(`${path} is deleted!`);
-          console.log(`product image folder is deleted!`);
         } catch (err) {
-          console.error(`Error while deleting ${path}.`);
         }
         res.redirect("/admin/view-product");
       } else {
-        console.log("Couldn't delete product images[no response]");
         res.redirect("/admin/view-product");
       }
     });
@@ -555,7 +522,6 @@ router.get("/edit-product/", verifyLogin, function (req, res, next) {
         }
       });
     } else {
-      console.log("Couldn't get edit product page[no result]");
       res.redirect("/admin/view-product");
     }
   });
@@ -579,11 +545,9 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
             prodImg1.mv(
               `./public/images/product-images/${prodId}/${varId}_1.webp`,
               (err, done) => {
-                console.log("Image 1 updated.....");
               }
             );
           } else {
-            console.log("Image 1 didn't updated");
           }
         }
       );
@@ -596,11 +560,9 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
             prodImg2.mv(
               `./public/images/product-images/${prodId}/${varId}_2.webp`,
               (err, done) => {
-                console.log("Image 2 updated.....");
               }
             );
           } else {
-            console.log("Image 2 didn't updated");
           }
         }
       );
@@ -613,11 +575,9 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
             prodImg3.mv(
               `./public/images/product-images/${prodId}/${varId}_3.webp`,
               (err, done) => {
-                console.log("Image 3 updated.....");
               }
             );
           } else {
-            console.log("Image 3 didn't updated");
           }
         }
       );
@@ -630,11 +590,9 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
             prodImg4.mv(
               `./public/images/product-images/${prodId}/${varId}_4.webp`,
               (err, done) => {
-                console.log("Image 4 updated.....");
               }
             );
           } else {
-            console.log("Image 4 didn't updated");
           }
         }
       );
@@ -644,7 +602,6 @@ router.post("/edit-product/", verifyLogin, function (req, res, next) {
   productHelper.updateProduct(req.query, req.body).then((result) => {
     if (result) {
       productEditMsg = result;
-      console.log("Updated product details");
       res.redirect("/admin/view-product");
     }
   });
@@ -699,12 +656,9 @@ router.get("/view-users", verifyLogin, (req, res, next) => {
 router.post("/block-user", verifyLogin, (req, res) => {
   adminHelper.blockUser(req.body.id).then((resp) => {
     if (response) {
-      console.log("user blocked........");
-      console.log(response);
       res.json({ status: true });
     } else {
       res.json({ status: false });
-      console.log("user not blocked");
     }
   });
 });
@@ -713,11 +667,8 @@ router.post("/block-user", verifyLogin, (req, res) => {
 router.post("/unblock-user", verifyLogin, (req, res) => {
   adminHelper.unblockUser(req.body.id).then((resp) => {
     if (response) {
-      console.log("user unblocked........");
-      console.log(response);
       res.json({ status: true });
     } else {
-      console.log("user not unblocked");
       res.json({ status: false });
     }
   });
@@ -730,7 +681,6 @@ router.get("/blocked-users", verifyLogin, (req, res, next) => {
     "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
   );
   adminHelper.getBlockedUsers().then((response) => {
-    console.log(response);
     if (response) {
       res.render("admin/blocked-users", {
         title: "blocked Users",
@@ -764,13 +714,11 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
   let topBannerImg3 = req.files?.top_banner_image_3;
   let offerImg = req.files?.offer_banner_image_1;
 
-  console.log(req.body);
 
   if (topBannerImg1) {
     topBannerImg1.mv(
       `./public/images/banner-images/topBanner1.webp`,
       (err, done) => {
-        console.log("Image 1 updated.....");
       }
     );
   }
@@ -778,7 +726,6 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
     topBannerImg2.mv(
       `./public/images/banner-images/topBanner2.webp`,
       (err, done) => {
-        console.log("Image 2 updated.....");
       }
     );
   }
@@ -786,7 +733,6 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
     topBannerImg3.mv(
       `./public/images/banner-images/topBanner3.webp`,
       (err, done) => {
-        console.log("Image 3 updated.....");
       }
     );
   }
@@ -794,7 +740,6 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
     offerImg.mv(
       `./public/images/banner-images/offerBanner.webp`,
       (err, done) => {
-        console.log("Image 4 updated.....");
       }
     );
   }
@@ -802,7 +747,6 @@ router.post("/manage-banner/", verifyLogin, function (req, res, next) {
   adminHelper.addBanner(req.body).then((result) => {
     if (result) {
       productEditMsg = result;
-      console.log("Updated product details");
       res.redirect("/admin/manage-banner");
     }
   });
@@ -816,7 +760,6 @@ router.get("/manage-orders", verifyLogin, (req, res, next) => {
   );
   adminHelper.viewOrders().then((response) => {
     if (response) {
-      console.log(response);
       res.render("admin/order-management", {
         title: "Order Management",
         admin: true,
@@ -833,10 +776,8 @@ router.post("/status-update", verifyLogin, (req, res) => {
   let proId = req.body.proId;
   adminHelper.deliveryStatusUpdate(status, orderId, proId).then((resp) => {
     if (response) {
-      console.log("Status Updated");
       res.json({ status: true });
     } else {
-      console.log("status not updated");
       res.json({ status: false });
     }
   });
@@ -949,7 +890,6 @@ router.get("/coupon-offer", verifyLogin,async (req, res, next) => {
 var couponMsg
 router.post("/coupon-offer", verifyLogin,async (req, res, next) => {
   await productHelper.addCouponOffer(req.body).then((resp)=>{
-    console.log(resp);
     if(resp.couponExists){
       couponMsg = "This Coupon Already Exists"
     }
