@@ -13,6 +13,7 @@ Technologies Used: <br>
   > Handlebars <br>
   > Javasctipt <br>
   > JQuery <br>
+  > AJAX <br>
   > Bootstrap <br>
   > CSS <br>
   > HTML <br>
