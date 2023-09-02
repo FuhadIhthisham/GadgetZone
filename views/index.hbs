@@ -1,7 +1,7 @@
 <!-- Hero Section Begin -->
 <section class="hero">
   <div class="hero__slider owl-carousel">
-    <div class="hero__items set-bg mx-md-3" data-setbg="/images/banner-images/topBanner1.webp">
+    <div class="hero__items set-bg mx-md-3" data-setbg="http://3.145.64.18/images/banner-images/topBanner1.webp">
       <div class="container">
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="hero__items set-bg" data-setbg="/images/banner-images/topBanner2.webp">
+    <div class="hero__items set-bg" data-setbg="http://3.145.64.18/images/banner-images/topBanner2.webp">
       <div class="container">
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <div class="hero__items set-bg" data-setbg="/images/banner-images/topBanner3.webp">
+    <div class="hero__items set-bg" data-setbg="http://3.145.64.18/images/banner-images/topBanner3.webp">
       <div class="container">
         <div class="row">
           <div class="col-xl-5 col-lg-7 col-md-8">
@@ -58,7 +58,7 @@
       <div class="col-lg-7 offset-lg-4">
         <div class="banner__item">
           <div class="banner__item__pic">
-            <img src="img/banner/banner-1.webp" height="350px" alt="" />
+            <img src="http://3.145.64.18/img/banner/banner-1.webp" height="350px" alt="" />
           </div>
           <div class="banner__item__text">
             <h2>Speaker Collections</h2>
@@ -69,7 +69,7 @@
       <div class="col-lg-6">
         <div class="banner__item banner__item--middle">
           <div class="banner__item__pic">
-            <img src="img/banner/banner-2.webp" height="270px" alt="" />
+            <img src="http://3.145.64.18/img/banner/banner-2.webp" height="270px" alt="" />
           </div>
           <div class="banner__item__text">
             <h2>Digital Cameras</h2>
@@ -80,7 +80,7 @@
       <div class="col-lg-6">
         <div class="banner__item banner__item--last">
           <div class="banner__item__pic">
-            <img src="img/banner/banner-3.webp" height="270px" alt="" />
+            <img src="http://3.145.64.18/img/banner/banner-3.webp" height="270px" alt="" />
           </div>
           <div class="banner__item__text">
             <h2>Best Smart Bands</h2>
@@ -114,44 +114,54 @@
             <div
               class="product__item__pic set-bg"
               style="cursor: pointer;"
-              data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
+              data-setbg="http://3.145.64.18/images/product-images/{{this.products._id}}/{{this.products.productVariants.0.variantId}}_1.webp"
             >
               <ul class="product__hover">
-                <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img src="img/icon/heart.png" alt="" />
+                <li><a onclick="addToWishlist('{{this.products._id}}','{{../user._id}}')"><img src="img/icon/heart.png" alt="" />
                     <span>Wishlist</span></a></li>
-                <li><a href="#"><img src="img/icon/compare.png" alt="" />
-                    <span>Compare</span></a></li>
-                <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
+                {{!-- <li><a href="#"><img src="img/icon/compare.png" alt="" />
+                    <span>Compare</span></a></li> --}}
+                <li><a onclick="productDetail('{{this.products._id}}')"><img src="/img/icon/search.png" alt="" />
                     <span>View</span></a></li>
               </ul>
             </div>
             <div class="product__item__text">
-              <h6 class="text-secondary mb-2">{{this.productBrand}}</h6>
-              {{#if this.productVariants.0.offerPrice}}
+              <h6 class="text-secondary mb-2">{{this.products.productBrand}}</h6>
+              {{#if this.products.productVariants.0.offerPrice}}
                 <a
-                  onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
+                  onclick="addToCart('{{this.products._id}}','{{this.products.productVariants.0.offerPrice}}')"
                   class="add-cart text-danger"
-                >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                >Add To Cart <i class="fas fa-cart-plus"></i></a>
+
+                <a
+                  href="/buy-now?proId={{this.products._id}}"
+                  class="add-cart text-danger float-end"
+                > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
               {{else}}
                 <a
-                  onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
+                  onclick="addToCart('{{this.products._id}}','{{this.products.productVariants.0.productPrice}}')"
                   class="add-cart text-danger"
-                >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                >Add To Cart <i class="fas fa-cart-plus"></i></a>
+
+                <a
+                  href="/buy-now?proId={{this.products._id}}"
+                  class="add-cart text-danger float-end"
+                >Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
               {{/if}}
-              <h6>{{this.productName}}</h6>
-              <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
+              <h6>{{this.products.productName}}</h6>
+              <h6 class="text-secondary mt-2">{{this.products.productSubcategory}}</h6>
               <div class="rating">
+                {{!-- <i class="fa text-warning fa-star"></i>
                 <i class="fa text-warning fa-star"></i>
                 <i class="fa text-warning fa-star"></i>
                 <i class="fa text-warning fa-star"></i>
-                <i class="fa text-warning fa-star"></i>
-                <i class="fa text-warning fa-star-o"></i>
+                <i class="fa text-warning fa-star-o"></i> --}}
               </div>
-              {{#if this.productVariants.0.offerPrice}}
-                <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
-                <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.productVariants.0.productPrice}}</span>
+              {{#if this.products.productVariants.0.offerPrice}}
+                <h5> ₹{{this.products.productVariants.0.offerPrice}}</h5>
+                <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.products.productVariants.0.productPrice}}</span>
               {{else}}
-                <h5> ₹{{this.productVariants.0.productPrice}}</h5>
+                <h5> ₹{{this.products.productVariants.0.productPrice}}</h5>
                 {{!-- <span class="text-decoration-line-through"> ₹{{this.productVariants.0.productPrice}}</span> --}}
               {{/if}}
             </div>
@@ -173,7 +183,7 @@
       <div class="col-lg-5">
         <div class="categories__hot__deal">
           <img
-            src="/images/banner-images/offerBanner.jpg"
+            src="http://3.145.64.18/images/banner-images/offerBanner.jpg"
             alt=""
           />
           <div class="hot__deal__sticker">

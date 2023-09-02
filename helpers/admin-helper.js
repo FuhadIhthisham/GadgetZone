@@ -241,7 +241,6 @@ module.exports = {
       resolve(true);
     });
   },
-
   getBanner: () => {
     return new Promise(async (resolve, reject) => {
       let allBanner = await db
@@ -251,7 +250,6 @@ module.exports = {
       resolve(allBanner);
     });
   },
-
   getRevenue: () => {
     return new Promise(async (resolve, reject) => {
       let revenue = await db

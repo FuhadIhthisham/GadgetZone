@@ -23,13 +23,15 @@
     <div class="row">
       <div class="col-lg-3">
         <div class="shop__sidebar">
-          <div class="shop__sidebar__search">
-            <form action="#">
-              <input type="text" placeholder="Search..." />
-              <button type="submit"><span class="icon_search"></span></button>
+          <div class="shop__sidebar__search mb-5">
+            <form>
+              <input type="text" placeholder="Search..." onkeyup="sendData(this)" />
+              <section id="searchResult">
+                
+              </section>
             </form>
           </div>
-          <div class="shop__sidebar__accordion">
+          <div class="mt-5 shop__sidebar__accordion">
             <div class="accordion" id="accordionExample">
               <div class="card">
                 <div class="card-heading">
@@ -105,16 +107,16 @@
                 <div
                   class="product__item__pic set-bg"
                   style="cursor: pointer;"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
                 >
                   <ul class="product__hover">
                     <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img
                           src="img/icon/heart.png"
                           alt=""
                         /></a></li>
-                    <li><a href="#"><img src="img/icon/compare.png" alt="" />
+                    {{!-- <li><a href="#"><img src="img/icon/compare.png" alt="" />
                         <span>Compare</span></a>
-                    </li>
+                    </li> --}}
                     <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
                     <span>View</span></a></li>
                   </ul>
@@ -126,20 +128,23 @@
                       onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
                       class="add-cart text-danger"
                     >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                    <a
+                      href="/buy-now?proId={{this._id}}"
+                      class="add-cart text-danger float-end"
+                    > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
                   {{else}}
                     <a
                       onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
                       class="add-cart text-danger"
                     >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                    <a
+                      href="/buy-now?proId={{this._id}}"
+                      class="add-cart text-danger float-end"
+                    > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
                   {{/if}}
                    <h6>{{this.productName}}</h6>
               <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
                   <div class="rating">
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star-o"></i>
                   </div>
                   {{#if this.productVariants.0.offerPrice}}
                     <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
@@ -164,16 +169,16 @@
                 <div
                   class="product__item__pic set-bg"
                   style="cursor: pointer;"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
                 >
                   <ul class="product__hover">
                     <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img
                           src="img/icon/heart.png"
                           alt=""
                         /></a></li>
-                    <li><a href="#"><img src="img/icon/compare.png" alt="" />
+                    {{!-- <li><a href="#"><img src="img/icon/compare.png" alt="" />
                         <span>Compare</span></a>
-                    </li>
+                    </li> --}}
                     <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
                     <span>View</span></a></li>
                   </ul>
@@ -185,20 +190,23 @@
                       onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
                       class="add-cart text-danger"
                     >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                    <a
+                      href="/buy-now?proId={{this._id}}"
+                      class="add-cart text-danger float-end"
+                    > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
                   {{else}}
                     <a
                       onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
                       class="add-cart text-danger"
                     >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                    <a
+                      href="/buy-now?proId={{this._id}}"
+                      class="add-cart text-danger float-end"
+                    > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
                   {{/if}}
                    <h6>{{this.productName}}</h6>
               <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
                   <div class="rating">
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star-o"></i>
                   </div>
                   {{#if this.productVariants.0.offerPrice}}
                     <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
@@ -222,16 +230,16 @@
                 <div
                   class="product__item__pic set-bg"
                   style="cursor: pointer;"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
                 >
                   <ul class="product__hover">
                     <li><a onclick="addToWishlist('{{this._id}}','{{../user._id}}')"><img
                           src="img/icon/heart.png"
                           alt=""
                         /></a></li>
-                    <li><a href="#"><img src="img/icon/compare.png" alt="" />
+                    {{!-- <li><a href="#"><img src="img/icon/compare.png" alt="" />
                         <span>Compare</span></a>
-                    </li>
+                    </li> --}}
                     <li><a onclick="productDetail('{{this._id}}')"><img src="/img/icon/search.png" alt="" />
                     <span>View</span></a></li>
                   </ul>
@@ -243,27 +251,30 @@
                       onclick="addToCart('{{this._id}}','{{this.productVariants.0.offerPrice}}')"
                       class="add-cart text-danger"
                     >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                    <a
+                      href="/buy-now?proId={{this._id}}"
+                      class="add-cart text-danger float-end"
+                    > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
                   {{else}}
                     <a
                       onclick="addToCart('{{this._id}}','{{this.productVariants.0.productPrice}}')"
                       class="add-cart text-danger"
                     >+ Add To Cart <i class="fas fa-cart-plus"></i></a>
+                    <a
+                      href="/buy-now?proId={{this._id}}"
+                      class="add-cart text-danger float-end"
+                    > Buy Now <i class="fa fa-shopping-bag" aria-hidden="true"></i> </a>
                   {{/if}}
                    <h6>{{this.productName}}</h6>
               <h6 class="text-secondary mt-2">{{this.productSubcategory}}</h6>
                   <div class="rating">
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star"></i>
-                    <i class="fa text-warning fa-star-o"></i>
                   </div>
                   {{#if this.productVariants.0.offerPrice}}
                     <h5> ₹{{this.productVariants.0.offerPrice}}</h5>
                     <span class="text-decoration-line-through text-muted fs-6"> ₹{{this.productVariants.0.productPrice}}</span>
-                {{else}}
+                  {{else}}
                     <h5> ₹{{this.productVariants.0.productPrice}}</h5>
-                {{/if}}
+                  {{/if}}
                 </div>
               </div>
             </div>
@@ -305,4 +316,41 @@
       }
     })
   }
+
+  // SEARCH PRODUCT
+
+    function sendData(e){
+      const searchResult = document.getElementById('searchResult')
+      let match = e.value.match(/^[a-zA-Z ]*/)
+      let match2 = e.value.match(/\s*/)
+
+      if(match2[0] === e.value){
+        searchResult.innerHTML = ''
+        return
+      }
+      if(match[0] === e.value){
+
+        fetch('searchProduct',{
+          method: "post",
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({payload: e.value})
+        }).then(res => res.json()).then(data => {
+          let payload = data.payload
+          searchResult.innerHTML = ''
+          if(payload.length < 1){
+            searchResult.innerHTML = "<p>Sorry, Nothing Found</p>"
+            return;
+          }
+          payload.forEach((item,index)=>{
+            if(index > 0) searchResult.innerHTML += '<hr>'
+            searchResult.innerHTML += `<a onclick="productDetail('${item._id}')"> <p> ${item.productName} </p> </a>`
+          })
+          return
+        })
+      }
+
+      searchResult.innerHTML = ''
+
+    }
+
 </script>

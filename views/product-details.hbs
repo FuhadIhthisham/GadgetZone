@@ -24,7 +24,7 @@
               >
                 <div
                   class="product__thumb__pic set-bg"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp"
                 >
                 </div>
               </a>
@@ -33,7 +33,7 @@
               <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
                 <div
                   class="product__thumb__pic set-bg"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp"
                 >
                 </div>
               </a>
@@ -42,7 +42,7 @@
               <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
                 <div
                   class="product__thumb__pic set-bg"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp"
                 >
                 </div>
               </a>
@@ -51,7 +51,7 @@
               <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
                 <div
                   class="product__thumb__pic set-bg"
-                  data-setbg="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp"
+                  data-setbg="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp"
                 >
                 </div>
               </a>
@@ -62,22 +62,22 @@
           <div class="tab-content">
             <div class="tab-pane active" id="tabs-1" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp" alt="" class="imageZoom1" />
+                <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp" alt="" class="imageZoom1" />
               </div>
             </div>
             <div class="tab-pane" id="tabs-2" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp" alt="" class="imageZoom2" />
+                <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp" alt="" class="imageZoom2" />
               </div>
             </div>
             <div class="tab-pane" id="tabs-3" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp" alt="" class="imageZoom3" />
+                <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp" alt="" class="imageZoom3" />
               </div>
             </div>
             <div class="tab-pane" id="tabs-4" role="tabpanel">
               <div class="product__details__pic__item">
-                <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp" alt="" class="imageZoom4" />
+                <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp" alt="" class="imageZoom4" />
               </div>
             </div>
           </div>
@@ -129,10 +129,10 @@
                   <div class="product__details__btns__option mt-sm-4">
             <a onclick="addToWishlist('{{this._id}}','{{../user._id}}')" style="font-size: 15px;"><i class="fa fa-heart"></i>
               add to wishlist</a>
-            <a href="#" class="mt-2" style="font-size: 15px;"><i
+            {{!-- <a href="#" class="mt-2" style="font-size: 15px;"><i
                 class="fa fa-exchange"
               ></i>
-              Add To Compare</a>
+              Add To Compare</a> --}}
           </div>
                 </div>
                 </div>
@@ -145,12 +145,12 @@
           </div>
 
           <div class="rating mt-sm-3">
-            <i class="fa fa-star"></i>
+            {{!-- <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-o"></i>
-            <span> - 55 Reviews</span>
+            <span> - 55 Reviews</span> --}}
           </div>
 
           <div class="product__details__last__option mt-sm-5">
@@ -173,14 +173,14 @@
                   role="tab"
                 >Description</a>
               </li>
-              <li class="nav-item">
+              {{!-- <li class="nav-item">
                 <a
                   class="nav-link"
                   data-toggle="tab"
                   href="#tabs-6"
                   role="tab"
                 >Customer Previews(5)</a>
-              </li>
+              </li> --}}
             </ul>
             <div class="tab-content">
               <div

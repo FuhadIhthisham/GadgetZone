@@ -157,7 +157,7 @@
 
                 <div class="mt-5">
                   <label for="">Product Image 1 </label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp" alt="" style="width: 100px; height:auto" id="imgview1">
+                  <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_1.webp" alt="" style="width: 100px; height:auto" id="imgview1">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_1" id="file1" class="form-control"
                       onchange="return fileValidation('file1','image1','imgview1')">
@@ -169,7 +169,7 @@
 
                 <div class="mt-5">
                   <label for="">Product Image 2</label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp" alt="" style="width: 100px; height:auto" id="imgview2">
+                  <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_2.webp" alt="" style="width: 100px; height:auto" id="imgview2">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_2" id="file2" class="form-control"
                       onchange="return fileValidation('file2','image2','imgview2')">
@@ -180,7 +180,7 @@
                 
                 <div class="mt-5">
                   <label for="">Product Image 3</label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp" alt="" style="width: 100px; height:auto" id="imgview3">
+                  <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_3.webp" alt="" style="width: 100px; height:auto" id="imgview3">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_3" id="file3" class="form-control"
                       onchange="return fileValidation('file3','image3','imgview3')">
@@ -191,7 +191,7 @@
 
                 <div class="mt-5">
                   <label for="">Product Image 4 </label>
-                  <img src="/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp" alt="" style="width: 100px; height:auto" id="imgview4">
+                  <img src="http://3.145.64.18/images/product-images/{{this._id}}/{{this.productVariants.0.variantId}}_4.webp" alt="" style="width: 100px; height:auto" id="imgview4">
                   {{!-- <div id="preview1"></div> --}}
                   <input type="file" name="product_Image_4" id="file4" class="form-control"
                       onchange="return fileValidation('file4','image4','imgview4')">
@@ -232,7 +232,6 @@
 // while Onchange select option category, it shows subcategories on other select option
   function catChange(){
   var currCategory = document.getElementById('categoryChange').value
-  console.log(currCategory)
   $.ajax({
     url: '/admin/find-subcategory?category='+currCategory,
     method: 'get',
@@ -345,7 +344,7 @@ setInputFilter(document.getElementById("productQuantity"), function (value) {
                     document.getElementById('image-box').style.display = 'none'
                     document.getElementById('crop-btn').style.display = 'none'
                     document.getElementById('confirm-btn').style.display = 'block'
-                });
+                },'image/webp',0.8);
             });
         }
     }

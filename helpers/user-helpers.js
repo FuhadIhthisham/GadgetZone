@@ -47,13 +47,11 @@ module.exports = {
             response.status = true;
             resolve(response);
           } else {
-            console.log("login Failed");
            
             resolve({ status: false });
           }
         });
       } else {
-        console.log("User not found");
         resolve({ status: false });
       }
     });
@@ -66,10 +64,8 @@ module.exports = {
         .collection(collections.USER_COLLECTION)
         .findOne({ phone: userPhone });
       if (user) {
-        console.log("Phone found on db");
         resolve({ userExist: true, user });
       } else {
-        console.log("Phone not found");
         resolve({ userExist: false });
       }
     });
@@ -90,7 +86,6 @@ module.exports = {
           msg: "User with this Phone number or email already exist",
         });
       } else {
-        console.log("Phone not found");
         resolve({ userExist: false });
       }
     });
@@ -255,6 +250,13 @@ module.exports = {
       ]).toArray()
       
       resolve(wishlist)
+    })
+  },
+
+  getSearchProduct:(data)=>{
+    return new Promise(async(resolve,reject)=>{
+      let result = await db.get().collection(collections.PRODUCT_COLLECTION).find({productName:{$regex: new RegExp(data+'.*','i')}}).toArray()
+      resolve(result)
     })
   },
 
@@ -450,7 +452,6 @@ module.exports = {
         
         // if order is COD, then add the user id on coupon collection
         if(code != 'undefined'){
-          console.log("????????????????????? "+code);
           db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
             $push:{
               usedUsers: {
@@ -531,7 +532,6 @@ module.exports = {
 
         // if order is COD, then add the user id on coupon collection
         if(code != 'undefined'){
-          console.log("????????????????????? "+code);
           db.get().collection(collections.COUPON_OFFER).updateOne({couponCode: code},{
             $push:{
               usedUsers: {
@@ -571,8 +571,6 @@ module.exports = {
           console.log(err);
         }
         else{
-
-          console.log(order);
           resolve(order)
         }
       })
@@ -599,7 +597,6 @@ module.exports = {
     return new Promise((resolve,reject)=>{
 
       if(code == 'undefined'){
-        console.log("No coupon code used");
       }
       else{
         
@@ -677,6 +674,7 @@ module.exports = {
             delivered: "$products.delivered",
             dateISO: "$dateISO",
             date: "$date",
+            paymentMethod: "$paymentMethod",
             deliveryDetails: "$deliveryDetails"
           }
         },
@@ -699,6 +697,7 @@ module.exports = {
             deliveryDetails:1,
             cancelled:1,
             delivered:1,
+            paymentMethod:1,
             product: {
               $arrayElemAt: ["$products",0]
             }
@@ -764,8 +763,7 @@ module.exports = {
           )
           .then((response) => {
             if (response) {
-              
-              console.log("address exist");
+            
               resolve({addressExist:true});
             } else {
               db.get()
@@ -779,7 +777,6 @@ module.exports = {
                   }
                 )
                 .then(() => {
-                  console.log("address updated");
                   resolve()
                 });
             }
@@ -941,8 +938,6 @@ module.exports = {
         
         if(user){
           bcrypt.compare(userPass.currPass, user.password).then(async(status) => {
-            console.log(status);
-            console.log("dsafsadfsdfsdf");
             if (status) {
               userPass.newPass = await bcrypt.hash(userPass.newPass, 10);
               db.get()
@@ -956,12 +951,9 @@ module.exports = {
                   }
                 ).then((resp)=>{
                   if(resp){
-                    console.log("Password Updated success");
                     resolve({status:true})
                   }
                   else{
-                    console.log("not updated");
-                    console.log(resp);
                     resolve({status:false,changePassMsg: 'Password not updated'})                  }
                 })
             } 

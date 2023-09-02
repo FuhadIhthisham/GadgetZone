@@ -5,7 +5,7 @@ const state = {
 }
 
 module.exports.connect = (done)=>{
-    const url = 'mongodb://localhost:27017'
+    const url = `mongodb+srv://FuhadIhthisham:${process.env.pass}@gadgetzone.90ww6.mongodb.net/gadgetzone?retryWrites=true&w=majority`
     const dbname = 'gadgetzone'
 
     mongoClient.connect(url,(err,data)=>{

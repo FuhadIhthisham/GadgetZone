@@ -49,7 +49,6 @@
 
     var otpnumber =`${first}${second}${third}${fourth}`
     var phoneNumber = document.getElementById("phonenumber").value;
-    console.log("Phone number:::: "+phoneNumber)
 
 $.ajax({
     url:'/otp-verify?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,
@@ -127,7 +126,7 @@ setInputFilter(document.getElementById("num4"), function (value) {
   }
 }
 
-const startMin = 0.2;
+const startMin = 2;
 let time = startMin * 60;
 
 const countEl = document.getElementById("countdownOTP");

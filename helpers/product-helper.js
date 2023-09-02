@@ -8,6 +8,10 @@ const { Collection } = require("mongodb");
 module.exports = {
      // Add product to Database
   addProduct: (productData) => {
+    productData.productQuantity = parseInt(productData.productQuantity);
+    productData.landingCost = parseInt(productData.landingCost);
+    productData.productPrice = parseInt(productData.productPrice);
+    console.log(productData);
     return new Promise(async (resolve, reject) => {
       let variantid = new objectId()
       let isProduct = await db
@@ -95,6 +99,11 @@ module.exports = {
 
     // Update products
     updateProduct: (productId,productData) => {
+
+      productData.productQuantity = parseInt(productData.productQuantity);
+      productData.landingCost = parseInt(productData.landingCost);
+      productData.productPrice = parseInt(productData.productPrice);
+
       return new Promise(async (resolve, reject) => {
         let isProduct = await db
           .get()
@@ -153,7 +162,6 @@ module.exports = {
           } 
           else {
             //if there is no document of product name
-            console.log("No product found...Failed update");
             resolve({
               status: false,
               msg: "Product Update Failed",
@@ -178,7 +186,6 @@ module.exports = {
           .collection(collections.PRODUCT_COLLECTION)
           .deleteMany({ productSubcategory: proData.subcategory })
           .then((response) => {
-            console.log("Delete Product success::::::::: ")
           });
         }
         if(proData.item==='sub'){
@@ -189,7 +196,6 @@ module.exports = {
             { category: proData.category },
             { $pull: { subcategory: proData.subcategory } }
             ).then((res)=>{
-              console.log("Delete Subcategory success ");
             })
           }
           resolve({allProducts})
@@ -210,7 +216,6 @@ module.exports = {
           .collection(collections.PRODUCT_COLLECTION)
           .deleteMany({productCategory: proData.category})
           .then((response) => {
-            console.log("Delete Product Success::::::: ")
           });
         }
         if(proData.item==='cat'){
@@ -219,7 +224,6 @@ module.exports = {
           .collection(collections.PRODUCT_CATEGORY)
           .deleteOne({ category: proData.category })
           .then((res)=>{
-              console.log("Delete Category Success: ");
             })
           }
           resolve({allProducts})
@@ -245,7 +249,6 @@ module.exports = {
             .collection(collections.PRODUCT_COLLECTION)
             .deleteMany({productBrand: proData.brandName})
             .then((response) => {
-              console.log("Delete Product Success::::::: ")
             });
 
           }
@@ -256,7 +259,6 @@ module.exports = {
               .collection(collections.BRAND_COLLECTION)
               .deleteOne({ brandName: proData.brandName })
               .then((response) => {
-                console.log("Delete Brand Success: ");
               });
             }
             resolve({allProducts,getBrandId})
@@ -548,8 +550,6 @@ module.exports = {
             _id: objectId(couponId)
           })
 
-          console.log("coupon deleted");
-
         resolve()
       })
     },
@@ -569,18 +569,15 @@ module.exports = {
             }
           })
         if(isUsed){
-          
-          console.log("this coupon is already used by user");
+        
           resolve({isUsed: true})
         }
         else{
-          console.log("couponExistsssss");
           resolve({status:true,couponExist})
         }
 
       }
       else{
-        console.log("not Existsssss");
         resolve({status:false})
       }
       })
@@ -610,7 +607,6 @@ module.exports = {
                 }
               })
 
-              console.log("deleted Offer ");
             })
 
             db.get().collection(collections.CATEGORY_OFFER).deleteMany({
@@ -620,7 +616,6 @@ module.exports = {
               
         }
         else{
-          console.log("Cat Offer Doesn't exist");
         }
         
 
@@ -644,7 +639,6 @@ module.exports = {
                 }
               })
 
-              console.log("deleted Offer ");
             })
 
             db.get().collection(collections.PRODUCT_OFFER).deleteMany({
@@ -654,7 +648,6 @@ module.exports = {
               
         }
         else{
-          console.log(" prod Offer Doesn't exist");
         }
 
         // delete expired coupon code
@@ -872,6 +865,55 @@ module.exports = {
         ]).toArray()
         
         resolve(stockReport)
+      })
+    },
+
+    getBestSelling:()=>{
+      return new Promise(async(resolve,reject)=>{
+        let topSelling = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              item: "$products.item",
+              quantity: "$products.quantity",
+              subTotal: "$products.subTotal"
+            }
+          },
+          {
+            $lookup: {
+              from: collections.PRODUCT_COLLECTION,
+              localField: "item",
+              foreignField: "_id",
+              as: "products"
+            }
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project:{
+              quantity:1,
+              products: "$products",
+              productName: "$products.productName"
+            }
+          },
+          {
+            $group:{
+              _id: "$productName",
+              totalQty: {$sum: "$quantity"},
+              products: {"$first": "$products"},
+            }
+          },
+          {
+            $sort:{totalQty:-1}
+          },
+          {
+            $limit: 8
+          }
+        ]).toArray()
+        resolve(topSelling)
       })
     },
 }

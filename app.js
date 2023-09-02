@@ -19,6 +19,9 @@ var db = require('./config/connection')
 // HBS handlebar
 var hbs = require('express-handlebars')
 
+// mongostore
+const MongoStore = require('connect-mongo');
+
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 
@@ -43,7 +46,12 @@ app.use(session({
   secret: 'key',
   cookie: {maxAge: 6000000},
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: `mongodb+srv://FuhadIhthisham:${process.env.pass}@gadgetzone.90ww6.mongodb.net/gadgetzone?retryWrites=true&w=majority`,
+    ttl: 2 * 24 * 60 * 60,
+    autoRemove: 'native'
+  })
 })
 )
 

@@ -48,9 +48,7 @@
     var fourth = document.getElementById("num4").value;
 
     var otpnumber = `${first}${second}${third}${fourth}`
-    console.log(otpnumber)
     var phoneNumber = document.getElementById("phonenumber2").value;
-    console.log("Phone number:::: "+phoneNumber)
 
 $.ajax({
     url:'/signupOtp?phonenumber='+phoneNumber+'&otpnumber='+otpnumber,

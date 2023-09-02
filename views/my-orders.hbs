@@ -11,53 +11,70 @@
         <div class="panel-heading">
             <strong>Order history</strong>
         </div>
-        {{#each allOrders}}
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-1"><img src="/images/product-images/{{this.product._id}}/{{this.product.productVariants.variantId}}_1.webp" class="media-object img-thumbnail" /></div>
-                <div class="col-md-11">
-                    <div class="row">
-                        
-                        <div class="col-md-12">
-                            {{#if this.cancelled}}
-                                <div class="pull-right"><label class="label label-danger">{{this.status}}</label></div>
-                            {{else}}
-                                <div class="pull-right"><label class="label label-success">{{this.status}}</label></div>
-                            {{/if}}
-                            <span><strong>{{this.product.productName}}</strong></span> <span class="label label-info"> {{this.product.productVariants.productColour}} </span><br />
-                            <span>
-                                Quantity : {{this.quantity}}
-                                    <br>
-                                cost: ₹{{this.subTotal}} <br /> <br>
-                            </span>
-                            <div>
-                                <span class="fw-bold">
-                                    Address:
-                                </span>
-                                <span class="fw-lighter">
-                                    {{deliveryDetails.houseNumber}}
-                                    {{deliveryDetails.streetAddress}}
-                                    {{deliveryDetails.locality}}
-                                </span>
-                            </div>
-                            {{#if this.cancelled}}
+        {{#if allOrders}}
+            {{#each allOrders}}
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-1"><img src="http://3.145.64.18/images/product-images/{{this.product._id}}/{{this.product.productVariants.variantId}}_1.webp" class="media-object img-thumbnail" /></div>
+                    <div class="col-md-11">
+                        <div class="row">
                             
-                            {{else}}
-                                {{#if this.delivered}}
-                                
-                            {{else}}
-
-                             <a data-placement="top" class="btn btn-danger btn-xs glyphicon glyphicon-trash" onclick="cancelOrder('{{this._id}}','{{this.product._id}}')" title="Danger">Cancel</a>
-                            
+                            <div class="col-md-12">
+                                {{#if this.cancelled}}
+                                    <div class="pull-right"><label class="label label-danger">{{this.status}}</label></div>
+                                {{else}}
+                                    <div class="pull-right"><label class="label label-success">{{this.status}}</label></div>
                                 {{/if}}
-                            {{/if}}
+                                <span><strong>{{this.product.productName}}</strong></span> <span class="label label-info"> {{this.product.productVariants.productColour}} </span><br />
+                                <span>
+                                    Quantity : {{this.quantity}}
+                                        <br>
+                                    cost: ₹{{this.subTotal}} <br>
+                                    Payment Method: {{this.paymentMethod}}
+                                     <br> <br>
+                                </span>
+                                <div>
+                                    <span class="fw-bold">
+                                        Address:
+                                    </span>
+                                    <span class="fw-lighter">
+                                        {{deliveryDetails.houseNumber}}
+                                        {{deliveryDetails.streetAddress}}
+                                        {{deliveryDetails.locality}}
+                                    </span>
+                                </div>
+                                {{#if this.cancelled}}
+                                
+                                {{else}}
+                                    {{#if this.delivered}}
+                                    
+                                {{else}}
+
+                                <a data-placement="top" class="btn btn-danger btn-xs glyphicon glyphicon-trash" onclick="cancelOrder('{{this._id}}','{{this.product._id}}')" title="Danger">Cancel</a>
+                                
+                                    {{/if}}
+                                {{/if}}
+                            </div>
+                            <div class="col-md-12">Ordered On: {{this.dateISO}}</div>
                         </div>
-                        <div class="col-md-12">Ordered On: {{this.dateISO}}</div>
                     </div>
+                </div> 
+            </div>
+            {{/each}}
+        {{else}}
+            <div class="col-md-6 my-5 text-center centered">
+                <div class="card">
+                <div class="card-header bg-light">
+                    <i class="fa fa-shopping-bag fs-2 my-2" aria-hidden="true"></i>
                 </div>
-            </div> 
-        </div>
-        {{/each}}
+                <div class="card-body bg-dark text-white">
+                    <h2 class="card-title mt-4"> EMPTY ORDER </h2>
+                    <p class="card-title mt-4"> Please Order Something... </p>
+                    <a href="/" class="btn btn-light text-dark my-4">Continue Shopping</a>
+                </div>
+                </div>
+            </div>
+        {{/if}}
     </div>
 </div>
 
