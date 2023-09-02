@@ -1,6 +1,6 @@
 var db = require("../config/connection");
 var collections = require("../config/constants");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 var objectId = require("mongodb").ObjectId;
 const { response } = require("express");
 
