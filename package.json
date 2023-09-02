@@ -6,11 +6,10 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "cropperjs": "^1.5.12",
     "croppie": "^2.6.5",
-    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
